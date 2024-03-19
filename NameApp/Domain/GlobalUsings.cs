@@ -1,0 +1,1 @@
+﻿global using NameApp.Domain.Common;
