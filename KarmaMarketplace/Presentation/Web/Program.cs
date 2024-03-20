@@ -106,6 +106,7 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/swagger/v1/swagger.yaml", "NameApp API");
         options.DefaultModelsExpandDepth(-1);
     });
+    await app.InitialiseDatabaseAsync(); 
 }
 app.UseStaticFiles();
 

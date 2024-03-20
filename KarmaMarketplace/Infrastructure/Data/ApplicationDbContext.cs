@@ -19,6 +19,7 @@ namespace KarmaMarketplace.Infrastructure.Data
         {
             // add here any amount of configurations 
             builder.ApplyConfiguration(new UserConfiguration());
+
         }
 
     }

@@ -21,8 +21,11 @@ namespace KarmaMarketplace.Infrastructure
             });
 
             services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+            services.AddScoped<ApplicationDbContextInitialiser>();
 
-            //services.AddScoped<ApplicationDbContextInitialiser>();
+            services.AddSingleton(TimeProvider.System);
+
+            services.AddAuthorizationBuilder(); 
 
             return services;
         }
