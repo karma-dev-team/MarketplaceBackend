@@ -1,6 +1,6 @@
 ﻿namespace KarmaMarketplace.Domain.Payment.Entities
 {
-    public class TransactionEntitiy
+    public class TransactionEntitiy : BaseAuditableEntity
     {
     }
 }

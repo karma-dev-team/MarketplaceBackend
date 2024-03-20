@@ -1,6 +1,6 @@
 ﻿namespace KarmaMarketplace.Domain.Messging.Entities
 {
-    public class MessageEntity
+    public class MessageEntity : BaseAuditableEntity
     {
     }
 }

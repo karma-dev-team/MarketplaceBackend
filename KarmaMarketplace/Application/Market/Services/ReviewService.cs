@@ -2,7 +2,8 @@
 
 namespace KarmaMarketplace.Application.Market.Services
 {
-    public class ProductService : IProductService
+    public class ReviewService : IReviewService
     {
+
     }
 }
