@@ -26,7 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\Messaging\" />
+    <Folder Include="Application\Messaging\Exceptions\" />
+    <Folder Include="Application\Payment\Exceptions\" />
   </ItemGroup>
 
 </Project>
