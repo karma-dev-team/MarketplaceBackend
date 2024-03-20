@@ -27,7 +27,6 @@
 
   <ItemGroup>
     <Folder Include="Application\Messaging\" />
-    <Folder Include="Domain\Payment\Services\" />
   </ItemGroup>
 
 </Project>
