@@ -1,6 +1,10 @@
 ﻿namespace KarmaMarketplace.Application.Messaging
 {
-    public class DependencyInjection
+    public static class DependencyInjection
     {
+        public static IServiceCollection AddMessagingApplicationServices(this IServiceCollection services)
+        {
+            return services;
+        }
     }
 }

@@ -1,6 +1,10 @@
 ﻿namespace KarmaMarketplace.Application.Payment
 {
-    public class DependencyInjection
+    public static class DependencyInjection
     {
+        public static IServiceCollection AddPaymentApplicationServices(this IServiceCollection services)
+        {
+            return services;
+        }
     }
 }

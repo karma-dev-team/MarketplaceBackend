@@ -1,4 +1,7 @@
-﻿using KarmaMarketplace.Application.User;
+﻿using KarmaMarketplace.Application.Market;
+using KarmaMarketplace.Application.Messaging;
+using KarmaMarketplace.Application.Payment;
+using KarmaMarketplace.Application.User;
 using KarmaMarketplace.Application.User.EventHandlers;
 using KarmaMarketplace.Application.User.Interfaces;
 using KarmaMarketplace.Domain.User.Events;
@@ -17,6 +20,9 @@ namespace KarmaMarketplace.Application
 
             services.AddSingleton<IEventDispatcher, EventDispatcher>(x => { return eventDispatcher; });
             services.AddUserApplicationServices();
+            services.AddMarketApplicationServices();
+            services.AddPaymentApplicationServices(); 
+            services.AddMessagingApplicationServices();
 
             return services; 
         }
