@@ -1,6 +1,12 @@
-﻿namespace KarmaMarketplace.Domain.Payment.Enums
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace KarmaMarketplace.Domain.Payment.Enums
 {
-    public class Currency
+    public enum CurrencyEnum
     {
+        [Display(Name = "RUB")]
+        RussianRuble,
+        [Display(Name = "USD")]
+        Dollar
     }
 }

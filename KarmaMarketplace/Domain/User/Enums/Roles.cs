@@ -5,16 +5,16 @@ namespace KarmaMarketplace.Domain.User.Enums
     public enum UserRoles 
     {
         [Display(Name = "user")]
-        User = 1, 
+        User, 
         [Display(Name = "seller")]
-        Seller = 2,
+        Seller,
         [Display(Name = "moderator")]
-        Moderator = 3,
+        Moderator,
         [Display(Name = "admin")]
-        Admin = 4,
+        Admin,
         [Display(Name = "superadmin")]
-        SuperAdmin = 5,
+        SuperAdmin,
         [Display(Name = "other")]
-        Other = 228,
+        Other,
     }
 }

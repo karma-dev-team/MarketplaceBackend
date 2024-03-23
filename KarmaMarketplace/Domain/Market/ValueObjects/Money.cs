@@ -1,14 +1,16 @@
-﻿namespace KarmaMarketplace.Domain.Market.ValueObjects
+﻿using KarmaMarketplace.Domain.Payment.Enums;
+
+namespace KarmaMarketplace.Domain.Market.ValueObjects
 {
     public class Money
     {
         public decimal Amount { get; set; }
         public string Currency { get; set; }
 
-        public Money(decimal amount, string currency)
+        public Money(decimal amount, CurrencyEnum currency)
         {
             Amount = amount;
-            Currency = currency;
+            Currency = currency.ToString();
         }
     }
 }

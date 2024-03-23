@@ -2,6 +2,7 @@
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Infrastructure.Data.Configuration;
+using System.Reflection;
 
 namespace KarmaMarketplace.Infrastructure.Data
 {
@@ -17,9 +18,7 @@ namespace KarmaMarketplace.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            // add here any amount of configurations 
-            builder.ApplyConfiguration(new UserConfiguration());
-
+            builder.ApplyConfigurationsFromAssembly(assembly: Assembly.GetExecutingAssembly()); 
         }
 
     }

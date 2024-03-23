@@ -1,8 +1,6 @@
-﻿using KarmaMarketplace.Infrastructure.Data.Extensions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using KarmaMarketplace.Domain.User.Entities;
-using KarmaMarketplace.Domain.User.Enums;
 
 
 namespace KarmaMarketplace.Infrastructure.Data.Configuration

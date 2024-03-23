@@ -1,9 +1,11 @@
-﻿namespace KarmaMarketplace.Domain.Common
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace KarmaMarketplace.Domain.Common
 {
     public class BaseAuditableEntity
     {
+        [Key]
         public Guid Id { get; set; }
-        public Guid CreatedBy { get; set; }
         public DateTime? Created { get; set; }
         public Guid LastModifiedBy { get; set; }
         public DateTime? LastModified { get; set;}

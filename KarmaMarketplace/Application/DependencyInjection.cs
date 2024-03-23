@@ -15,9 +15,8 @@ namespace KarmaMarketplace.Application
 
             eventDispatcher.RegisterEventSubscribers(Assembly.GetExecutingAssembly());
 
-            services.AddScoped<IEventSubscriber<UserCreated>, UserCreatedSubsciber>();
             services.AddSingleton<IEventDispatcher, EventDispatcher>(x => { return eventDispatcher; });
-            services.AddScoped<IUserService, UserService>(); 
+            services.AddUserApplicationServices();
 
             return services; 
         }

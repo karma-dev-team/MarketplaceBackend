@@ -45,7 +45,6 @@ namespace KarmaMarketplace.Infrastructure.Data.Intercepters
                     var utcNow = _dateTime.GetUtcNow();
                     if (entry.State == EntityState.Added)
                     {
-                        entry.Entity.CreatedBy = _user.Id;
                         entry.Entity.Created = utcNow.DateTime;
                     }
                     entry.Entity.LastModifiedBy = _user.Id;

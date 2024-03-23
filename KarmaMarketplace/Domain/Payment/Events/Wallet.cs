@@ -1,6 +1,6 @@
 ﻿namespace KarmaMarketplace.Domain.Payment.Events
 {
-    public class Wallet
+    public class WalletCreated
     {
     }
 }

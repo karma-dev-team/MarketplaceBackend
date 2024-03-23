@@ -2,7 +2,7 @@
 
 namespace KarmaMarketplace.Domain.Files.Entities
 {
-    public class FileEntity
+    public class ImageEntity
     {
         [Key]
         public Guid Id { get; set; }
@@ -19,7 +19,7 @@ namespace KarmaMarketplace.Domain.Files.Entities
         // Assuming Size is meant to be a numeric type, not GUID.
         public long Size { get; set; } = 0;
 
-        public FileEntity(Guid id, string fileName, string filePath, string? mimeType, long size)
+        public ImageEntity(Guid id, string fileName, string filePath, string? mimeType, long size)
         {
             Id = id;
             FileName = fileName;
