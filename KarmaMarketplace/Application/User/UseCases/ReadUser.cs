@@ -29,7 +29,7 @@ namespace KarmaMarketplace.Application.User.Interactors
 
         public async Task<UserEntity> Execute(GetUserDto dto)
         {
-            return [];
+            return new();
         }
     }
 }

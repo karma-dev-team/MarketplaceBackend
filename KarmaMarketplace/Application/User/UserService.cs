@@ -1,29 +1,39 @@
-﻿using KarmaMarketplace.Application.Common.Interfaces;
-using KarmaMarketplace.Application.User.Interactors;
+﻿using KarmaMarketplace.Application.User.Interactors;
 using KarmaMarketplace.Application.User.Interfaces;
-using KarmaMarketplace.Domain.User.Services;
 
 namespace KarmaMarketplace.Application.User
 {
     public class UserService : IUserService
     {
-        private readonly IApplicationDbContext Context;
-        private readonly UserEntityService ServiceEntity;
+        private readonly IServiceProvider ServiceProvider;
 
         public UserService(
-            IApplicationDbContext dbContext,
-            UserEntityService userEntityService
+            IServiceProvider serviceProvider
         ) {
-            ServiceEntity = userEntityService;
-            Context = dbContext;
+            ServiceProvider = serviceProvider; 
         }
 
         public CreateUser Register()
         {
-            return new CreateUser(
-                dbContext: Context,
-                userEntityService: ServiceEntity
-            ); 
+            return ServiceProvider.GetRequiredService<CreateUser>(); 
+        }
+
+        public UpdateUser Update()
+        {
+            return ServiceProvider.GetRequiredService<UpdateUser>(); 
+        }
+
+        public DeleteUser Delete()
+        {
+            return ServiceProvider.GetRequiredService<DeleteUser>();
+        }
+        public GetUser Get()
+        {
+            return ServiceProvider.GetRequiredService<GetUser>();   
+        }
+        public GetUsersList GetList()
+        {
+            return ServiceProvider.GetRequiredService<GetUsersList>(); 
         }
     }
 }

@@ -4,6 +4,9 @@ namespace KarmaMarketplace.Domain.User.Enums
 {
     public enum UserRoles 
     {
+        // DONT CHANGE THE ORDER
+        [Display(Name = "other")]
+        Other,
         [Display(Name = "user")]
         User, 
         [Display(Name = "seller")]
@@ -12,9 +15,9 @@ namespace KarmaMarketplace.Domain.User.Enums
         Moderator,
         [Display(Name = "admin")]
         Admin,
+        [Display(Name = "owner")]
+        Owner, 
         [Display(Name = "superadmin")]
         SuperAdmin,
-        [Display(Name = "other")]
-        Other,
     }
 }

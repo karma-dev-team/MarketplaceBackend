@@ -34,12 +34,22 @@ namespace KarmaMarketplace.Application.User.Dto
 
     public class UpdateUserDto {
         [Required]
-        public Guid UserId { get; set; } 
+        public Guid UserId { get; set; }
+        [Required]
+        public Guid ByUserId { get; set; }
         public string? Email { get; set; }
         public UserRoles? Role { get; set; }
         public string? Name { get; set; }
         public string? OldPassword { get; set; }
         public string? NewPassword { get; set; }
         public string? TelegramId { get; set; }
+    }
+
+    public class DeleteUserDto
+    {
+        [Required]
+        public Guid UserId { get; set; }
+        [Required]
+        public Guid ByUserId { get; set; }
     }
 }

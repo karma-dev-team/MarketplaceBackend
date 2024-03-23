@@ -13,7 +13,7 @@ namespace KarmaMarketplace.Domain
                     return new PasswordService(passwordHasher: new PasswordHasher<UserEntity>());
                 }
             );
-            services.AddScoped<UserEntityService, UserEntityService>();
+            services.AddScoped<UserDomainService, UserDomainService>();
 
             return services; 
         }

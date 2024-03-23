@@ -1,19 +1,17 @@
-﻿using KarmaMarketplace.Domain.Common;
-using KarmaMarketplace.Domain.User.Events;
+﻿using KarmaMarketplace.Domain.User.Events;
 using Microsoft.AspNetCore.Identity;
 using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Domain.User.Enums;
-using KarmaMarketplace.Domain.User.Events;
 using KarmaMarketplace.Infrastructure.EventDispatcher;
 
 namespace KarmaMarketplace.Domain.User.Services
 {
-    public class UserEntityService
+    public class UserDomainService
     {
         public IEventDispatcher EventDispatcher { get; set; }
         public PasswordService PasswordService { get; set; }
 
-        public UserEntityService(IEventDispatcher eventDispatcher, PasswordService passwordService)
+        public UserDomainService(IEventDispatcher eventDispatcher, PasswordService passwordService)
         {
             Guard.Against.Null(eventDispatcher, message: "Event dispatcher is not found.");
 
