@@ -33,5 +33,18 @@ namespace KarmaMarketplace.Infrastructure
                 throw new AccessDenied(""); 
             }
         }
+
+        public async Task<bool> CanAccessOrSelf(Guid userId, Guid isSelfId, UserRoles role)
+        {
+            return userId == isSelfId || await CanAccess(userId, role); 
+        }
+
+        public async Task FailIfNotSelfOrNoAccess(Guid userId, Guid isSelfId, UserRoles role)
+        {
+            if (!(await CanAccessOrSelf(userId, isSelfId, role)))
+            {
+                throw new AccessDenied("");
+            }
+        }
     }
 }

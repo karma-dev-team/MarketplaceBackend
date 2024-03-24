@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using KarmaMarketplace.Application.User.Dto;
+using System.ComponentModel.DataAnnotations;
 
 namespace KarmaMarketplace.Application.Market.Dto
 {
-    public class CreateProductDto
+    public class CreateProductDto : UserActionDto
     {
         [Required]
         public string Name { get; set; } = null!;
@@ -18,12 +19,10 @@ namespace KarmaMarketplace.Application.Market.Dto
         public ICollection<Guid> Images { get; set; } = []; 
     }
 
-    public class UpdateProductDto
+    public class UpdateProductDto : UserActionDto
     {
         [Required]
         public Guid ProductId { get; set; }
-        [Required]
-        public Guid ByUserId { get; set; } 
         public string? Name { get; set; } 
         public string? Description { get; set; }
         public decimal? Price { get; set; }
@@ -32,14 +31,22 @@ namespace KarmaMarketplace.Application.Market.Dto
         public string? ProductStatus { get; set; }
     }
 
-    public class DeleteProductDto {
+    public class DeleteProductDto : UserActionDto {
         [Required]
         public Guid ProductId { get; set; }
-        [Required]
-        public Guid ByUserId { get; set; }
     }
 
     public class GetProductDto
     {
+        [Required]
+        public Guid ProductId { get; set; } 
+    }
+
+    public class GetProductsListDto : UserActionOptionalDto
+    {
+        public string? Name { get; set; }
+        public Guid? CategoryId { get; set; }   
+        public Guid? GameId { get; set; }
+        public string? Status { get; set; } 
     }
 }

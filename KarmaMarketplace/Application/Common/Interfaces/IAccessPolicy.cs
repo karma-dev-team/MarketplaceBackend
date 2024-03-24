@@ -6,5 +6,7 @@ namespace KarmaMarketplace.Application.Common.Interfaces
     {
         public Task<bool> CanAccess(Guid userId, UserRoles role);
         public Task FailIfNoAccess(Guid userId, UserRoles role); 
+        public Task CanAccessOrSelf(Guid userId, Guid byUserId, UserRoles role);
+        public Task FailIfNotSelfOrNoAccess(Guid userId, Guid isSelfId, UserRoles role); 
     }
 }

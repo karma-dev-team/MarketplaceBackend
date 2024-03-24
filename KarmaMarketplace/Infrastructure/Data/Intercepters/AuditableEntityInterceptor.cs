@@ -47,7 +47,7 @@ namespace KarmaMarketplace.Infrastructure.Data.Intercepters
                     {
                         entry.Entity.Created = utcNow.DateTime;
                     }
-                    entry.Entity.LastModifiedBy = _user.Id;
+                    entry.Entity.LastModifiedBy = (Guid)_user.Id;
                     entry.Entity.LastModified = utcNow.DateTime;
                 }
             }

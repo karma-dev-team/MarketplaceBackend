@@ -3,6 +3,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace KarmaMarketplace.Application.User.Dto
 {
+    public class UserActionDto
+    {
+        [Required]
+        public Guid ByUserId { get; set; }
+    }
+
+    public class UserActionOptionalDto
+    {
+        public Guid? ByUserId { get; set; }
+    }
+
     public class CreateUserDto
     {
         [Required]
@@ -32,11 +43,9 @@ namespace KarmaMarketplace.Application.User.Dto
         public string Password { get; set; } = null!;
     }
 
-    public class UpdateUserDto {
+    public class UpdateUserDto : UserActionDto {
         [Required]
         public Guid UserId { get; set; }
-        [Required]
-        public Guid ByUserId { get; set; }
         public string? Email { get; set; }
         public UserRoles? Role { get; set; }
         public string? Name { get; set; }
@@ -45,11 +54,9 @@ namespace KarmaMarketplace.Application.User.Dto
         public string? TelegramId { get; set; }
     }
 
-    public class DeleteUserDto
+    public class DeleteUserDto : UserActionDto
     {
         [Required]
         public Guid UserId { get; set; }
-        [Required]
-        public Guid ByUserId { get; set; }
     }
 }
