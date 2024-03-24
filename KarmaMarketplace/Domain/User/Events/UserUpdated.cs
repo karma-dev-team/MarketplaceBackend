@@ -6,12 +6,10 @@ namespace KarmaMarketplace.Domain.User.Events
 {
     public class UserUpdated(
         UserEntity user,
-        UserEntity byUser,
-        Dictionary<string, object> changedValues
+        UserEntity byUser
     ) : BaseEvent
     {
         public UserEntity User { get; } = user;
-        public Dictionary<string, object> ChangedValues { get; } = changedValues; 
         public UserEntity ByUser { get; } = byUser; 
     }
 }

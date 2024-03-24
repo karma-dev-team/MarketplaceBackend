@@ -26,8 +26,6 @@ namespace KarmaMarketplace.Application.User.Interactors
             if (user == null)
                 throw new EntityDoesNotExists(nameof(UserEntity), "");
 
-            
-
             Context.Users.Remove(user);
             await Context.SaveChangesAsync();
 

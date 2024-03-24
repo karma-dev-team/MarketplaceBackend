@@ -2,6 +2,6 @@
 {
     public interface IEventSubscriber<TEvent> where TEvent : BaseEvent
     {
-        public void HandleEvent(TEvent @event);
+        public Task HandleEvent(TEvent @event);
     }
 }

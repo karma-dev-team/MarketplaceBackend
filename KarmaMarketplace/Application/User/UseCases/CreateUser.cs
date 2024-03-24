@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using KarmaMarketplace.Application.Common.Interactors;
 using KarmaMarketplace.Application.Common.Interfaces;
-using KarmaMarketplace.Application.User.Exceptions;
 using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Domain.User.Services;
 using KarmaMarketplace.Application.Common.Exceptions;

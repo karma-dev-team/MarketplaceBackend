@@ -19,6 +19,10 @@ namespace KarmaMarketplace.Infrastructure
             {
                 return false;
             }
+            if (user.Blocked == true)
+            {
+                return false; 
+            }
             return user.Role >= role; 
         }
 
