@@ -2,7 +2,7 @@
 
 namespace KarmaMarketplace.Domain.Common
 {
-    public class BaseAuditableEntity
+    public class BaseAuditableEntity : BaseEntity
     {
         [Key]
         public Guid Id { get; set; }

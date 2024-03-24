@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Infrastructure.Data;
-using KarmaMarketplace.Infrastructure.Data.Intercepters; 
+using KarmaMarketplace.Infrastructure.Data.Intercepters;
+using Microsoft.AspNetCore.Identity;
+using KarmaMarketplace.Domain.User.Entities;
 
 namespace KarmaMarketplace.Infrastructure
 {
@@ -24,6 +26,12 @@ namespace KarmaMarketplace.Infrastructure
             services.AddScoped<ApplicationDbContextInitialiser>();
 
             services.AddSingleton(TimeProvider.System);
+
+            services.AddScoped<PasswordService, PasswordService>(
+                x => {
+                    return new PasswordService(passwordHasher: new PasswordHasher<UserEntity>());
+                }
+            );
 
             services.AddAuthorizationBuilder(); 
 

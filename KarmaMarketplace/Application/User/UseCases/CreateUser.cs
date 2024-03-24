@@ -11,14 +11,14 @@ namespace KarmaMarketplace.Application.User.Interactors
     public class CreateUser : BaseUseCase<CreateUserDto, UserEntity>
     {
         private readonly IApplicationDbContext _context;
-        private readonly UserDomainService _userService;
+        private readonly PasswordService passwordService; 
 
         public CreateUser(
             IApplicationDbContext dbContext, 
-            UserDomainService userEntityService)
+            PasswordService pswdService)
         {
+            passwordService = pswdService;
             _context = dbContext;
-            _userService = userEntityService;
         }
 
         public async Task<UserEntity> Execute(CreateUserDto dto)
@@ -29,10 +29,11 @@ namespace KarmaMarketplace.Application.User.Interactors
                 throw new EntityAlreadyExists(nameof(UserEntity), dto.EmailAddress, "EmailAddress"); 
             }
 
-            var newUser = _userService.Create(
+            var newUser = UserEntity.Create(
                 UserName: dto.UserName, 
                 email: dto.EmailAddress, 
-                password: dto.Password
+                password: dto.Password, 
+                passwordService: passwordService 
             ); 
 
             await _context.Users.AddAsync(newUser);

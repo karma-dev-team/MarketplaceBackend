@@ -6,20 +6,22 @@ using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Domain.User.Enums;
 using KarmaMarketplace.Domain.User.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace KarmaMarketplace.Application.User.Interactors
 {
     public class UpdateUser : BaseUseCase<UpdateUserDto, UserEntity>
     {
-        private UserDomainService UserService; 
         private IApplicationDbContext Context;
         private IAccessPolicy AccessPolicy;
+        private PasswordService PasswordService; 
 
-        public UpdateUser(UserDomainService userService, 
+        public UpdateUser( 
             IApplicationDbContext context,
-            IAccessPolicy accessPolicy)
+            IAccessPolicy accessPolicy, 
+            PasswordService passwordService)
         {
-            UserService = userService;
+            PasswordService = passwordService; 
             Context = context;
             AccessPolicy = accessPolicy;
         }
@@ -48,16 +50,21 @@ namespace KarmaMarketplace.Application.User.Interactors
                 user.TelegramId = dto.TelegramId; 
             }
             if (dto.NewPassword != null && dto.OldPassword != null) {
-                UserService.UpdatePassword(
-                    user, 
-                    dto.OldPassword, 
-                    dto.NewPassword); 
+                user.UpdatePassword(
+                    oldPassword: dto.OldPassword, 
+                    newPassword: dto.NewPassword, 
+                    passwordService: ); 
             }
             if (dto.Role != null) {
-                UserService.UpdateRole(
-                    user,
-                    byUser,
-                    (UserRoles)dto.Role); 
+                if (byUser.Role == UserRoles.SuperAdmin)
+                {
+                    user.UpdateRole(
+                        (UserRoles)dto.Role);
+                }
+                else
+                {
+                    throw new AccessDenied(null);
+                }
             }
 
             return user;
