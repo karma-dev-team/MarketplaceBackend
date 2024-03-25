@@ -13,7 +13,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
 
         [ForeignKey("Game")]
         public Guid GameID { get; set; } 
-        public virtual Game Game { get; set; } = null!; 
+        public virtual GameEntity Game { get; set; } = null!; 
 
         [Required, MaxLength(256)]
         public string Slug { get; set; } = null!; 

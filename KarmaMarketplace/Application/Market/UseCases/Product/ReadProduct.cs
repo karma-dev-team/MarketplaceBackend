@@ -4,6 +4,8 @@ using KarmaMarketplace.Application.Market.Dto;
 using KarmaMarketplace.Application.User.Dto;
 using KarmaMarketplace.Domain.Market.Entities;
 using KarmaMarketplace.Domain.Market.Enums;
+using KarmaMarketplace.Domain.Market.ValueObjects;
+using KarmaMarketplace.Infrastructure;
 using KarmaMarketplace.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,10 +22,26 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
 
         public async Task<ProductEntity?> Execute(GetProductDto dto)
         {
-            return await _context.Products
+            var product = await _context.Products
                 .IncludeStandard()
                 .Where(x => x.Id == dto.ProductId)
                 .FirstOrDefaultAsync();
+
+            var byUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == dto.ByUserId);
+
+            Guard.Against.Null(byUser, message: "Unauthorized"); 
+
+            if (product == null)
+            {
+                return null;
+            }
+
+            product.RegisterView(byUser); 
+
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync(); 
+
+            return product; 
         }
     }
 
@@ -77,18 +95,54 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
         }
     }
 
-    public class GetAnalyticsInformation : BaseUseCase<UserActionDto, AnalyticsInformationDto>
+    public class GetAnalyticsInformation : BaseUseCase<GetAnalyticsDto, AnalyticsInformationDto>
     {
         private readonly IApplicationDbContext _context;
-        private readonly IAccessPolicy _accessPolicy;
 
         public GetAnalyticsInformation(IApplicationDbContext dbContext) {
-            _context = dbContext; 
+            _context = dbContext;
         } 
 
-        public async Task<AnalyticsInformationDto> Execute(UserActionDto dto)
+        public async Task<AnalyticsInformationDto> Execute(GetAnalyticsDto dto)
         {
-            return new(); 
+            List<ProductEntity> products = []; 
+            if (dto.ProductId != null)
+            {
+                var product = await _context.Products
+                    .IncludeStandard()
+                    .Where(x => x.Id == dto.ProductId)
+                    .FirstOrDefaultAsync();
+
+                Guard.Against.Null(product, message: "Product does not exists"); 
+
+                products.Add(product);
+            }
+            else
+            {
+                var foundProducts = await _context.Products
+                    .IncludeStandard()
+                    .Where(x => x.CreatedBy.Id == dto.ByUserId)
+                    .Where(x => x.CreatedAt >= dto.StartDate && x.CreatedAt <= dto.EndDate)
+                    .ToListAsync();
+                products.AddRange(foundProducts);
+            }
+
+            int totalViews = 0;
+            var viewsInWeek = 0;
+            foreach ( var product in products)
+            {
+                totalViews += product.CountViews(
+                        startDate: DateTime.UtcNow.AddYears(-20),
+                        endDate: DateTime.UtcNow);
+                viewsInWeek += product.CountViews(
+                        startDate: DateTime.UtcNow.AddDays(-7),
+                        endDate: DateTime.UtcNow); 
+            }
+
+            return new AnalyticsInformationDto(
+                totalViews: totalViews, 
+                viewsInWeek: viewsInWeek, 
+                revenue: new(0)); 
         }
     }
 }

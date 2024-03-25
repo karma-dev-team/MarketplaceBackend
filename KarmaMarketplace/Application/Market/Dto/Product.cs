@@ -1,4 +1,7 @@
-﻿using KarmaMarketplace.Application.User.Dto;
+﻿using KarmaMarketplace.Application.Files.Dto;
+using KarmaMarketplace.Application.Files.UseCases;
+using KarmaMarketplace.Application.User.Dto;
+using KarmaMarketplace.Domain.Market.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 
 namespace KarmaMarketplace.Application.Market.Dto
@@ -16,7 +19,7 @@ namespace KarmaMarketplace.Application.Market.Dto
         [Required]
         public decimal Price { get; set; }
         public Dictionary<string, string> Attributes { get; set; } = new();
-        public ICollection<Guid> Images { get; set; } = []; 
+        public ICollection<CreateFileDto> Images { get; set; } = []; 
     }
 
     public class UpdateProductDto : UserActionDto
@@ -50,8 +53,27 @@ namespace KarmaMarketplace.Application.Market.Dto
         public string? Status { get; set; } 
     }
 
-    public class AnalyticsInformationDto : UserActionDto {  
-        public int TotlWatches { get; set; }
-        public int WatchesInWeek { get; set; }
+    public class AnalyticsInformationDto : UserActionDto {
+        [Required]
+        public int TotalViews { get; set; }
+        [Required]
+        public int ViewsInWeek { get; set; }
+        [Required]
+        public Money Revenue { get; set; } = null!; 
+
+        public AnalyticsInformationDto(int totalViews, int viewsInWeek, Money revenue)
+        {
+            TotalViews = totalViews;
+            ViewsInWeek = viewsInWeek;
+            Revenue = revenue; 
+        }
+    }
+
+    public class GetAnalyticsDto : UserActionDto {  
+        public Guid? ProductId { get; set; }
+        [Required]
+        public DateTime StartDate { get; set; }
+        [Required]
+        public DateTime EndDate { get; set; }
     }
 }

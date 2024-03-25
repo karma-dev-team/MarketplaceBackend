@@ -1,5 +1,6 @@
 ﻿using KarmaMarketplace.Application.Common.Interactors;
 using KarmaMarketplace.Application.Common.Interfaces;
+using KarmaMarketplace.Application.Files.Interfaces;
 using KarmaMarketplace.Application.Market.Dto;
 using KarmaMarketplace.Domain.Files.Entities;
 using KarmaMarketplace.Domain.Market.Entities;
@@ -10,10 +11,12 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
 {
     public class CreateProduct : BaseUseCase<CreateProductDto, ProductEntity>
     {
-        private readonly IApplicationDbContext _context; 
+        private readonly IApplicationDbContext _context;
+        private readonly IFileService _fileService; 
 
-        public CreateProduct(IApplicationDbContext dbContext) {
-            _context = dbContext; 
+        public CreateProduct(IApplicationDbContext dbContext, IFileService fileService) {
+            _context = dbContext;
+            _fileService = fileService; 
         }
 
         public async Task<ProductEntity> Execute(CreateProductDto dto)
@@ -27,10 +30,10 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
             Guard.Against.Null(category, message: "category does not exists");
 
             ICollection<ImageEntity> images = []; 
-            foreach (var imageId in dto.Images)
+            foreach (var createImage in dto.Images)
             {
-                var image = await _context.Images.FirstOrDefaultAsync(x => x.Id == imageId);
-                Guard.Against.Null(image, message: $"Image does not exists, image: {imageId}"); 
+                var image = await _fileService.UploadImage().Execute(createImage); 
+                Guard.Against.Null(image, message: $"Image does not exists, image: {createImage.Name}"); 
                 images.Add(image);
             }
 

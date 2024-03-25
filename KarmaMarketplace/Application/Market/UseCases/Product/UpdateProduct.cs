@@ -1,9 +1,11 @@
 ﻿using KarmaMarketplace.Application.Common.Interactors;
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Application.Market.Dto;
+using KarmaMarketplace.Domain.Files.Entities;
 using KarmaMarketplace.Domain.Market.Entities;
 using KarmaMarketplace.Domain.Market.Enums;
 using KarmaMarketplace.Domain.Market.Exceptions;
+using KarmaMarketplace.Domain.Market.ValueObjects;
 using KarmaMarketplace.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
@@ -11,7 +13,7 @@ using System.Text.Json;
 
 namespace KarmaMarketplace.Application.Market.UseCases.Product
 {
-    public class UpdateProduct : BaseUseCase<UpdateProductDto, ProductEntity?>
+    public class UpdateProduct : BaseUseCase<UpdateProductDto, ProductEntity>
     {
         private readonly IApplicationDbContext _context;
         private readonly IAccessPolicy _accessPolicy;
@@ -65,10 +67,27 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
             }
             if (dto.Images != null)
             {
-                
+                List<ImageEntity> images = []; 
+
+                foreach (var imageId in dto.Images)
+                {
+                    var image = await _context.Images.FirstOrDefaultAsync(x => x.Id == imageId);
+
+                    Guard.Against.Null(image, message: "Image does not exists");
+
+                    images.Add(image);
+                }
+
+                product.Images = images; 
+            }
+            if (dto.Price != null) {
+                product.BasePrice = new Money((decimal)dto.Price); 
             }
 
-            return;
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync(); 
+
+            return product;
         }
     }
 }

@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using KarmaMarketplace.Domain.Files.Entities;
 using KarmaMarketplace.Domain.Market.Enums;
+using KarmaMarketplace.Domain.Market.Events;
 
 namespace KarmaMarketplace.Domain.Market.Entities
 {
@@ -31,5 +32,27 @@ namespace KarmaMarketplace.Domain.Market.Entities
         [ForeignKey("BannerImage")]
         public Guid? BannerID { get; set; }
         public virtual ImageEntity BannerImage { get; set; } = null!;
+
+        public static GameEntity Create(
+            string name, 
+            string? description, 
+            GameTypes type, 
+            string tags, 
+            ImageEntity banner, 
+            ImageEntity logo)
+        {
+            var game = new GameEntity();
+
+            game.Name = name;
+            game.Description = description;
+            game.Type = type;
+            game.Tags = tags;
+            game.BannerImage = banner;
+            game.LogoImage = logo;
+            
+            game.AddDomainEvent(new GameCreated(game));
+
+            return game;
+        }
     }
 }

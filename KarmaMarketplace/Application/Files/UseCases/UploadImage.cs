@@ -3,6 +3,7 @@ using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Application.Files.Dto;
 using KarmaMarketplace.Domain.Files.Entities;
 using KarmaMarketplace.Infrastructure.Adapters.FileStorage;
+using Microsoft.EntityFrameworkCore;
 
 namespace KarmaMarketplace.Application.Files.UseCases
 {
@@ -21,6 +22,11 @@ namespace KarmaMarketplace.Application.Files.UseCases
 
         public async Task<ImageEntity> Execute(CreateFileDto dto)
         {
+            if (dto.FileId != null)
+            {
+                var image = await _context.Images.FirstOrDefaultAsync(x => x.Id == dto.FileId);
+                Guard.Against.Null(image, message: $"Image does not exists with id: {dto.FileId}"); 
+            }
             Stream? fileStream = dto.Stream;
             if (fileStream == null && !string.IsNullOrEmpty(dto.DownloadUrl))
             {

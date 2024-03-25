@@ -7,6 +7,8 @@ using KarmaMarketplace.Domain.Market.ValueObjects;
 using KarmaMarketplace.Domain.Market.Exceptions;
 using KarmaMarketplace.Domain.Market.Events;
 using KarmaMarketplace.Domain.Files.Entities;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace KarmaMarketplace.Domain.Market.Entities
 {
@@ -35,7 +37,8 @@ namespace KarmaMarketplace.Domain.Market.Entities
 
         [Column(TypeName = "jsonb")]
         public string Attributes { get; set; } = null!;
-        public ICollection<ImageEntity> Images { get; set; } = []; 
+        public ICollection<ImageEntity> Images { get; set; } = [];
+        public ICollection<ProductViewEntity> ProductViews { get; set; } = []; 
 
         public static ProductEntity Create(
             UserEntity byUser, 
@@ -59,11 +62,31 @@ namespace KarmaMarketplace.Domain.Market.Entities
             };
 
             VerifyAttributes(attributes, category);
+            newProduct.Attributes = JsonSerializer.Serialize(attributes);
 
             newProduct.AddDomainEvent(
                 new ProductCreated(newProduct)); 
 
             return newProduct;
+        }
+
+        public void RegisterView(
+            UserEntity byUser)
+        {
+            ProductViews.Add(new ProductViewEntity(userId: byUser.Id, productId: Id, info: "{}"));
+
+            AddDomainEvent(new ProductViewed(this)); 
+        }
+
+        public int CountViews(
+            DateTime startDate,
+            DateTime endDate)
+        {
+            var filteredVisits = ProductViews
+                .Where(visit => visit.CreatedAt >= startDate && visit.CreatedAt <= endDate)
+                .ToList();
+
+            return filteredVisits.Count; 
         }
 
         public static void VerifyAttributes(

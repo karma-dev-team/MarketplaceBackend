@@ -45,10 +45,10 @@ namespace KarmaMarketplace.Infrastructure.Data.Intercepters
                     var utcNow = _dateTime.GetUtcNow();
                     if (entry.State == EntityState.Added)
                     {
-                        entry.Entity.Created = utcNow.DateTime;
+                        entry.Entity.CreatedAt = utcNow.DateTime;
                     }
                     entry.Entity.LastModifiedBy = (Guid)_user.Id;
-                    entry.Entity.LastModified = utcNow.DateTime;
+                    entry.Entity.LastModifiedAt = utcNow.DateTime;
                 }
             }
         }

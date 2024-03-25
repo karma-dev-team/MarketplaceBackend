@@ -25,6 +25,6 @@ namespace KarmaMarketplace.Domain.Messging.Entities
 
         [NotMapped]
         public MessageEntity? LastMessage => 
-            Messages?.OrderByDescending(m => m.Created).FirstOrDefault();
+            Messages?.OrderByDescending(m => m.CreatedAt).FirstOrDefault();
     }
 }
