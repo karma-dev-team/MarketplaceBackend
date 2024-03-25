@@ -1,6 +1,7 @@
 ﻿using KarmaMarketplace.Application.Common.Interactors;
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Application.Market.Dto;
+using KarmaMarketplace.Application.User.Dto;
 using KarmaMarketplace.Domain.Market.Entities;
 using KarmaMarketplace.Domain.Market.Enums;
 using KarmaMarketplace.Infrastructure.Data.Queries;
@@ -73,6 +74,21 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
             }
 
             return await query.ToListAsync();
+        }
+    }
+
+    public class GetAnalyticsInformation : BaseUseCase<UserActionDto, AnalyticsInformationDto>
+    {
+        private readonly IApplicationDbContext _context;
+        private readonly IAccessPolicy _accessPolicy;
+
+        public GetAnalyticsInformation(IApplicationDbContext dbContext) {
+            _context = dbContext; 
+        } 
+
+        public async Task<AnalyticsInformationDto> Execute(UserActionDto dto)
+        {
+            return new(); 
         }
     }
 }

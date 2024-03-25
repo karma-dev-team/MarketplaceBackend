@@ -36,7 +36,7 @@ namespace KarmaMarketplace.Application.Market.Dto
         public Guid ProductId { get; set; }
     }
 
-    public class GetProductDto
+    public class GetProductDto : UserActionOptionalDto
     {
         [Required]
         public Guid ProductId { get; set; } 
@@ -48,5 +48,10 @@ namespace KarmaMarketplace.Application.Market.Dto
         public Guid? CategoryId { get; set; }   
         public Guid? GameId { get; set; }
         public string? Status { get; set; } 
+    }
+
+    public class AnalyticsInformationDto : UserActionDto {  
+        public int TotlWatches { get; set; }
+        public int WatchesInWeek { get; set; }
     }
 }
