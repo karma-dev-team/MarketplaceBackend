@@ -10,10 +10,6 @@ namespace KarmaMarketplace.Presentation.TelegramBot
         static async Task Main(string[] args)
         {
             var privateMessages = new DefaultMessageUpdateHandler();
-            var privateTexts = new Defa
-            {
-                CommandsManager = new DefaultActionManager<SignedMessageTextUpdate>()
-            };
             privateTexts.CommandsManager.AddSafely(StartCommand);
             privateMessages.TextMessageUpdateHandler = privateTexts;
 

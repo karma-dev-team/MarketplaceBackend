@@ -1,4 +1,5 @@
 ﻿using KarmaMarketplace.Application.Common.Interfaces;
+using KarmaMarketplace.Application.Files;
 using KarmaMarketplace.Application.Market;
 using KarmaMarketplace.Application.Messaging;
 using KarmaMarketplace.Application.Payment;
@@ -26,6 +27,7 @@ namespace KarmaMarketplace.Application
             services.AddMarketApplicationServices();
             services.AddPaymentApplicationServices(); 
             services.AddMessagingApplicationServices();
+            services.AddFilesApplicationServices(); 
 
             return services; 
         }
