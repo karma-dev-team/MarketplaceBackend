@@ -6,6 +6,7 @@ using KarmaMarketplace.Domain.Market.Enums;
 using KarmaMarketplace.Domain.Market.ValueObjects;
 using KarmaMarketplace.Domain.Market.Exceptions;
 using KarmaMarketplace.Domain.Market.Events;
+using KarmaMarketplace.Domain.Files.Entities;
 
 namespace KarmaMarketplace.Domain.Market.Entities
 {
@@ -33,7 +34,8 @@ namespace KarmaMarketplace.Domain.Market.Entities
         public UserEntity? BuyerUser { get; set; }
 
         [Column(TypeName = "jsonb")]
-        public string Attributes { get; set; } = null!; 
+        public string Attributes { get; set; } = null!;
+        public ICollection<ImageEntity> Images { get; set; } = []; 
 
         public static ProductEntity Create(
             UserEntity byUser, 
@@ -42,6 +44,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
             Money price, 
             string description,
             Dictionary<string, string> attributes,             
+            ICollection<ImageEntity>? images,
             ProductStatus status = ProductStatus.Processing) 
         {
             ProductEntity newProduct = new ProductEntity()

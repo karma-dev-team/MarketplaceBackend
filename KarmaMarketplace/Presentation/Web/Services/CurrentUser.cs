@@ -13,6 +13,7 @@ namespace KarmaMarketplace.Presentation.Web.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public Guid? Id => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        public Guid? Id => Guid.Parse(
+            _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier));
     }
 }

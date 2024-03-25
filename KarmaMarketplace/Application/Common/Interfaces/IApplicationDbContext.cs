@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Domain.Market.Entities;
+using KarmaMarketplace.Domain.Files.Entities;
 
 namespace KarmaMarketplace.Application.Common.Interfaces
 {
@@ -16,6 +17,8 @@ namespace KarmaMarketplace.Application.Common.Interfaces
         DbSet<ReviewEntity> Reviews { get; }    
 
         DbSet<GameEntity> Games { get; }    
+
+        DbSet<ImageEntity> Images { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         EntityEntry<TEntity> Update<TEntity>(TEntity entity) where TEntity : class; 

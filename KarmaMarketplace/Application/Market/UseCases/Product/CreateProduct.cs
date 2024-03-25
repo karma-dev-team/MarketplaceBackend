@@ -1,6 +1,7 @@
 ﻿using KarmaMarketplace.Application.Common.Interactors;
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Application.Market.Dto;
+using KarmaMarketplace.Domain.Files.Entities;
 using KarmaMarketplace.Domain.Market.Entities;
 using KarmaMarketplace.Domain.Market.ValueObjects;
 using Microsoft.EntityFrameworkCore;
@@ -25,11 +26,20 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
 
             Guard.Against.Null(category, message: "category does not exists");
 
+            ICollection<ImageEntity> images = []; 
+            foreach (var imageId in dto.Images)
+            {
+                var image = await _context.Images.FirstOrDefaultAsync(x => x.Id == imageId);
+                Guard.Against.Null(image, message: $"Image does not exists, image: {imageId}"); 
+                images.Add(image);
+            }
+
             var product = ProductEntity.Create(
                 byUser: byUser,
                 category: category,
                 name: dto.Name,
                 price: new Money(dto.Price),
+                images: images,
                 description: dto.Description,
                 attributes: dto.Attributes);
 

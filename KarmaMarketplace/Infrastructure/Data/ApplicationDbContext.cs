@@ -4,6 +4,7 @@ using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Infrastructure.Data.Configuration;
 using System.Reflection;
 using KarmaMarketplace.Domain.Market.Entities;
+using KarmaMarketplace.Domain.Files.Entities;
 
 namespace KarmaMarketplace.Infrastructure.Data
 {
@@ -18,6 +19,8 @@ namespace KarmaMarketplace.Infrastructure.Data
         public DbSet<ReviewEntity> Reviews { get; } = null!;
 
         public DbSet<GameEntity> Games { get; } = null!;
+
+        public DbSet<ImageEntity> Images { get; } = null!; 
 
         public ApplicationDbContext(DbContextOptions options) : base(options) { }
 

@@ -4,7 +4,7 @@ using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Application.User.Dto;
 using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Domain.User.Enums;
-using KarmaMarketplace.Domain.User.Services;
+using KarmaMarketplace.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 
@@ -53,7 +53,7 @@ namespace KarmaMarketplace.Application.User.Interactors
                 user.UpdatePassword(
                     oldPassword: dto.OldPassword, 
                     newPassword: dto.NewPassword, 
-                    passwordService: ); 
+                    passwordService: PasswordService); 
             }
             if (dto.Role != null) {
                 if (byUser.Role == UserRoles.SuperAdmin)

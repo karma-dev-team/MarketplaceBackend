@@ -61,7 +61,7 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddHealthChecks();
 builder.Services.AddApplicationServices();
-builder.Services.AddDomainServices(); 
+builder.Services.AddHttpClient();
 builder.Services.AddInfrastructureServices(builder.Configuration); 
 builder.Services.AddAuthentication(options =>
 {
