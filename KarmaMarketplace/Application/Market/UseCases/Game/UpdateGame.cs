@@ -28,7 +28,7 @@ namespace KarmaMarketplace.Application.Market.Interactors.Game
 
             Guard.Against.Null(game, message: "Game does not exists");
 
-            await _accessPolicy.FailIfNoAccess(dto.ByUserId, Domain.User.Enums.UserRoles.Admin); 
+            await _accessPolicy.FailIfNoAccess(Domain.User.Enums.UserRoles.Admin); 
 
             if (!string.IsNullOrEmpty(dto.Name))
             {

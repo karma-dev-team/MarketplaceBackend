@@ -12,16 +12,22 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
     public class CreateProduct : BaseUseCase<CreateProductDto, ProductEntity>
     {
         private readonly IApplicationDbContext _context;
-        private readonly IFileService _fileService; 
+        private readonly IFileService _fileService;
+        private readonly IAccessPolicy _accessPolicy;
+        private readonly IUser _user; 
 
-        public CreateProduct(IApplicationDbContext dbContext, IFileService fileService) {
+        public CreateProduct(IApplicationDbContext dbContext, IFileService fileService, IAccessPolicy accessPolicy, IUser user) {
             _context = dbContext;
-            _fileService = fileService; 
+            _fileService = fileService;
+            _accessPolicy = accessPolicy;
+            _user = user; 
         }
 
         public async Task<ProductEntity> Execute(CreateProductDto dto)
         {
-            var byUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == dto.ByUserId);
+            await _accessPolicy.FailIfNoAccess(Domain.User.Enums.UserRoles.User);
+
+            var byUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == _user.Id);
 
             Guard.Against.Null(byUser, message: "correct user is not provided");
 

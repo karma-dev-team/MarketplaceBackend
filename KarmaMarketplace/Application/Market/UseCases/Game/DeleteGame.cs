@@ -26,6 +26,8 @@ namespace KarmaMarketplace.Application.Market.Interactors.Game
 
         public async Task<GameEntity> Execute(DeleteGameDto dto)
         {
+            await _accessPolicy.FailIfNoAccess(Domain.User.Enums.UserRoles.Admin); 
+
             var game = await _context.Games.FirstOrDefaultAsync(x => x.Id == dto.GameId);
 
             Guard.Against.Null(game, message: "Game does not exists");

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace KarmaMarketplace.Application.Market.Dto
 {
-    public class CreateGameDto : UserActionDto
+    public class CreateGameDto 
     {
         [Required]
         public string Name { get; set; } = null!;
@@ -20,13 +20,13 @@ namespace KarmaMarketplace.Application.Market.Dto
         public CreateFileDto Banner { get; set; } = null!;
     }
 
-    public class DeleteGameDto : UserActionDto
+    public class DeleteGameDto 
     {
         [Required]
         public Guid GameId { get; set; }
     }
 
-    public class UpdateGameDto : UserActionDto
+    public class UpdateGameDto 
     {
         [Required]
         public Guid GameId { get; set; }
@@ -36,5 +36,16 @@ namespace KarmaMarketplace.Application.Market.Dto
         public List<string>? Tags { get; set; } = null!;
         public CreateFileDto? Logo { get; set; } = null!;
         public CreateFileDto? Banner { get; set; } = null!;
+    }
+
+    public class GetGameDto
+    {
+        public Guid? GameId { get; set; }
+        public string? Name { get; set; }
+    }
+
+    public class GetGamesListDto
+    {
+        public string? Name { get; set; }
     }
 }

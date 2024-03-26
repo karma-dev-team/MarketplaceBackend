@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace KarmaMarketplace.Application.Market.Dto
 {
-    public class CreateProductDto : UserActionDto
+    public class CreateProductDto
     {
         [Required]
         public string Name { get; set; } = null!;
@@ -22,7 +22,7 @@ namespace KarmaMarketplace.Application.Market.Dto
         public ICollection<CreateFileDto> Images { get; set; } = []; 
     }
 
-    public class UpdateProductDto : UserActionDto
+    public class UpdateProductDto
     {
         [Required]
         public Guid ProductId { get; set; }
@@ -34,18 +34,18 @@ namespace KarmaMarketplace.Application.Market.Dto
         public string? ProductStatus { get; set; }
     }
 
-    public class DeleteProductDto : UserActionDto {
+    public class DeleteProductDto {
         [Required]
         public Guid ProductId { get; set; }
     }
 
-    public class GetProductDto : UserActionOptionalDto
+    public class GetProductDto
     {
         [Required]
         public Guid ProductId { get; set; } 
     }
 
-    public class GetProductsListDto : UserActionOptionalDto
+    public class GetProductsListDto
     {
         public string? Name { get; set; }
         public Guid? CategoryId { get; set; }   
@@ -53,7 +53,7 @@ namespace KarmaMarketplace.Application.Market.Dto
         public string? Status { get; set; } 
     }
 
-    public class AnalyticsInformationDto : UserActionDto {
+    public class AnalyticsInformationDto {
         [Required]
         public int TotalViews { get; set; }
         [Required]
@@ -69,7 +69,7 @@ namespace KarmaMarketplace.Application.Market.Dto
         }
     }
 
-    public class GetAnalyticsDto : UserActionDto {  
+    public class GetAnalyticsDto {  
         public Guid? ProductId { get; set; }
         [Required]
         public DateTime StartDate { get; set; }

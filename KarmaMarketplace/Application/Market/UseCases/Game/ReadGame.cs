@@ -1,4 +1,5 @@
 ﻿using KarmaMarketplace.Application.Common.Interactors;
+using KarmaMarketplace.Application.Market.Dto;
 using KarmaMarketplace.Domain.Market.Entities;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -12,7 +13,7 @@ namespace KarmaMarketplace.Application.Market.Interactors.Game
 
         public async Task<GameEntity> Execute(GetGameDto dto)
         {
-            return;
+            return new();
         }
     }
 
@@ -25,7 +26,7 @@ namespace KarmaMarketplace.Application.Market.Interactors.Game
 
         public async Task<ICollection<GameEntity>> Execute(GetGamesListDto dto)
         {
-
+            return []; 
         }
     }
 }

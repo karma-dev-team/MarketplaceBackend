@@ -12,6 +12,8 @@ using KarmaMarketplace.Infrastructure;
 using KarmaMarketplace.Infrastructure.Data;
 using System.Text;
 using System.Text.Json;
+using KarmaMarketplace.Application.Common.Interfaces;
+using KarmaMarketplace.Presentation.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -85,6 +87,9 @@ builder.Services.AddAuthentication(options =>
     };
 });
 builder.Services.AddScoped<IPasswordHasher<UserEntity>, PasswordHasher<UserEntity>>();
+builder.Services.AddScoped<IUser, CurrentUser>();
+
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddCors(option => option.AddPolicy("TaskManger", builder =>
 {
@@ -110,6 +115,7 @@ if (app.Environment.IsDevelopment())
 }
 app.UseStaticFiles();
 
+app.UseHealthChecks("/health");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

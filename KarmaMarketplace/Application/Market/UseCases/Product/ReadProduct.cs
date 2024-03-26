@@ -14,10 +14,12 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
     public class GetProduct : BaseUseCase<GetProductDto, ProductEntity?>
     {
         private readonly IApplicationDbContext _context;
+        private readonly IUser _user; 
 
-        public GetProduct(IApplicationDbContext dbContext)
+        public GetProduct(IApplicationDbContext dbContext, IUser user)
         {
             _context = dbContext;
+            _user = user;
         }
 
         public async Task<ProductEntity?> Execute(GetProductDto dto)
@@ -27,7 +29,7 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
                 .Where(x => x.Id == dto.ProductId)
                 .FirstOrDefaultAsync();
 
-            var byUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == dto.ByUserId);
+            var byUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == _user.Id);
 
             Guard.Against.Null(byUser, message: "Unauthorized"); 
 

@@ -4,9 +4,9 @@ namespace KarmaMarketplace.Application.Common.Interfaces
 {
     public interface IAccessPolicy
     {
-        public Task<bool> CanAccess(Guid userId, UserRoles role);
-        public Task FailIfNoAccess(Guid userId, UserRoles role); 
-        public Task<bool> CanAccessOrSelf(Guid userId, Guid byUserId, UserRoles role);
-        public Task FailIfNotSelfOrNoAccess(Guid userId, Guid isSelfId, UserRoles role); 
+        public Task<bool> CanAccess(UserRoles role, Guid? userId = null);
+        public Task FailIfNoAccess(UserRoles role, Guid? userId = null); 
+        public Task<bool> CanAccessOrSelf(Guid byUserId, UserRoles role, Guid? userId = null);
+        public Task FailIfNotSelfOrNoAccess(Guid byUserId, UserRoles role, Guid? userId = null);
     }
 }
