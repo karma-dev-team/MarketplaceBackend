@@ -1,14 +1,16 @@
 ﻿using KarmaMarketplace.Application.Common.Interactors;
+using KarmaMarketplace.Application.Market.Dto;
+using KarmaMarketplace.Domain.Market.Entities;
 
 namespace KarmaMarketplace.Application.Market.UseCases.Review
 {
-    public class GetReview : BaseUseCase<InputDTO, OutputDTO>
+    public class GetReviewsList : BaseUseCase<GetReviewsListDto, ICollection<ReviewEntity>>
     {
-        public GetReview() { }
+        public GetReviewsList() { }
 
-        public async Task<OutputDTO> Execute(InputDTO dto)
+        public async Task<ICollection<ReviewEntity>> Execute(GetReviewsListDto dto)
         {
-            return;
+            return [];
         }
     }
 }
