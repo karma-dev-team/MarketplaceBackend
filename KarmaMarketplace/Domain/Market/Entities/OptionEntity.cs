@@ -32,7 +32,6 @@ namespace KarmaMarketplace.Domain.Market.Entities
 
         // Для RANGE цифр. 
         public int? ValueRangeMin { get; set; }
-
         public int? ValueRangeMax { get; set; }
 
         public static OptionEntity CreateRange(
@@ -53,7 +52,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
             range.ValueRangeMin = min;
             range.ValueRangeMax = max; 
 
-            return range; 
+            return range;
         }
 
         public static OptionEntity CreateSwitch(
@@ -65,7 +64,9 @@ namespace KarmaMarketplace.Domain.Market.Entities
 
             range.Label = label;
             range.Field = field;
-            range.Sequence = sequence; return range;
+            range.Sequence = sequence; 
+            
+            return range;
         }
     }
 }

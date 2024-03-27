@@ -6,7 +6,6 @@ using System.Reflection;
 using KarmaMarketplace.Domain.Market.Entities;
 using KarmaMarketplace.Domain.Files.Entities;
 using System.Reflection.Emit;
-using KarmaMarketplace.Infrastructure.Data.Extensions;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace KarmaMarketplace.Infrastructure.Data

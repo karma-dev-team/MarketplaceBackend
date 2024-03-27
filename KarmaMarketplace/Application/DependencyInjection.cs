@@ -26,7 +26,7 @@ namespace KarmaMarketplace.Application
             services.AddUserApplicationServices();
             services.AddMarketApplicationServices();
             services.AddPaymentApplicationServices(); 
-            services.AddMessagingApplicationServices();
+            services.AddMessagingApplicationServices(); 
             services.AddFilesApplicationServices(); 
 
             return services; 

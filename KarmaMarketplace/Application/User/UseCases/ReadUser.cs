@@ -2,18 +2,26 @@
 using KarmaMarketplace.Application.Common.Interactors;
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Domain.User.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace KarmaMarketplace.Application.User.Interactors
 {
     public class GetUsersList : BaseUseCase<GetListUserDto, List<UserEntity>>
     {
-        private IApplicationDbContext Context; 
+        private IApplicationDbContext _context;
+        private IAccessPolicy _accessPolicy; 
 
-        public GetUsersList(IApplicationDbContext context) {
-            Context = context;
+        public GetUsersList(IApplicationDbContext dbContext, IAccessPolicy accessPolicy) {
+            _context = dbContext; 
+            _accessPolicy = accessPolicy;
         }
 
         public async Task<List<UserEntity>> Execute(GetListUserDto dto) {
+            await _accessPolicy.FailIfNoAccess(Domain.User.Enums.UserRoles.Moderator);
+
+            var result = await _context.Users
+                .ToListAsync(); 
+
             return []; 
         }
     }

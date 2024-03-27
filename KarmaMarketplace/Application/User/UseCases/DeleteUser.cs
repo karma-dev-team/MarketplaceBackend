@@ -21,7 +21,7 @@ namespace KarmaMarketplace.Application.User.Interactors
 
         public async Task<UserEntity> Execute(DeleteUserDto dto)
         {
-            await AccessPolicy.FailIfNoAccess(dto.ByUserId, Domain.User.Enums.UserRoles.Admin); 
+            await AccessPolicy.FailIfNoAccess(Domain.User.Enums.UserRoles.Admin); 
             var user = await Context.Users.FirstOrDefaultAsync(x => x.Id == dto.UserId);
             if (user == null)
                 throw new EntityDoesNotExists(nameof(UserEntity), "");
