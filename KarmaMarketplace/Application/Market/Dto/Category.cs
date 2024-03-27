@@ -1,6 +1,12 @@
-﻿namespace KarmaMarketplace.Application.Market.Dto
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace KarmaMarketplace.Application.Market.Dto
 {
-    public class Category
+    public class CreateCategoryDto 
     {
+        [Required]
+        public string Name { get; set; } = null!;
+        public ICollection<CreateOption> Options { get; set; } = []; 
+        public Guid GameId { get; set; }
     }
 }

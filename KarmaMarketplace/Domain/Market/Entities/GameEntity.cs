@@ -25,13 +25,15 @@ namespace KarmaMarketplace.Domain.Market.Entities
         public string Tags { get; set; } = null!; 
 
         // Assuming Logo and Banner are optional foreign keys to the Image table
-        [ForeignKey("LogoImage")]
+        [ForeignKey("Logo")]
         public Guid? LogoID { get; set; }
-        public virtual ImageEntity LogoImage { get; set; } = null!; 
+        public virtual ImageEntity Logo { get; set; } = null!;
 
-        [ForeignKey("BannerImage")]
+        public ICollection<CategoryEntity> Categories { get; set; } = []; 
+
+        [ForeignKey("Banner")]
         public Guid? BannerID { get; set; }
-        public virtual ImageEntity BannerImage { get; set; } = null!;
+        public virtual ImageEntity Banner { get; set; } = null!;
 
         public static GameEntity Create(
             string name, 
@@ -47,8 +49,8 @@ namespace KarmaMarketplace.Domain.Market.Entities
             game.Description = description;
             game.Type = type;
             game.Tags = tags;
-            game.BannerImage = banner;
-            game.LogoImage = logo;
+            game.Banner = banner;
+            game.Logo = logo;
             
             game.AddDomainEvent(new GameCreated(game));
 

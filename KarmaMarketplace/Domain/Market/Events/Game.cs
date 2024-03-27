@@ -12,5 +12,5 @@ namespace KarmaMarketplace.Domain.Market.Events
     {
         public GameEntity Game { get; set; } = game;
         public DateTime DeletedAt { get; set; } = deletedAt; 
-    } 
+    }
 }

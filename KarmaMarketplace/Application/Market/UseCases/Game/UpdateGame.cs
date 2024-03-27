@@ -48,14 +48,14 @@ namespace KarmaMarketplace.Application.Market.Interactors.Game
                 var file = await _fileService.UploadImage().Execute(dto.Logo);
 
                 game.LogoID = file.Id;
-                game.LogoImage = file;
+                game.Logo = file;
             }
 
             if (dto.Banner != null)
             {
                 var file = await _fileService.UploadImage().Execute(dto.Banner);
 
-                game.BannerImage = file;
+                game.Banner = file;
                 game.BannerID = file.Id; 
             }
             if (dto.Type != null)

@@ -1,5 +1,7 @@
 ﻿using KarmaMarketplace.Domain.Market.Enums;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection.Emit;
 
 namespace KarmaMarketplace.Domain.Market.Entities
 {
@@ -32,5 +34,38 @@ namespace KarmaMarketplace.Domain.Market.Entities
         public int? ValueRangeMin { get; set; }
 
         public int? ValueRangeMax { get; set; }
+
+        public static OptionEntity CreateRange(
+            string label,
+            string value,
+            string field,
+            int sequence,
+            int min, 
+            int max)
+        {
+            var range = new OptionEntity();
+
+            range.Label = label;
+            range.Value = value;
+            range.Field = field;
+            range.Sequence = sequence;
+            range.Type = OptionTypes.Range;
+            range.ValueRangeMin = min;
+            range.ValueRangeMax = max; 
+
+            return range; 
+        }
+
+        public static OptionEntity CreateSwitch(
+            string label, 
+            string field, 
+            int sequence)
+        {
+            var range = new OptionEntity();
+
+            range.Label = label;
+            range.Field = field;
+            range.Sequence = sequence; return range;
+        }
     }
 }
