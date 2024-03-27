@@ -22,9 +22,12 @@ namespace KarmaMarketplace.Application.Market
             services.AddScoped<DeleteGame>();
             services.AddScoped<GetGamesList>();
 
+            // Categories 
             services.AddScoped<CreateCategory>();
             services.AddScoped<UpdateCategory>();
             services.AddScoped<UpdateCategory>(); 
+            services.AddScoped<GetCategoriesList>();
+            services.AddScoped<GetCategory>(); 
 
             return services;
         }
