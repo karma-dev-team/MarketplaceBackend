@@ -21,19 +21,13 @@ namespace KarmaMarketplace.Application.Market.Interactors.Game
 
         public async Task<GameEntity> Execute(CreateGameDto dto)
         {
-            var ok = Enum.TryParse(dto.Type, out GameTypes type);
-            if (!ok)
-            {
-                throw new IncorrectAttributes("type", dto.Type); 
-            }
-
             var logo = await _fileService.UploadImage().Execute(dto.Logo);
             var banner = await _fileService.UploadImage().Execute(dto.Banner);
 
             var game = GameEntity.Create(
                 name: dto.Name,
                 description: dto.Description,
-                type: type,
+                type: dto.Type,
                 tags: JsonSerializer.Serialize(dto.Tags), 
                 banner: banner, 
                 logo: logo); 

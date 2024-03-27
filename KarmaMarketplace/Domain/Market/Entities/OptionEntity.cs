@@ -68,5 +68,18 @@ namespace KarmaMarketplace.Domain.Market.Entities
             
             return range;
         }
+
+        public static OptionEntity CreateSelector(string label, string value, string group, string field, int sequence)
+        {
+            return new OptionEntity
+            {
+                Label = label,
+                Value = value,
+                Field = field,
+                Group = group,
+                Sequence = sequence,
+                Type = OptionTypes.Selector
+            };
+        }
     }
 }

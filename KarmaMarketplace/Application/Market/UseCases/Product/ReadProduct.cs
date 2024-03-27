@@ -100,9 +100,11 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
     public class GetAnalyticsInformation : BaseUseCase<GetAnalyticsDto, AnalyticsInformationDto>
     {
         private readonly IApplicationDbContext _context;
+        private readonly IUser _user; 
 
-        public GetAnalyticsInformation(IApplicationDbContext dbContext) {
+        public GetAnalyticsInformation(IApplicationDbContext dbContext, IUser user) {
             _context = dbContext;
+            _user = user; 
         } 
 
         public async Task<AnalyticsInformationDto> Execute(GetAnalyticsDto dto)
@@ -123,7 +125,7 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
             {
                 var foundProducts = await _context.Products
                     .IncludeStandard()
-                    .Where(x => x.CreatedBy.Id == dto.ByUserId)
+                    .Where(x => x.CreatedBy.Id == _user.Id)
                     .Where(x => x.CreatedAt >= dto.StartDate && x.CreatedAt <= dto.EndDate)
                     .ToListAsync();
                 products.AddRange(foundProducts);

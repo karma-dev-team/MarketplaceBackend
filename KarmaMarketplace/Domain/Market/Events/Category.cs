@@ -7,4 +7,8 @@ namespace KarmaMarketplace.Domain.Market.Events
     {
         public CategoryEntity Category { get; set; } = category; 
     }
+
+    public class CategoryDeleted(CategoryEntity category) : BaseEvent {
+        public CategoryEntity Category { get; set; } = category; 
+    }
 }

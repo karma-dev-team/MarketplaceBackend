@@ -45,6 +45,8 @@ builder.Services.AddSwaggerGen(options =>
         BearerFormat = "JWT"
     });
 
+    options.UseInlineDefinitionsForEnums();
+
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {

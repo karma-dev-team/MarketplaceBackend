@@ -6,7 +6,7 @@ namespace KarmaMarketplace.Application.Market.Dto
     public class CreateOption
     {
         [Required, MaxLength(256)]
-        public string Group { get; set; } = null!;
+        public string? Group { get; set; } = null!;
 
         // Имя значения, тоесть то что будет показываться при выборе значении,
         // для SWITCH это имя значения
@@ -14,7 +14,8 @@ namespace KarmaMarketplace.Application.Market.Dto
         public string Label { get; set; } = null!;
 
         // Тип Опции, Свитч для True и False, Selector для выбора только одного атрибута, Range для цифры 
-        public OptionTypes Type { get; set; }
+        [Required]
+        public OptionTypes Type { get; set; }; 
 
         // Значение типо True, False, 1800
         [MaxLength(256)]

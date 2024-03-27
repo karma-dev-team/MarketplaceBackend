@@ -9,4 +9,20 @@ namespace KarmaMarketplace.Application.Market.Dto
         public ICollection<CreateOption> Options { get; set; } = []; 
         public Guid GameId { get; set; }
     }
+
+    public class GetCategoryDto {
+        [Required]
+        public Guid CategoryId { get; set; }
+    }
+
+    public class GetCategoriesListDto
+    {
+        public string Name { get; set; } = null!; 
+    }
+
+    public class DeleteCategoryDto
+    {
+        [Required]
+        public Guid CategoryId { get; set; }
+    }
 }

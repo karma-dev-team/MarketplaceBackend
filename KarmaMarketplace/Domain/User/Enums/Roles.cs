@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace KarmaMarketplace.Domain.User.Enums
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum UserRoles 
     {
         // DONT CHANGE THE ORDER

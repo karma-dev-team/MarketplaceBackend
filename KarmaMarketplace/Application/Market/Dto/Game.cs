@@ -1,5 +1,6 @@
 ﻿using KarmaMarketplace.Application.Files.Dto;
 using KarmaMarketplace.Application.User.Dto;
+using KarmaMarketplace.Domain.Market.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace KarmaMarketplace.Application.Market.Dto
@@ -11,7 +12,7 @@ namespace KarmaMarketplace.Application.Market.Dto
         [Required]
         public string Description { get; set; } = null!;
         [Required]
-        public string Type { get; set; } = null!;
+        public GameTypes Type { get; set; } = null!;
         [Required]
         public List<string> Tags { get; set; } = null!;
         [Required]
