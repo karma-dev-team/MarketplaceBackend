@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace KarmaMarketplace.Application.Market.Dto
 {
-    public class CreateOption
+    public class CreateOptionDto
     {
         [Required, MaxLength(256)]
         public string? Group { get; set; } = null!;

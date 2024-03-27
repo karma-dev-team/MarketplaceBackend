@@ -6,7 +6,7 @@ namespace KarmaMarketplace.Application.Market.Dto
     {
         [Required]
         public string Name { get; set; } = null!;
-        public ICollection<CreateOption> Options { get; set; } = []; 
+        public ICollection<CreateOptionDto> Options { get; set; } = []; 
         public Guid GameId { get; set; }
     }
 
@@ -24,5 +24,12 @@ namespace KarmaMarketplace.Application.Market.Dto
     {
         [Required]
         public Guid CategoryId { get; set; }
+    }
+
+    public class UpdateCategoryDto {
+        [Required]
+        public Guid CategoryId { get; set; }
+        public string? Name { get; set; }
+        public ICollection<CreateOptionDto> Options { get; set; } = []; 
     }
 }
