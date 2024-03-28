@@ -1,6 +1,10 @@
-﻿namespace KarmaMarketplace.Domain.Messging.Events
+﻿using KarmaMarketplace.Domain.Messging.Entities;
+using KarmaMarketplace.Infrastructure.EventDispatcher;
+
+namespace KarmaMarketplace.Domain.Messging.Events
 {
-    public class Message
+    public class MessageCreated(MessageEntity message) : BaseEvent
     {
+        public MessageEntity Message { get; set; } = message; 
     }
 }
