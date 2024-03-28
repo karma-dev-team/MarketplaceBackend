@@ -13,7 +13,7 @@ namespace KarmaMarketplace.Application.User
             ServiceProvider = serviceProvider; 
         }
 
-        public CreateUser Register()
+        public CreateUser Create()
         {
             return ServiceProvider.GetRequiredService<CreateUser>(); 
         }
@@ -34,6 +34,14 @@ namespace KarmaMarketplace.Application.User
         public GetUsersList GetList()
         {
             return ServiceProvider.GetRequiredService<GetUsersList>(); 
+        }
+        public SendResetCode SendResetPasswordCode()
+        {
+            return ServiceProvider.GetRequiredService<SendResetCode>();
+        }
+        public ResetPassword ResetPassword()
+        {
+            return ServiceProvider.GetRequiredService<ResetPassword>();
         }
     }
 }

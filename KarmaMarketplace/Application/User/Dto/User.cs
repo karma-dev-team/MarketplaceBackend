@@ -3,17 +3,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace KarmaMarketplace.Application.User.Dto
 {
-    public class UserActionDto
-    {
-        [Required]
-        public Guid ByUserId { get; set; }
-    }
-
-    public class UserActionOptionalDto
-    {
-        public Guid? ByUserId { get; set; }
-    }
-
     public class CreateUserDto
     {
         [Required]
@@ -59,5 +48,23 @@ namespace KarmaMarketplace.Application.User.Dto
     {
         [Required]
         public Guid UserId { get; set; }
+    }
+
+    public class ResetPasswordDto {
+        [Required]
+        public string Code { get; set; } = null!; 
+        [Required]
+        [EmailAddress(ErrorMessage = "No email")]
+        public string Email { get; set; } = null!;
+        [Required]
+        public string NewPassword { get; set; } = null!; 
+    }
+
+    public class SendResetCodeDto
+    {
+        [Required]
+        [EmailAddress(ErrorMessage = "No email")]
+        public string Email { get; set; } = null!; 
+        
     }
 }

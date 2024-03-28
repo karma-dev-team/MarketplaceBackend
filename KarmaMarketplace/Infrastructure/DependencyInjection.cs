@@ -6,6 +6,7 @@ using KarmaMarketplace.Infrastructure.Data.Intercepters;
 using Microsoft.AspNetCore.Identity;
 using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Infrastructure.Adapters.FileStorage;
+using KarmaMarketplace.Infrastructure.Adapters.Mailing;
 
 namespace KarmaMarketplace.Infrastructure
 {
@@ -45,6 +46,8 @@ namespace KarmaMarketplace.Infrastructure
                     return new PasswordService(passwordHasher: new PasswordHasher<UserEntity>());
                 }
             );
+
+            services.AddMailing(configuration); 
 
             //services.AddScoped<IFileStorageAdapter, S3StorageAdapter>(); 
             if (type == StorageTypes.Local)

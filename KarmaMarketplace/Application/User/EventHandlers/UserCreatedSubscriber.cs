@@ -5,7 +5,7 @@ namespace KarmaMarketplace.Application.User.EventHandlers
 {
     public class UserCreatedSubsciber : IEventSubscriber<UserCreated>
     {
-        public void HandleEvent(UserCreated userCreated)
+        public async Task HandleEvent(UserCreated userCreated)
         {
             
         }

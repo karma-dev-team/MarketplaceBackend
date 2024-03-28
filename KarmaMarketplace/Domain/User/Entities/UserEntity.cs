@@ -75,6 +75,11 @@ namespace KarmaMarketplace.Domain.User.Entities
             HashedPassword = passwordService.HashPassword(this, newPassword);
         }
 
+        public void UpdatePassword(string newPassword, PasswordService passwordService)
+        {
+            HashedPassword = passwordService.HashPassword(this, newPassword);
+        }
+
         public void UpdateRole(
             UserRoles role)
         {
