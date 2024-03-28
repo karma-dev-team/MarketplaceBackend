@@ -32,6 +32,7 @@ namespace KarmaMarketplace.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+
             builder.ApplyConfigurationsFromAssembly(assembly: Assembly.GetExecutingAssembly()); 
         }
 

@@ -10,6 +10,14 @@ namespace KarmaMarketplace.Presentation.Web.Schemas
         public string ExpiresIn { get; set; } = null!; 
     }
 
+    public class ResetPasswordScheme
+    {
+        [Required]
+        public string NewPassword { get; set; } = null!;
+        [Required]
+        public string Code { get; set; } = null!; 
+    }
+
     public class LoginUserSchema
     {
         [Required]

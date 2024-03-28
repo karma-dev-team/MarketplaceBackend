@@ -27,7 +27,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
         // Assuming Money is a decimal. If Money is a complex type, adjust accordingly.
         public Money? DiscountPrice { get; set; }
 
-        public Money BasePrice { get; set; }
+        public Money BasePrice { get; set; } = new Money(0); 
 
         public string Description { get; set; } = null!; 
 

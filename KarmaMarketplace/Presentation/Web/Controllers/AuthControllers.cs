@@ -59,12 +59,11 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
         [HttpPost("reset/code/verify/{code}")]
         public async Task<IActionResult> VerifyCode(
             string email, 
-            [FromBody] string code, 
-            [FromBody] string newPassword) 
+            [FromBody] ResetPasswordScheme model) 
         {
             await _userService
                 .ResetPassword()
-                .Execute(new ResetPasswordDto() { Code = code, NewPassword = newPassword, Email = email});
+                .Execute(new ResetPasswordDto() { Code = model.Code, NewPassword = model.NewPassword, Email = email});
 
             return Ok(true); 
         }
