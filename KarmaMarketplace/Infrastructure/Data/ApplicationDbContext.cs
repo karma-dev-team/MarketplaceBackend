@@ -14,21 +14,20 @@ namespace KarmaMarketplace.Infrastructure.Data
 {
     public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
-        public DbSet<UserEntity> Users { get; } = null!;
-        public DbSet<CategoryEntity> Categories { get; } = null!; 
-        public DbSet<ProductEntity> Products { get; } = null!;
-        public DbSet<ReviewEntity> Reviews { get; } = null!;
-        public DbSet<GameEntity> Games { get; } = null!;
-        public DbSet<OptionEntity> Options { get; } = null!;
-        public DbSet<PurchaseEntity> Purchases { get; } = null!;
-        public DbSet<ChatEntity> Chats { get; } = null!;
-        public DbSet<MessageEntity> Messages { get; } = null!;
-        public DbSet<ProductViewEntity> ProductViews { get; } = null!;
-        public DbSet<ChatReadRecord> ChatReads { get; } = null!;
-        public DbSet<TransactionEntity> Transactions { get; } = null!;
-        public DbSet<WalletEntity> Wallets { get; } = null!;
-
-        public DbSet<ImageEntity> Images { get; } = null!; 
+        public DbSet<UserEntity> Users { get; set;} 
+        public DbSet<CategoryEntity> Categories { get; set;}  
+        public DbSet<ProductEntity> Products { get; set;} 
+        public DbSet<ReviewEntity> Reviews { get; set;} 
+        public DbSet<GameEntity> Games { get; set;} 
+        public DbSet<OptionEntity> Options { get; set;} 
+        public DbSet<PurchaseEntity> Purchases { get; set;} 
+        public DbSet<ChatEntity> Chats { get; set;} 
+        public DbSet<MessageEntity> Messages { get; set;} 
+        public DbSet<ProductViewEntity> ProductViews { get; set;} 
+        public DbSet<ChatReadRecord> ChatReads { get; set;} 
+        public DbSet<TransactionEntity> Transactions { get; set;} 
+        public DbSet<WalletEntity> Wallets { get; set;} 
+        public DbSet<ImageEntity> Images { get; set;}  
 
         public ApplicationDbContext(DbContextOptions options) : base(options) { }
 

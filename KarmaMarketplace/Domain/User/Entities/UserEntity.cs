@@ -5,6 +5,7 @@ using KarmaMarketplace.Infrastructure;
 using KarmaMarketplace.Infrastructure.EventDispatcher;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KarmaMarketplace.Domain.User.Entities
 {
@@ -17,24 +18,29 @@ namespace KarmaMarketplace.Domain.User.Entities
         [Required] 
         [EmailAddress(ErrorMessage = "Email address is not correct")]
         public string Email { get; set; } = null!;
-        public UserRoles Role { get; set; } = UserRoles.User; 
-        public string? TelegramId {
-            get => TelegramId;
+        public UserRoles Role { get; set; } = UserRoles.User;
+        [Column(name: "TelegramId")]
+        private string? _telegramId; // Закрытое поле для хранения значения
+
+        [NotMapped]
+        public string? TelegramId
+        {
+            get => _telegramId; // Возвращаем значение из закрытого поля
             set
             {
                 if (Blocked)
                 {
-                    throw new AccessDenied("blocked"); 
+                    throw new AccessDenied("blocked");
                 }
-                TelegramId = value;
+                _telegramId = value; // Устанавливаем значение в закрытое поле
 
                 AddDomainEvent(
                     new UserUpdated(
                         user: this,
                         fieldName: "TelegramId"
                     )
-                ); 
-            } 
+                );
+            }
         }
         public bool Blocked { get; set; } = false;
 

@@ -10,8 +10,8 @@ namespace KarmaMarketplace.Application.User.Interactors
 {
     public class CreateUser : BaseUseCase<CreateUserDto, UserEntity>
     {
-        private readonly IApplicationDbContext _context;
-        private readonly PasswordService passwordService; 
+        private IApplicationDbContext _context;
+        private PasswordService passwordService; 
 
         public CreateUser(
             IApplicationDbContext dbContext, 

@@ -30,8 +30,12 @@ namespace KarmaMarketplace.Infrastructure
 
             Guard.Against.Null(connectionString, message: "Connection string 'DefaultConnection' not found.");
 
+            services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>(); 
+            services.AddScoped<ISaveChangesInterceptor, EventDispatcherInterceptor>(); 
+
             services.AddDbContext<ApplicationDbContext>((sp, options) =>
             {
+                options.EnableDetailedErrors(true);
                 options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
                 options.UseNpgsql(connectionString); 
             });

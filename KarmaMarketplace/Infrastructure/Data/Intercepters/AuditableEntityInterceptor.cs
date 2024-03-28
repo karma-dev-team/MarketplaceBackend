@@ -42,13 +42,14 @@ namespace KarmaMarketplace.Infrastructure.Data.Intercepters
             {
                 if (entry.State is EntityState.Added or EntityState.Modified || entry.HasChangedOwnedEntities())
                 {
-                    var utcNow = _dateTime.GetUtcNow();
+                    //var utcNow = _dateTime.GetUtcNow();
                     if (entry.State == EntityState.Added)
                     {
-                        entry.Entity.CreatedAt = utcNow.DateTime;
+                        entry.Entity.CreatedBy = _user.Id; 
+                        entry.Entity.CreatedAt = DateTime.UtcNow;
                     }
-                    entry.Entity.LastModifiedBy = (Guid)_user.Id;
-                    entry.Entity.LastModifiedAt = utcNow.DateTime;
+                    entry.Entity.LastModifiedBy = _user.Id;
+                    entry.Entity.LastModifiedAt = DateTime.UtcNow;
                 }
             }
         }

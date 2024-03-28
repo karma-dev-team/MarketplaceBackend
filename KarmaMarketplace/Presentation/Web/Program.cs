@@ -19,12 +19,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-{
-    options.EnableDetailedErrors(true);
-    options.UseNpgsql(builder.Configuration["ConnectionString"]);
-});
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddMvc().AddJsonOptions(c =>
