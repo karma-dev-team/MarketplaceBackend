@@ -17,7 +17,9 @@ namespace KarmaMarketplace.Application.Market.Dto
 
     public class GetCategoriesListDto
     {
-        public string Name { get; set; } = null!; 
+        public Guid? GameId { get; set; }
+        public string? GameName { get; set; }
+        public string? Name { get; set; } = null!; 
     }
 
     public class DeleteCategoryDto

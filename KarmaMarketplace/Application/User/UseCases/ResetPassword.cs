@@ -1,7 +1,6 @@
 ﻿using KarmaMarketplace.Application.Common.Interactors;
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Application.User.Dto;
-using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Infrastructure;
 using KarmaMarketplace.Infrastructure.Adapters.Mailing;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +11,6 @@ namespace KarmaMarketplace.Application.User.UseCases
     public class ResetPassword : BaseUseCase<ResetPasswordDto, bool>
     {
         private IApplicationDbContext _context;
-        private IEmailService _emailService; 
         private IMemoryCache _cacheService;
         private PasswordService _passwordService; 
 
@@ -22,7 +20,6 @@ namespace KarmaMarketplace.Application.User.UseCases
             IMemoryCache cacheService, 
             PasswordService passwordService) {
             _context = dbContext; 
-            _emailService = emailService;
             _cacheService = cacheService;
             _passwordService = passwordService;
         }

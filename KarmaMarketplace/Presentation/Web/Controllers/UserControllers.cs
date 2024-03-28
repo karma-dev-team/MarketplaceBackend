@@ -33,7 +33,7 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
             return UserScheme.FromEntity(result); 
         }
 
-        [HttpPatch("/me")]
+        [HttpPatch("me")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<ActionResult<UserScheme>> UpdateMe([FromBody] UpdateUserDto model)
         {
@@ -43,7 +43,7 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
             return UserScheme.FromEntity(result);
         }
 
-        [HttpGet("/me")]
+        [HttpGet("me")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<ActionResult<UserEntity>> GetMe()
         {
@@ -53,7 +53,7 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
             return result; 
         }
 
-        [HttpGet("/{userId}")]
+        [HttpGet("{userId}")]
         public async Task<ActionResult<UserEntity>> GetUserById(Guid userId)
         {
             var result = await UserService
@@ -62,7 +62,7 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
             return result;
         }
 
-        [HttpDelete("/{userId}")]
+        [HttpDelete("{userId}")]
         public async Task<ActionResult<UserScheme>> DeleteUserById(Guid userId)
         {
             var result = await UserService

@@ -32,9 +32,9 @@ namespace KarmaMarketplace.Application.Market.Services
         {
             return ServiceProvider.GetRequiredService<GetProduct>();
         }
-        public GetCategoriesList GetCategoriesList()
+        public GetProductsList GetProductsList()
         {
-            return ServiceProvider.GetRequiredService<GetCategoriesList>();
+            return ServiceProvider.GetRequiredService<GetProductsList>();
         }
         public GetAnalyticsInformation GetAnalyticsInformation()
         {

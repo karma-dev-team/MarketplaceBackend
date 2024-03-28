@@ -31,7 +31,7 @@ namespace KarmaMarketplace.Application.Market.Services
         {
             return ServiceProvider.GetRequiredService<GetGame>();
         }
-        public GetGamesList GetCategoriesList()
+        public GetGamesList GetGamesList()
         {
             return ServiceProvider.GetRequiredService<GetGamesList>();
         }

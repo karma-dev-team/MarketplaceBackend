@@ -9,7 +9,7 @@ namespace KarmaMarketplace.Application.Market.Interfaces
         public UpdateGame UpdateGame();
         public DeleteGame DeleteGame();
         public GetGame GetGame();
-        public GetGamesList GetCategoriesList();
+        public GetGamesList GetGamesList();
         public CountGames CountGames(); 
     }
 }

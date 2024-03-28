@@ -9,7 +9,7 @@ namespace KarmaMarketplace.Application.Market.Interfaces
         public UpdateProduct UpdateProduct();
         public DeleteProduct DeleteProduct();
         public GetProduct GetProduct();
-        public GetCategoriesList GetCategoriesList();
+        public GetProductsList GetProductsList();
         public GetAnalyticsInformation GetAnalyticsInformation(); 
     }
 }

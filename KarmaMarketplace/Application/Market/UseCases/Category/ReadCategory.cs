@@ -51,6 +51,17 @@ namespace KarmaMarketplace.Application.Market.Interactors.Category
                         .Matches(EF.Functions.ToTsQuery(dto.Name))
                     ); 
             } 
+            if (!string.IsNullOrEmpty(dto.GameName))
+            {
+                var game = await _context.Games.FirstOrDefaultAsync(x => x.Name == dto.Name);
+
+                if (game != null)
+                    query = query.Where(x => x.GameID == game.Id); 
+            }
+            if (dto.GameId != null)
+            {
+                query = query.Where(x => x.GameID == dto.GameId);
+            }
 
             return await query.ToListAsync();
         }
