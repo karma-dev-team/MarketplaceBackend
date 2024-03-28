@@ -4,9 +4,9 @@ using KarmaMarketplace.Domain.Market.Entities;
 
 namespace KarmaMarketplace.Application.Market.UseCases.Review
 {
-    public class CreteReview : BaseUseCase<CreateReviewDto, ReviewEntity>
+    public class CreateReview : BaseUseCase<CreateReviewDto, ReviewEntity>
     {
-        public CreteReview() { }
+        public CreateReview() { }
 
         public async Task<ReviewEntity> Execute(CreateReviewDto dto)
         {

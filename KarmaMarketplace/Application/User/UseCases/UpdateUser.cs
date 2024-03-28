@@ -14,13 +14,16 @@ namespace KarmaMarketplace.Application.User.Interactors
     {
         private IApplicationDbContext Context;
         private IAccessPolicy AccessPolicy;
-        private PasswordService PasswordService; 
+        private PasswordService PasswordService;
+        private IUser User; 
 
         public UpdateUser( 
             IApplicationDbContext context,
             IAccessPolicy accessPolicy, 
-            PasswordService passwordService)
+            PasswordService passwordService, 
+            IUser user)
         {
+            User = user; 
             PasswordService = passwordService; 
             Context = context;
             AccessPolicy = accessPolicy;
@@ -28,14 +31,13 @@ namespace KarmaMarketplace.Application.User.Interactors
 
         public async Task<UserEntity> Execute(UpdateUserDto dto)
         {
-            var byUser = await Context.Users.FirstOrDefaultAsync(x => x.Id == dto.ByUserId);
             var user = await Context.Users.FirstOrDefaultAsync(x => x.Id == dto.UserId);
-            if (user == null || byUser == null) 
-                throw new EntityDoesNotExists(nameof(UserEntity), "");
-            if (!await AccessPolicy.CanAccess(byUser.Id, Domain.User.Enums.UserRoles.Admin) || user.Id != byUser.Id)
-            {
-                throw new AccessDenied("be yourself"); 
-            } 
+
+            Guard.Against.Null(user, message: "User does not exists");
+
+            var byUser = await Context.Users.FirstOrDefaultAsync(x => x.Id == user.Id);
+
+            Guard.Against.Null(byUser, message: "User does not exists"); 
             
             if (dto.Email != null)
             {
@@ -56,7 +58,7 @@ namespace KarmaMarketplace.Application.User.Interactors
                     passwordService: PasswordService); 
             }
             if (dto.Role != null) {
-                if (byUser.Role == UserRoles.SuperAdmin)
+                if (byUser.Role == UserRoles.Owner)
                 {
                     user.UpdateRole(
                         (UserRoles)dto.Role);

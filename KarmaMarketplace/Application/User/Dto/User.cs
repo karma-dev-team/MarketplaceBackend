@@ -32,7 +32,8 @@ namespace KarmaMarketplace.Application.User.Dto
 
     public class GetListUserDto
     {
-        public UserRoles Role { get; set; }
+        public UserRoles? Role { get; set; }
+        public string? Name { get; set; }
     }
 
     public class LoginDto
@@ -43,7 +44,7 @@ namespace KarmaMarketplace.Application.User.Dto
         public string Password { get; set; } = null!;
     }
 
-    public class UpdateUserDto : UserActionDto {
+    public class UpdateUserDto {
         [Required]
         public Guid UserId { get; set; }
         public string? Email { get; set; }
@@ -54,7 +55,7 @@ namespace KarmaMarketplace.Application.User.Dto
         public string? TelegramId { get; set; }
     }
 
-    public class DeleteUserDto : UserActionDto
+    public class DeleteUserDto 
     {
         [Required]
         public Guid UserId { get; set; }

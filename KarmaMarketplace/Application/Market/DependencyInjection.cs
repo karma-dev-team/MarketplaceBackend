@@ -1,6 +1,7 @@
 ﻿using KarmaMarketplace.Application.Market.Interactors.Category;
 using KarmaMarketplace.Application.Market.Interactors.Game;
 using KarmaMarketplace.Application.Market.UseCases.Product;
+using KarmaMarketplace.Application.Market.UseCases.Review;
 
 namespace KarmaMarketplace.Application.Market
 {
@@ -27,7 +28,11 @@ namespace KarmaMarketplace.Application.Market
             services.AddScoped<UpdateCategory>();
             services.AddScoped<UpdateCategory>(); 
             services.AddScoped<GetCategoriesList>();
-            services.AddScoped<GetCategory>(); 
+            services.AddScoped<GetCategory>();
+
+            // Reviews
+            services.AddScoped<CreateReview>();
+            services.AddScoped<GetReviewsList>(); 
 
             return services;
         }

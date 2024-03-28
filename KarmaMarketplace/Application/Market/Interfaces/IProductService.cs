@@ -1,4 +1,5 @@
-﻿using KarmaMarketplace.Application.Market.UseCases.Product;
+﻿using KarmaMarketplace.Application.Market.Interactors.Category;
+using KarmaMarketplace.Application.Market.UseCases.Product;
 
 namespace KarmaMarketplace.Application.Market.Interfaces
 {
@@ -9,7 +10,6 @@ namespace KarmaMarketplace.Application.Market.Interfaces
         public DeleteProduct DeleteProduct();
         public GetProduct GetProduct();
         public GetCategoriesList GetCategoriesList();
-        public RegisterView RegisterView();
-        public GetAnalyticsInformtion GetAnalyticsInformation(); 
+        public GetAnalyticsInformation GetAnalyticsInformation(); 
     }
 }

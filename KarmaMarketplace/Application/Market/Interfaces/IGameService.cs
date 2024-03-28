@@ -1,4 +1,5 @@
 ﻿using KarmaMarketplace.Application.Market.Interactors.Game;
+using KarmaMarketplace.Application.Market.UseCases.Game;
 
 namespace KarmaMarketplace.Application.Market.Interfaces
 {

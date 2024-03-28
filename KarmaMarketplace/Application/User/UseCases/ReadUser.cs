@@ -3,10 +3,11 @@ using KarmaMarketplace.Application.Common.Interactors;
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Domain.User.Entities;
 using Microsoft.EntityFrameworkCore;
+using KarmaMarketplace.Infrastructure.Data.Queries;
 
 namespace KarmaMarketplace.Application.User.Interactors
 {
-    public class GetUsersList : BaseUseCase<GetListUserDto, List<UserEntity>>
+    public class GetUsersList : BaseUseCase<GetListUserDto, ICollection<UserEntity>>
     {
         private IApplicationDbContext _context;
         private IAccessPolicy _accessPolicy; 
@@ -16,28 +17,54 @@ namespace KarmaMarketplace.Application.User.Interactors
             _accessPolicy = accessPolicy;
         }
 
-        public async Task<List<UserEntity>> Execute(GetListUserDto dto) {
+        public async Task<ICollection<UserEntity>> Execute(GetListUserDto dto) {
             await _accessPolicy.FailIfNoAccess(Domain.User.Enums.UserRoles.Moderator);
 
-            var result = await _context.Users
-                .ToListAsync(); 
+            var query = _context.Users
+                .IncludeStandard()
+                .AsQueryable(); 
+            if (!string.IsNullOrEmpty(dto.Name))
+            {
+                query = query.Where(x => x.UserName == dto.Name); 
+            }
+            if (dto.Role != null)
+            {
+                query = query.Where(x => x.Role == dto.Role); 
+            }
+            var result = await query.ToListAsync(); 
 
-            return []; 
+            return result; 
         }
     }
 
     public class GetUser : BaseUseCase<GetUserDto, UserEntity>
     {
-        private IApplicationDbContext Context;
+        private IApplicationDbContext _context;
 
         public GetUser(IApplicationDbContext context)
         {
-            Context = context;
+            _context = context;
         }
 
         public async Task<UserEntity> Execute(GetUserDto dto)
         {
-            return new();
+            var query = _context.Users
+                .IncludeStandard().AsQueryable();
+
+            if (dto.UserId != null)
+            {
+                query = query.Where(x => x.Id == dto.UserId); 
+            }
+            if (dto.Email != null)
+            {
+                query = query.Where(x => x.Email == dto.Email); 
+            }
+
+            var result = await query.FirstOrDefaultAsync();
+
+            Guard.Against.Null(result, message: "User does not exists"); 
+
+            return result;
         }
     }
 }

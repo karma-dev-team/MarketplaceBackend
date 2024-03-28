@@ -9,6 +9,5 @@ namespace KarmaMarketplace.Application.Market.Interfaces
         public DeleteCategory DeleteCategory();
         public GetCategory GetCategory();
         public GetCategoriesList GetCategoriesList(); 
-        public GetCategoryProducts GetCategoryProducts(); 
     }
 }
