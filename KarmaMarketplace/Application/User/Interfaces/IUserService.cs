@@ -1,4 +1,5 @@
 ﻿using KarmaMarketplace.Application.User.Interactors;
+using KarmaMarketplace.Application.User.UseCases;
 using Microsoft.AspNetCore.Identity.Data;
 
 namespace KarmaMarketplace.Application.User.Interfaces

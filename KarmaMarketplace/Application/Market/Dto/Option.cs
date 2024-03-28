@@ -15,7 +15,7 @@ namespace KarmaMarketplace.Application.Market.Dto
 
         // Тип Опции, Свитч для True и False, Selector для выбора только одного атрибута, Range для цифры 
         [Required]
-        public OptionTypes Type { get; set; }; 
+        public OptionTypes Type { get; set; } 
 
         // Значение типо True, False, 1800
         [MaxLength(256)]

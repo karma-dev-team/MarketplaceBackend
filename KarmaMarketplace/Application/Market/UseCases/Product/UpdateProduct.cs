@@ -17,9 +17,11 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
     {
         private readonly IApplicationDbContext _context;
         private readonly IAccessPolicy _accessPolicy;
+        private readonly IUser _user; 
 
-        public UpdateProduct(IApplicationDbContext dbContext, IAccessPolicy accessPolicy)
+        public UpdateProduct(IApplicationDbContext dbContext, IAccessPolicy accessPolicy, IUser user)
         {
+            _user = user; 
             _context = dbContext;
             _accessPolicy = accessPolicy;
         }
@@ -32,13 +34,15 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
 
             Guard.Against.Null(product, message: "Product does not exists");
 
+            Guard.Against.Null(_user.Id, message: "Unauthorized"); 
+
             await _accessPolicy.FailIfNotSelfOrNoAccess(
-                dto.ByUserId, 
-                product.CreatedBy.Id, 
-                Domain.User.Enums.UserRoles.Moderator);
+                (Guid)_user.Id,
+                Domain.User.Enums.UserRoles.Moderator, 
+                product.CreatedBy.Id);
 
             var user = await _context.Users.FirstOrDefaultAsync(
-                x => x.Id == dto.ByUserId);
+                x => x.Id == _user.Id);
 
             Guard.Against.Null(user, message: "No user"); 
 

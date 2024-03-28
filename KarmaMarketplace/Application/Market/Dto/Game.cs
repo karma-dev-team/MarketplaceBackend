@@ -12,7 +12,7 @@ namespace KarmaMarketplace.Application.Market.Dto
         [Required]
         public string Description { get; set; } = null!;
         [Required]
-        public GameTypes Type { get; set; } = null!;
+        public GameTypes Type { get; set; }
         [Required]
         public List<string> Tags { get; set; } = null!;
         [Required]

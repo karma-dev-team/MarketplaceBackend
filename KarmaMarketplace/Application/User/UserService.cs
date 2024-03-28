@@ -1,5 +1,6 @@
 ﻿using KarmaMarketplace.Application.User.Interactors;
 using KarmaMarketplace.Application.User.Interfaces;
+using KarmaMarketplace.Application.User.UseCases;
 
 namespace KarmaMarketplace.Application.User
 {

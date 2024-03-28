@@ -3,6 +3,7 @@ using KarmaMarketplace.Application.User.Dto;
 using KarmaMarketplace.Application.User.EventHandlers;
 using KarmaMarketplace.Application.User.Interactors;
 using KarmaMarketplace.Application.User.Interfaces;
+using KarmaMarketplace.Application.User.UseCases;
 using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Domain.User.Events;
 using KarmaMarketplace.Infrastructure.EventDispatcher;
@@ -16,11 +17,13 @@ namespace KarmaMarketplace.Application.User
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IEventSubscriber<UserCreated>, UserCreatedSubsciber>();
 
-            services.AddScoped<CreateUser, CreateUser>(); 
-            services.AddScoped<UpdateUser, UpdateUser>();
-            services.AddScoped<DeleteUser, DeleteUser>();   
-            services.AddScoped<GetUser, GetUser>();
-            services.AddScoped<GetUsersList, GetUsersList>(); 
+            services.AddScoped<CreateUser>(); 
+            services.AddScoped<UpdateUser>();
+            services.AddScoped<DeleteUser>();   
+            services.AddScoped<GetUser>();
+            services.AddScoped<SendResetCode>(); 
+            services.AddScoped<ResetPassword>();
+            services.AddScoped<GetUsersList>(); 
 
             return services; 
         }

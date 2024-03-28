@@ -49,7 +49,24 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
         [HttpPost("reset/code/{email}")]
         public async Task<IActionResult> ResetPassword(string email)
         {
-            return 
+            await _userService
+                .SendResetPasswordCode()
+                .Execute(new SendResetCodeDto() { Email = email }); 
+
+            return Ok(true); 
+        }
+
+        [HttpPost("reset/code/verify/{code}")]
+        public async Task<IActionResult> VerifyCode(
+            string email, 
+            [FromBody] string code, 
+            [FromBody] string newPassword) 
+        {
+            await _userService
+                .ResetPassword()
+                .Execute(new ResetPasswordDto() { Code = code, NewPassword = newPassword, Email = email});
+
+            return Ok(true); 
         }
 
         [HttpPost("login")]
@@ -92,5 +109,4 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
-}
 }

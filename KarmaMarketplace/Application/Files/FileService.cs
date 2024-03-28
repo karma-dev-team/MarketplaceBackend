@@ -7,7 +7,7 @@ namespace KarmaMarketplace.Application.Files
     {
         private readonly IServiceProvider ServiceProvider;
 
-        public UserService(
+        public FileService(
             IServiceProvider serviceProvider
         )
         {
