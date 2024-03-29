@@ -5,6 +5,11 @@ namespace KarmaMarketplace.Domain.Messging.Events
 {
     public class ChatRead(ChatEntity chat) : BaseEvent
     {
-        private ChatEntity Chat { get; set; } = chat; 
+        public ChatEntity Chat { get; set; } = chat;
+    }
+
+    public class ChatCreated(ChatEntity chat) : BaseEvent
+    {
+        public ChatEntity Chat { get; set; } = chat;
     }
 }

@@ -2,20 +2,29 @@
 
 namespace KarmaMarketplace.Infrastructure.EventDispatcher
 {
+
     public class EventDispatcher : IEventDispatcher
     {
         private readonly Dictionary<Type, List<Delegate>> eventListeners = new();
+        private readonly IServiceProvider serviceProvider;
+
+        public EventDispatcher(IServiceProvider serviceProvider)
+        {
+            this.serviceProvider = serviceProvider;
+        }
 
         public void RegisterEventSubscribers(Assembly assembly)
         {
-            var types = assembly.GetTypes();
             var eventSubscriberTypes = assembly.GetTypes()
                 .Where(type => type.IsClass && !type.IsAbstract && ImplementsEventSubscriberInterface(type));
 
             foreach (var eventSubscriberType in eventSubscriberTypes)
             {
-                var eventSubscriber = Activator.CreateInstance(eventSubscriberType);
-                RegisterEventSubscriber((IEventSubscriber<BaseEvent>)eventSubscriber);
+                var eventSubscriber = serviceProvider.GetService(eventSubscriberType);
+                if (eventSubscriber != null)
+                {
+                    RegisterEventSubscriber((IEventSubscriber<BaseEvent>)eventSubscriber);
+                }
             }
         }
 
@@ -28,7 +37,7 @@ namespace KarmaMarketplace.Infrastructure.EventDispatcher
             {
                 if (!eventListeners.ContainsKey(eventType))
                 {
-                    eventListeners[eventType] = [];
+                    eventListeners[eventType] = new List<Delegate>();
                 }
 
                 var eventHandler = CreateEventHandlerDelegate(eventSubscriber, eventType);
@@ -38,10 +47,10 @@ namespace KarmaMarketplace.Infrastructure.EventDispatcher
 
         public void AddListener<TEvent>(Action<TEvent> listener) where TEvent : BaseEvent
         {
-            Type eventType = typeof(TEvent);
+            var eventType = typeof(TEvent);
             if (!eventListeners.ContainsKey(eventType))
             {
-                eventListeners[eventType] = [];
+                eventListeners[eventType] = new List<Delegate>();
             }
 
             eventListeners[eventType].Add(listener);
@@ -49,7 +58,7 @@ namespace KarmaMarketplace.Infrastructure.EventDispatcher
 
         public void RemoveListener<TEvent>(Action<TEvent> listener) where TEvent : BaseEvent
         {
-            Type eventType = typeof(TEvent);
+            var eventType = typeof(TEvent);
             if (eventListeners.ContainsKey(eventType))
             {
                 eventListeners[eventType].Remove(listener);
@@ -58,37 +67,35 @@ namespace KarmaMarketplace.Infrastructure.EventDispatcher
 
         public void Dispatch<TEvent>(TEvent @event) where TEvent : BaseEvent
         {
-            Type eventType = typeof(TEvent);
+            var eventType = typeof(TEvent);
             if (eventListeners.ContainsKey(eventType))
             {
                 foreach (var listener in eventListeners[eventType].ToList())
                 {
-                    ((Action<TEvent>)listener)(@event);
+                    if (listener is Action<TEvent> action)
+                    {
+                        action(@event);
+                    }
                 }
             }
         }
 
         private bool ImplementsEventSubscriberInterface(Type type)
         {
-            var eventSubscriberInterface = typeof(IEventSubscriber<>);
-            var result = eventSubscriberInterface.IsAssignableFrom(type);
-            return result;
+            return type.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEventSubscriber<>));
         }
 
         private IEnumerable<Type> GetEventTypes(Type eventSubscriberType)
         {
-            var eventSubscriberInterface = typeof(IEventSubscriber<>);
             return eventSubscriberType.GetInterfaces()
-                .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == eventSubscriberInterface)
+                .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEventSubscriber<>))
                 .Select(i => i.GetGenericArguments()[0]);
         }
 
         private Delegate CreateEventHandlerDelegate(object eventSubscriber, Type eventType)
         {
-            var handleEventMethod = typeof(IEventSubscriber<>).MakeGenericType(eventType)
-                .GetMethod("HandleEvent");
-
-            return Delegate.CreateDelegate(typeof(Action<>).MakeGenericType(eventType), eventSubscriber, handleEventMethod);
+            var handleEventMethod = eventSubscriber.GetType().GetMethod("HandleEvent", new[] { eventType });
+            return Delegate.CreateDelegate(typeof(Action<>).MakeGenericType(eventType), eventSubscriber, handleEventMethod, false);
         }
     }
 }

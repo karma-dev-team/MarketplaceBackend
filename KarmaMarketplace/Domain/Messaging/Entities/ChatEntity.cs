@@ -60,5 +60,17 @@ namespace KarmaMarketplace.Domain.Messging.Entities
 
             AddDomainEvent(new ChatRead(this)); 
         }
+
+        public static ChatEntity CreateSupport(UserEntity user)
+        {
+            var chat = new ChatEntity();
+
+            chat.Name = "Поддержка";
+            chat.Participants = [user]; 
+            chat.Owner = user;
+            chat.IsVerified = true;
+
+            chat.AddDomainEvent(new ChatCreated(chat)); 
+        }
     }
 }

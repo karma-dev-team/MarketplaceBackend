@@ -1,4 +1,5 @@
-﻿using KarmaMarketplace.Application.Messaging.UseCases;
+﻿using KarmaMarketplace.Application.Messaging.EventsHandlers;
+using KarmaMarketplace.Application.Messaging.UseCases;
 
 namespace KarmaMarketplace.Application.Messaging
 {
@@ -10,6 +11,8 @@ namespace KarmaMarketplace.Application.Messaging
             services.AddScoped<GetChatsList>();
             services.AddScoped<SendMessage>();
             services.AddScoped<GetChatMessages>();
+
+            services.AddScoped<UserCreatedHandler>();
 
             return services;
         }
