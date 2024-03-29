@@ -18,7 +18,7 @@ namespace KarmaMarketplace.Domain.Messging.Entities
         public bool Deleted { get; set; } = false; 
         public bool IsVerified { get; set; } = false;
 
-        public ICollection<ChatReadRecord> ReadRecords { get; set; } = []; 
+        public IList<ChatReadRecord> ReadRecords { get; set; } = []; 
 
         public ChatTypes Type { get; set; } = ChatTypes.Private;
 
@@ -28,6 +28,32 @@ namespace KarmaMarketplace.Domain.Messging.Entities
         public MessageEntity? LastMessage => 
             Messages?.OrderByDescending(m => m.CreatedAt).FirstOrDefault();
 
+        [NotMapped]
+        public int UnreadMessages
+        {
+            get
+            {
+                // Used in ChatDTO as not explicit property
+                // TODO: somehow optimize it
+                int unreadCount = 0;
+                if (ReadRecords.Count == 0)
+                {
+                    return Messages.Count;
+                }
+                foreach (var message in Messages)
+                {
+                    if (message.CreatedAt > ReadRecords[ReadRecords.Count - 1].ReadAt)
+                    {
+                        unreadCount++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                return unreadCount;
+            }
+        }
         public void ReadMessages(ChatReadRecord chatRead)
         {
             ReadRecords.Add(chatRead);
