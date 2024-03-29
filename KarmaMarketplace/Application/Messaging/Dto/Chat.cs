@@ -1,4 +1,6 @@
-﻿namespace KarmaMarketplace.Application.Messaging.Dto
+﻿using KarmaMarketplace.Application.Common.Models;
+
+namespace KarmaMarketplace.Application.Messaging.Dto
 {
     public class GetChatsListDto
     {
@@ -10,4 +12,9 @@
     {
         public Guid ChatId { get; set; }
     }
+
+    public class GetChatMessagesDto : InputPagination
+    {
+        public Guid ChatId { get; set; }
+    } 
 }

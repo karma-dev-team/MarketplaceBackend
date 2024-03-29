@@ -1,5 +1,6 @@
 ﻿using KarmaMarketplace.Domain.Files.Entities;
 using KarmaMarketplace.Domain.Messaging.Enums;
+using KarmaMarketplace.Domain.Messging.Events;
 using KarmaMarketplace.Domain.User.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -26,5 +27,12 @@ namespace KarmaMarketplace.Domain.Messging.Entities
         [NotMapped]
         public MessageEntity? LastMessage => 
             Messages?.OrderByDescending(m => m.CreatedAt).FirstOrDefault();
+
+        public void ReadMessages(ChatReadRecord chatRead)
+        {
+            ReadRecords.Add(chatRead);
+
+            AddDomainEvent(new ChatRead(this)); 
+        }
     }
 }

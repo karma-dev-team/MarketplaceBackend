@@ -2,11 +2,12 @@
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Application.Messaging.Dto;
 using KarmaMarketplace.Domain.Messging.Entities;
+using KarmaMarketplace.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 
 namespace KarmaMarketplace.Application.Messaging.UseCases
 {
-    public class GetChatMessages : BaseUseCase<Guid, ICollection<MessageEntity>>
+    public class GetChatMessages : BaseUseCase<GetChatMessagesDto, ICollection<MessageEntity>>
     {
         private IApplicationDbContext _context;
 
@@ -14,12 +15,14 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
             _context = dbContext; 
         }
 
-        public async Task<ICollection<MessageEntity>> Execute(Guid chatId)
+        public async Task<ICollection<MessageEntity>> Execute(GetChatMessagesDto dto)
         {
-            var chat = await _context.Chats.FirstOrDefaultAsync(x => x.Id == chatId);
+            var messages = await _context.Messages
+                .IncludeStandard()
+                .Where(x => x.ChatID == dto.ChatId)
+                .ToListAsync();
 
-            Guard.Against.Null(chat, message: "Chat does not exists");
-            return chat.Messages; 
+            return messages; 
         }
     }
 }

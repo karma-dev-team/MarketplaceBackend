@@ -29,4 +29,10 @@ namespace KarmaMarketplace.Application.Common.Models
             return new PaginatedList<T>(items, count, pageNumber, pageSize);
         }
     }
+
+    public class InputPagination
+    {
+        public int Start { get; set; }
+        public int Ends { get; set; }
+    } 
 }
