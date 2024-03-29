@@ -1,30 +1,32 @@
 ﻿using KarmaMarketplace.Application.Common.Interactors;
 using KarmaMarketplace.Application.Common.Interfaces;
+using KarmaMarketplace.Application.Files.Interfaces;
 using KarmaMarketplace.Application.Messaging.Dto;
 using KarmaMarketplace.Domain.Messging.Entities;
+using KarmaMarketplace.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 
 namespace KarmaMarketplace.Application.Messaging.UseCases
 {
-    public class SendTextMessage : BaseUseCase<SendTextMessageDto, MessageEntity>
+    public class SendMessage : BaseUseCase<SendMessageDto, MessageEntity>
     {
         private IApplicationDbContext _context;
-        private IAccessPolicy _accessPolicy;
-        private IUser _user; 
+        private IUser _user;
+        private IFileService _fileService; 
 
-        public SendTextMessage(
+        public SendMessage(
             IApplicationDbContext context, 
-            IAccessPolicy accessPolicy, 
-            IUser user) {
+            IUser user,
+            IFileService fileService ) {
             _context = context; 
-            _accessPolicy = accessPolicy;
-            _user = user; 
+            _user = user;
+            _fileService = fileService; 
         }
 
-        public async Task<MessageEntity> Execute(SendTextMessageDto dto)
+        public async Task<MessageEntity> Execute(SendMessageDto dto)
         {
             var chat = await _context.Chats
-                .Include(x => x.Messages)
+                .IncludeStandard()
                 .FirstOrDefaultAsync(x => x.Id == dto.ChatId);
 
             Guard.Against.Null(chat, message: "Chat does not exists");
@@ -32,9 +34,38 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
             var fromUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == _user.Id);
 
             Guard.Against.Null(fromUser, message: "User does not exists");
-            Guard.Against.Null(dto.Text, message: "Message text is not provided"); 
 
-            var message = MessageEntity.CreateText(dto.ChatId, fromUser, dto.Text); 
+            MessageEntity message; 
+
+            if (dto.Image != null)
+            {
+                var newImage = await _fileService.UploadImage().Execute(dto.Image); 
+
+                message = MessageEntity.CreateWithImage(dto.ChatId, fromUser, newImage); 
+            } else if (dto.PurchaseId != null) {
+                var purchase = await _context.Purchases.FirstOrDefaultAsync(x => x.Id == dto.PurchaseId);
+
+                Guard.Against.Null(purchase, message: "Purchase does not exists");
+
+                message = MessageEntity.CreateWithPurchase(dto.ChatId, fromUser, purchase);      
+            } else if (!string.IsNullOrEmpty(dto.Text))
+            {
+                message = MessageEntity.CreateText(dto.ChatId, fromUser, dto.Text);
+            } else
+            {
+                throw new Exception("Validation exception"); 
+            }
+
+            if (chat.Type == Domain.Messaging.Enums.ChatTypes.Private)
+            {
+                if (fromUser.Role == Domain.User.Enums.UserRoles.Moderator)
+                {
+                    chat.Participants.Add(fromUser);
+                }
+
+                var someUser = chat.Participants.FirstOrDefault(x => x.Id == _user.Id);
+                Guard.Against.Null(someUser, message: "You are not in participants"); 
+            }
 
             chat.Messages.Add(message);
 

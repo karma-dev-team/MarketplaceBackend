@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace KarmaMarketplace.Application.Messaging.Dto
 {
-    public class SendTextMessageDto 
+    public class SendMessageDto 
     {
         public string? Text { get; set; } = null!;
         [Required]
