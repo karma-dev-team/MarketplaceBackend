@@ -70,7 +70,9 @@ namespace KarmaMarketplace.Domain.Messging.Entities
             chat.Owner = user;
             chat.IsVerified = true;
 
-            chat.AddDomainEvent(new ChatCreated(chat)); 
+            chat.AddDomainEvent(new ChatCreated(chat));
+
+            return chat; 
         }
     }
 }
