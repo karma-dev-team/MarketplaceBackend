@@ -16,20 +16,19 @@ namespace KarmaMarketplace.Application
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-
-
-            services.AddSingleton<IEventDispatcher, EventDispatcher>(sp => {
-                var dispatcher = new EventDispatcher(sp);
-
-                dispatcher.RegisterEventSubscribers(Assembly.GetExecutingAssembly());
-                return dispatcher; 
-            });
             services.AddScoped<IAccessPolicy, AccessPolicy>(); 
             services.AddUserApplicationServices();
             services.AddMarketApplicationServices();
             services.AddPaymentApplicationServices(); 
             services.AddMessagingApplicationServices(); 
-            services.AddFilesApplicationServices(); 
+            services.AddFilesApplicationServices();
+
+            services.AddSingleton<IEventDispatcher, EventDispatcher>(sp => {
+                var dispatcher = new EventDispatcher(sp);
+
+                dispatcher.RegisterEventSubscribers(Assembly.GetExecutingAssembly());
+                return dispatcher;
+            });
 
             return services; 
         }

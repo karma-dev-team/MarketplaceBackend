@@ -1,4 +1,5 @@
 ﻿using KarmaMarketplace.Application.Common.Interactors;
+using KarmaMarketplace.Application.Messaging.EventsHandlers;
 using KarmaMarketplace.Application.User.Dto;
 using KarmaMarketplace.Application.User.Interactors;
 using KarmaMarketplace.Application.User.Interfaces;
@@ -21,7 +22,7 @@ namespace KarmaMarketplace.Application.User
             services.AddScoped<GetUser>();
             services.AddScoped<SendResetCode>(); 
             services.AddScoped<ResetPassword>();
-            services.AddScoped<GetUsersList>(); 
+            services.AddScoped<GetUsersList>();
 
             return services; 
         }

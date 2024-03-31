@@ -18,7 +18,9 @@ namespace KarmaMarketplace.Infrastructure.Data
         public DbSet<CategoryEntity> Categories { get; set;}  
         public DbSet<ProductEntity> Products { get; set;} 
         public DbSet<ReviewEntity> Reviews { get; set;} 
-        public DbSet<GameEntity> Games { get; set;} 
+        public DbSet<GameEntity> Games { get; set;}
+        public DbSet<AutoAnswerEntity> AutoAnswers { get; set; }
+
         public DbSet<OptionEntity> Options { get; set;} 
         public DbSet<PurchaseEntity> Purchases { get; set;} 
         public DbSet<ChatEntity> Chats { get; set;} 

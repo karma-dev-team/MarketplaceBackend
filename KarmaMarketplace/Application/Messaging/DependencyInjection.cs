@@ -14,7 +14,6 @@ namespace KarmaMarketplace.Application.Messaging
             services.AddScoped<SendMessage>();
             services.AddScoped<GetChatMessages>();
 
-            services.AddScoped<UserCreatedHandler>();
             services.AddScoped<IEventSubscriber<UserCreated>, UserCreatedHandler>();
 
 
