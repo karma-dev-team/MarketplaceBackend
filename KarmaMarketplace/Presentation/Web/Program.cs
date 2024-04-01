@@ -116,6 +116,9 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.UseAuthentication();
+app.UseWebSockets(new WebSocketOptions() { 
+    KeepAliveInterval = TimeSpan.FromMinutes(2), 
+});
 
 app.UseCors("TaskManger");
 app.MapControllers();

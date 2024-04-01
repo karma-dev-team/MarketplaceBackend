@@ -5,7 +5,7 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
 {
     [Route("api/review/")]
     [ApiController]
-    public class ReviewController : ControllerBase
+    public class ReviewControllers : ControllerBase
     {
     }
 }

@@ -9,11 +9,11 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
 {
     [Route("api/category/")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class CategoryControllers : ControllerBase
     {
         private ICategoryService _categoryService;
 
-        public CategoryController(ICategoryService categoryService) {
+        public CategoryControllers(ICategoryService categoryService) {
             _categoryService = categoryService;
         }
 

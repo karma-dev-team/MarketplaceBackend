@@ -9,11 +9,11 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
 {
     [Route("api/game/")]
     [ApiController]
-    public class GameController : ControllerBase
+    public class GameControllers : ControllerBase
     {
         private IGameService _gameService;
 
-        public GameController(IGameService gameService)
+        public GameControllers(IGameService gameService)
         {
             _gameService = gameService;
         }
