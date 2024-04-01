@@ -19,7 +19,8 @@ namespace KarmaMarketplace.Application.Market.Dto
         [Required]
         public decimal Price { get; set; }
         public Dictionary<string, string> Attributes { get; set; } = new();
-        public ICollection<CreateFileDto> Images { get; set; } = []; 
+        public ICollection<CreateFileDto> Images { get; set; } = [];
+        public ICollection<string> AutoAnswers { get; set; } = []; 
     }
 
     public class UpdateProductDto
@@ -32,6 +33,7 @@ namespace KarmaMarketplace.Application.Market.Dto
         public Dictionary<string, string>? Attributes { get; set; }
         public ICollection<Guid>? Images { get; set; }
         public string? ProductStatus { get; set; }
+        public ICollection<string>? AutoAnswers { get; set; }
     }
 
     public class DeleteProductDto {

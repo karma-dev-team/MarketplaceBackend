@@ -87,6 +87,17 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
             if (dto.Price != null) {
                 product.BasePrice = new Money((decimal)dto.Price); 
             }
+            if (dto.AutoAnswers != null) {
+                List<AutoAnswerEntity> answers = []; 
+
+                foreach (var answer in dto.AutoAnswers)
+                {
+                    answers.Add(AutoAnswerEntity.Create(product.Id, answer)); 
+                }
+
+                _context.AutoAnswers.AddRange(answers);
+                await _context.SaveChangesAsync(); 
+            }
 
             _context.Products.Update(product);
             await _context.SaveChangesAsync(); 

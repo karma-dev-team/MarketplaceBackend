@@ -12,7 +12,8 @@ namespace KarmaMarketplace.Application.Common.Interfaces
      {
          DbSet<UserEntity> Users { get; set;} 
          DbSet<CategoryEntity> Categories { get; set;} 
-         DbSet<ProductEntity> Products { get; set;} 
+         DbSet<ProductEntity> Products { get; set;}
+         DbSet<AutoAnswerEntity> AutoAnswers { get; set; }
          DbSet<ReviewEntity> Reviews { get; set;} 
          DbSet<GameEntity> Games { get; set;} 
          DbSet<OptionEntity> Options { get; set;} 

@@ -38,7 +38,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
         [Column(TypeName = "jsonb")]
         public string Attributes { get; set; } = null!;
         public ICollection<ImageEntity> Images { get; set; } = [];
-        public ICollection<ProductViewEntity> ProductViews { get; set; } = []; 
+        public ICollection<ProductViewEntity>? ProductViews { get; set; } = [];
 
         public static ProductEntity Create(
             UserEntity byUser, 
@@ -47,7 +47,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
             Money price, 
             string description,
             Dictionary<string, string> attributes,             
-            ICollection<ImageEntity>? images,
+            ICollection<ImageEntity> images,
             ProductStatus status = ProductStatus.Processing) 
         {
             ProductEntity newProduct = new ProductEntity()
@@ -55,13 +55,16 @@ namespace KarmaMarketplace.Domain.Market.Entities
                 CreatedBy = byUser,
                 Category = category,
                 Name = name,
-                BasePrice = price, 
+                BasePrice = price,
                 Description = description,
-                Attributes = "{}", 
-                Status = status, 
+                Attributes = "{}",
+                Status = status,
+                Images = images, 
             };
 
             VerifyAttributes(attributes, category);
+
+            // TODO: Possible security breach?
             newProduct.Attributes = JsonSerializer.Serialize(attributes);
 
             newProduct.AddDomainEvent(

@@ -1,6 +1,6 @@
 ﻿using KarmaMarketplace.Application.Common.Interactors;
+using KarmaMarketplace.Application.Messaging.EventsHandlers;
 using KarmaMarketplace.Application.User.Dto;
-using KarmaMarketplace.Application.User.EventHandlers;
 using KarmaMarketplace.Application.User.Interactors;
 using KarmaMarketplace.Application.User.Interfaces;
 using KarmaMarketplace.Application.User.UseCases;
@@ -15,7 +15,6 @@ namespace KarmaMarketplace.Application.User
         public static IServiceCollection AddUserApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IEventSubscriber<UserCreated>, UserCreatedSubsciber>();
 
             services.AddScoped<CreateUser>(); 
             services.AddScoped<UpdateUser>();
@@ -23,7 +22,7 @@ namespace KarmaMarketplace.Application.User
             services.AddScoped<GetUser>();
             services.AddScoped<SendResetCode>(); 
             services.AddScoped<ResetPassword>();
-            services.AddScoped<GetUsersList>(); 
+            services.AddScoped<GetUsersList>();
 
             return services; 
         }

@@ -53,6 +53,17 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
                 attributes: dto.Attributes);
 
             _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+
+            List<AutoAnswerEntity> autoAnswers = []; 
+
+            foreach (var answer in dto.AutoAnswers)
+            {
+                autoAnswers.Add(
+                    AutoAnswerEntity.Create(product.Id, answer)); 
+            }
+
+            _context.AutoAnswers.AddRange(autoAnswers);
             await _context.SaveChangesAsync(); 
 
             return new(); 
