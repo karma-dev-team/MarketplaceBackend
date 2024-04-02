@@ -86,6 +86,7 @@ builder.Services.AddScoped<IPasswordHasher<UserEntity>, PasswordHasher<UserEntit
 builder.Services.AddScoped<IUser, CurrentUser>();
 
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddCoreAdmin();
 
 builder.Services.AddCors(option => option.AddPolicy("TaskManger", builder =>
 {
@@ -110,6 +111,7 @@ if (app.Environment.IsDevelopment())
     await app.InitialiseDatabaseAsync(); 
 }
 app.UseStaticFiles();
+app.MapDefaultControllerRoute();
 
 app.UseHealthChecks("/health");
 app.UseHttpsRedirection();
@@ -119,7 +121,6 @@ app.UseAuthentication();
 app.UseWebSockets(new WebSocketOptions() { 
     KeepAliveInterval = TimeSpan.FromMinutes(2), 
 });
-
 app.UseCors("TaskManger");
 app.MapControllers();
 
