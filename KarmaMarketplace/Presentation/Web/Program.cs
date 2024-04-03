@@ -60,6 +60,15 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddHealthChecks();
 builder.Services.AddApplicationServices();
 builder.Services.AddHttpClient();
+if (builder.Environment.IsProduction()) {
+    builder.Logging.AddSentry(options =>
+    {
+        options.Dsn = builder.Configuration[""];
+        options.TracesSampleRate = 1.0;
+        options.Environment = "production"; 
+        options.Release = "app"; // It's a good practice to dynamically set this based on your CI/CD pipeline
+    });
+}
 builder.Services.AddInfrastructureServices(builder.Configuration); 
 builder.Services.AddAuthentication(options =>
 {
