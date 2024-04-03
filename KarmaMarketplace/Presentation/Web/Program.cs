@@ -63,10 +63,10 @@ builder.Services.AddHttpClient();
 if (builder.Environment.IsProduction()) {
     builder.Logging.AddSentry(options =>
     {
-        options.Dsn = builder.Configuration[""];
+        options.Dsn = builder.Configuration["SentryDsn"];
         options.TracesSampleRate = 1.0;
         options.Environment = "production"; 
-        options.Release = "app"; // It's a good practice to dynamically set this based on your CI/CD pipeline
+        options.Release = "app"; 
     });
 }
 builder.Services.AddInfrastructureServices(builder.Configuration); 
