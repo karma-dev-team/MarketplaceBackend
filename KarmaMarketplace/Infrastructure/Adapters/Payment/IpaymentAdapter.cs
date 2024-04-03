@@ -5,7 +5,7 @@
         // Инициирует платеж и возвращает результат операции.
         // В параметры можно включить сумму, валюту, описание платежа и дополнительные параметры, 
         // специфичные для каждой платежной системы.
-        Task<PaymentResult> InitPayment(decimal amount, string currency, string description, Dictionary<string, object> additionalParameters = null);
+        Task<PaymentResult> InitPayment(PaymentPayload payload);
 
         // Метод для проверки статуса платежа, если это требуется по логике платежной системы.
         // Может возвращать статус платежа в удобочитаемом формате.

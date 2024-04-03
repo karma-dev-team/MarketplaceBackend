@@ -1,22 +1,35 @@
 ﻿using KarmaMarketplace.Infrastructure.Adapters.Payment;
+using KarmaMarketplace.Infrastructure.Adapters.Payment.Systems;
 
 namespace KarmaMarketplace.Application.Payment
 {
     // PaymentAdapterFactory.cs
     public class PaymentAdapterFactory
     {
-        private readonly Dictionary<string, IPaymentAdapter> Adapters = new Dictionary<string, IPaymentAdapter>();
+        private readonly Dictionary<PaymentProviders, IPaymentAdapter> Adapters = new();
 
-        public PaymentAdapterFactory()
+        public PaymentAdapterFactory(IHttpClientFactory httpClient)
         {
             // Регистрация доступных адаптеров
-            Adapters.Add("PAYPAL", new PayPalychPaymentAdapter());
+            Adapters.Add(PaymentProviders.BankCardRu, new PayPalychPaymentAdapter(
+                httpClient.CreateClient("paypalych"),
+                new PayPalychConfiguration() {
+                    ShopId = "1234567", 
+                    HostUrl = "lol", 
+                    SuccessUrl = "/api/payment/payout/paypalych"
+                }
+            ));
             // Добавьте другие адаптеры здесь
         }
 
         public IPaymentAdapter GetPaymentAdapter(string providerId)
         {
-            if (Adapters.TryGetValue(providerId.ToUpper(), out var adapter))
+            if (!Enum.TryParse(providerId, out PaymentProviders provider))
+            {
+                throw new ArgumentException($"{providerId} is not convertable to Payment providers");
+            }
+
+            if (Adapters.TryGetValue(provider, out var adapter))
             {
                 return adapter;
             }

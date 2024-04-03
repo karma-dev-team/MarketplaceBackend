@@ -2,5 +2,7 @@
 {
     public interface IWalletService
     {
+        BalanceOperation BalanceOperation();
+        GetWallet GetWallet(); 
     }
 }
