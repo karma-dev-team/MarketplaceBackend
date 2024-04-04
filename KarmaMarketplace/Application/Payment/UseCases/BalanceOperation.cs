@@ -1,4 +1,5 @@
 ﻿using KarmaMarketplace.Application.Common.Interactors;
+using KarmaMarketplace.Application.Payment.Dto;
 
 namespace KarmaMarketplace.Application.Payment.UseCases
 {

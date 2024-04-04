@@ -5,8 +5,8 @@ namespace KarmaMarketplace.Application.Payment.Interfaces
     public interface ITransactionService
     {
         HandleTransaction HandleTransaction();
-        GetAllTransactions GetAllTransactions();
-        EditTransaction EditTransaction(); 
+        GetTransactionsList GetAllTransactions();
+        UpdateTransaction EditTransaction(); 
         GetTransactionProviders GetTransactionProviders();
     }
 }

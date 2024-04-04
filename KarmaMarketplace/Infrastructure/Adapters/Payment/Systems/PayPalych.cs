@@ -7,6 +7,7 @@ namespace KarmaMarketplace.Infrastructure.Adapters.Payment.Systems
         public string ShopId { get; set; } = null!;
         public string HostUrl { get; set; } = null!;
         public string SuccessUrl { get; set; } = null!; 
+        public string AccessToken {  get; set; } = null!;
     } 
 
     public class PayPalychPaymentAdapter : IPaymentAdapter
@@ -35,7 +36,8 @@ namespace KarmaMarketplace.Infrastructure.Adapters.Payment.Systems
                 {"fail_url", _config.SuccessUrl}
             };
 
-            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token);
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(
+                "Bearer", _config.AccessToken);
 
             var response = await _httpClient.PostAsync(
                 _config.HostUrl + _config.SuccessUrl, new FormUrlEncodedContent(data));
@@ -43,6 +45,8 @@ namespace KarmaMarketplace.Infrastructure.Adapters.Payment.Systems
 
             var responseContent = await response.Content.ReadAsStringAsync();
             var responseData = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(responseContent);
+
+            Guard.Against.Null(responseData, message: "Paypalych no answer "); 
 
             return new PaymentResult
             {

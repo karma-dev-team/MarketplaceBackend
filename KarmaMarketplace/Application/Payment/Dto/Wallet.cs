@@ -1,6 +1,11 @@
 ﻿namespace KarmaMarketplace.Application.Payment.Dto
 {
-    public class Wallet
+    public class BalanceOperationDto
     {
+    }
+
+    public class GetWalletDto
+    {
+
     }
 }

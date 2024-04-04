@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Components.Forms;
 
 namespace KarmaMarketplace.Application.Payment.UseCases
 {
-    public class HandleTransaction : BaseUseCase<HandleTransactionDto, TransactionEntity>
+    public class GetPurchasesList : BaseUseCase<GetPurchasesListDto, ICollection<PurchaseEntity>>
     {
-        public HandleTransaction() { }
+        public GetPurchasesList() { }
 
-        public async Task<TransactionEntity> Execute(HandleTransactionDto dto)
+        public async Task<ICollection<PurchaseEntity>> Execute(GetPurchasesListDto dto)
         {
-            return new();
+            return [];
         }
     }
 }

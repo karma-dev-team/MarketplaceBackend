@@ -6,8 +6,8 @@ namespace KarmaMarketplace.Application.Payment.Interfaces
     {
         CreatePurchase CreatePurchase();
         ConfirmPurchase ConfirmPurchase(); 
-        GetPurchases GetPurchases();
-        EditPurchase EditPurchase();
+        GetPurchasesList GetPurchases();
+        UpdatePurchase EditPurchase();
         SolveProblem SolveProblem(); 
     }
 }
