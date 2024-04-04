@@ -20,7 +20,7 @@ namespace KarmaMarketplace.Infrastructure.Data
         public DbSet<ReviewEntity> Reviews { get; set;} 
         public DbSet<GameEntity> Games { get; set;}
         public DbSet<AutoAnswerEntity> AutoAnswers { get; set; }
-        public DbSet<PaymentProviderEntity> PaymentProviders { get; set; }
+        public DbSet<TransactionProviderEntity> PaymentProviders { get; set; }
         public DbSet<PaymentSystemEntity> PaymentSystems { get; set; }
         public DbSet<OptionEntity> Options { get; set;} 
         public DbSet<PurchaseEntity> Purchases { get; set;} 

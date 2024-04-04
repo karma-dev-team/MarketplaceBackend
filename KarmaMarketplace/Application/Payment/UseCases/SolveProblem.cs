@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Components.Forms;
 
 namespace KarmaMarketplace.Application.Payment.UseCases
 {
-    public class SolveProblem : BaseUseCase<InputDTO, OutputDTO>
+    public class SolveProblem : BaseUseCase<SolveProblemDto, bool>
     {
-        public BalanceOperation() { }
+        public SolveProblem() { }
 
-        public async Task<OutputDTO> Execute(InputDTO dto)
+        public async Task<bool> Execute(SolveProblemDto dto)
         {
-            return;
+            return new();
         }
     }
 }

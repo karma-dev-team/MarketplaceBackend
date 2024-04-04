@@ -87,7 +87,7 @@ namespace KarmaMarketplace.Infrastructure.Data
             // Seed, if necessary
             if (!_context.PaymentProviders.Any())
             {
-                var providers = new List<PaymentProviderEntity>
+                var providers = new List<TransactionProviderEntity>
                 {
                     new()
                     {

@@ -1,15 +1,16 @@
 ﻿using KarmaMarketplace.Application.Common.Interactors;
+using KarmaMarketplace.Domain.Payment.Entities;
 using Microsoft.AspNetCore.Components.Forms;
 
 namespace KarmaMarketplace.Application.Payment.UseCases
 {
-    public class CreatePurchase : BaseUseCase<InputDTO, OutputDTO>
+    public class CreatePurchase : BaseUseCase<CreatePurchaseDto, PurchaseEntity>
     {
-        public BalanceOperation() { }
+        public CreatePurchase() { }
 
-        public async Task<OutputDTO> Execute(InputDTO dto)
+        public async Task<PurchaseEntity> Execute(CreatePurchaseDto dto)
         {
-            return;
+            return new();
         }
     }
 }
