@@ -3,6 +3,7 @@ using KarmaMarketplace.Application.User.Interfaces;
 using KarmaMarketplace.Domain.Payment.Entities;
 using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Domain.User.Enums;
+using KarmaMarketplace.Infrastructure.Adapters.Payment;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SKitLs.Bots.Telegram.Core.Users;
@@ -19,6 +20,8 @@ namespace KarmaMarketplace.Infrastructure.Data
             var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitialiser>();
 
             await initialiser.InitialiseAsync();
+
+            await initialiser.SeedAsync(); 
         }
     }
 
@@ -67,7 +70,7 @@ namespace KarmaMarketplace.Infrastructure.Data
         public async Task TrySeedAsync()
         {
             // Default users
-            var administrator = new UserEntity { UserName = "administrator@localhost", Email = "administrator@localhost" };
+            var administrator = new UserEntity { UserName = "admin", Email = "admin@localhost" };
 
             if (_context.Users.All(u => u.UserName != administrator.UserName))
             {
@@ -84,12 +87,18 @@ namespace KarmaMarketplace.Infrastructure.Data
             // Seed, if necessary
             if (!_context.PaymentProviders.Any())
             {
-                var providers = new List<PaymentProvider>();
-
-                providers.Add(new PaymentProvider()
+                var providers = new List<PaymentProviderEntity>
                 {
-                    Name
-                }); 
+                    new()
+                    {
+                        Name = nameof(PaymentProviders.BankCardRu),
+                        Systems = [new PaymentSystemEntity() { Name = "paypalych" }]
+                    }, 
+                    new() {
+                        Name = nameof(PaymentProviders.Balance), 
+                        Systems = []
+                    }
+                };
 
                 _context.PaymentProviders.AddRange(providers); 
 

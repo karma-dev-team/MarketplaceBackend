@@ -2,9 +2,9 @@
 
 namespace KarmaMarketplace.Application.Payment.UseCases
 {
-    public class UseCase : BaseUseCase<InputDTO, OutputDTO>
+    public class BalanceOperation : BaseUseCase<InputDTO, OutputDTO>
     {
-        public UseCase() { }
+        public BalanceOperation() { }
 
         public async Task<OutputDTO> Execute(InputDTO dto)
         {

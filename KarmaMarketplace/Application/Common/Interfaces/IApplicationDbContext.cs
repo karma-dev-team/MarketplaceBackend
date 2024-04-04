@@ -11,8 +11,8 @@ namespace KarmaMarketplace.Application.Common.Interfaces
      public interface IApplicationDbContext
      {
         DbSet<UserEntity> Users { get; set;}
-        DbSet<PaymentProvider> PaymentProviders { get; set; }
-        DbSet<PaymentSystem> PaymentSystems { get; set; }
+        DbSet<PaymentProviderEntity> PaymentProviders { get; set; }
+        DbSet<PaymentSystemEntity> PaymentSystems { get; set; }
         DbSet<CategoryEntity> Categories { get; set;} 
         DbSet<ProductEntity> Products { get; set;}
         DbSet<AutoAnswerEntity> AutoAnswers { get; set; }
