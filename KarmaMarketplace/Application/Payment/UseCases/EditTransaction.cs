@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Forms;
 
 namespace KarmaMarketplace.Application.Payment.UseCases
 {
-    public class ConfirmPurchase : BaseUseCase<InputDTO, OutputDTO>
+    public class EditTransaction : BaseUseCase<InputDTO, OutputDTO>
     {
         public BalanceOperation() { }
 

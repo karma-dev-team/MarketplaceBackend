@@ -1,4 +1,6 @@
-﻿namespace KarmaMarketplace.Application.Payment.Interfaces
+﻿using KarmaMarketplace.Application.Payment.UseCases;
+
+namespace KarmaMarketplace.Application.Payment.Interfaces
 {
     public interface IWalletService
     {
