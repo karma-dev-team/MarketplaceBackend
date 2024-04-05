@@ -2,6 +2,7 @@
 using KarmaMarketplace.Application.User.Interfaces;
 using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Presentation.Web.Schemas;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Annotations;
