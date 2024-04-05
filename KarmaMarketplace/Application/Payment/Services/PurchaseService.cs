@@ -5,9 +5,9 @@ namespace KarmaMarketplace.Application.Payment.Services
 {
     public class PurchaseService : IPurchaseService
     {
-        private readonly ServiceProvider _serviceProvider;
+        private readonly IServiceProvider _serviceProvider;
 
-        public PurchaseService(ServiceProvider serviceProvider)
+        public PurchaseService(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }

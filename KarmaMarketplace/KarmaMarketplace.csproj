@@ -8,13 +8,9 @@
 
   <ItemGroup>
     <Compile Remove="Application\Messaging\Exceptions\**" />
-    <Compile Remove="Application\Payment\Exceptions\**" />
     <Content Remove="Application\Messaging\Exceptions\**" />
-    <Content Remove="Application\Payment\Exceptions\**" />
     <EmbeddedResource Remove="Application\Messaging\Exceptions\**" />
-    <EmbeddedResource Remove="Application\Payment\Exceptions\**" />
     <None Remove="Application\Messaging\Exceptions\**" />
-    <None Remove="Application\Payment\Exceptions\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,6 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Application\Payment\Exceptions\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

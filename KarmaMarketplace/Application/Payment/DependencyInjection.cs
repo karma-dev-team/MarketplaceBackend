@@ -1,4 +1,6 @@
 ﻿using KarmaMarketplace.Application.Payment.Interactors;
+using KarmaMarketplace.Application.Payment.Interfaces;
+using KarmaMarketplace.Application.Payment.Services;
 using KarmaMarketplace.Application.Payment.UseCases;
 
 namespace KarmaMarketplace.Application.Payment
@@ -21,6 +23,11 @@ namespace KarmaMarketplace.Application.Payment
             services.AddScoped<SolveProblem>(); 
             services.AddScoped<UpdatePurchase>();
             services.AddScoped<UpdateTransaction>(); 
+            services.AddScoped<HandleGatewayResult>();
+
+            services.AddScoped<IPurchaseService, PurchaseService>();
+            services.AddScoped<ITransactionService, TransactionService>();
+            services.AddScoped<IWalletService, WalletService>(); 
 
             return services;
         }

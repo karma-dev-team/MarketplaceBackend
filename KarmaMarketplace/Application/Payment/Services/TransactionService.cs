@@ -1,14 +1,13 @@
 ﻿using KarmaMarketplace.Application.Payment.Interfaces;
 using KarmaMarketplace.Application.Payment.UseCases;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace KarmaMarketplace.Application.Payment.Services
 {
     public class TransactionService : ITransactionService
     {
-        private readonly ServiceProvider _serviceProvider;
+        private readonly IServiceProvider _serviceProvider;
 
-        public TransactionService(ServiceProvider serviceProvider) {
+        public TransactionService(IServiceProvider serviceProvider) {
             _serviceProvider = serviceProvider;
         }
 
@@ -28,6 +27,11 @@ namespace KarmaMarketplace.Application.Payment.Services
         public GetTransactionProviders GetTransactionProviders()
         {
             return _serviceProvider.GetRequiredService<GetTransactionProviders>();
+        }
+
+        public HandleGatewayResult HandleGatewayResult()
+        {
+            return _serviceProvider.GetRequiredService<HandleGatewayResult>();
         }
     }
 }

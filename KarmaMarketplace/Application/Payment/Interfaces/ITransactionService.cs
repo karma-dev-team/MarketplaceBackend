@@ -8,5 +8,6 @@ namespace KarmaMarketplace.Application.Payment.Interfaces
         GetTransactionsList GetAllTransactions();
         UpdateTransaction EditTransaction(); 
         GetTransactionProviders GetTransactionProviders();
+        HandleGatewayResult HandleGatewayResult();
     }
 }
