@@ -93,7 +93,9 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
                 query = query.Where(x => x.Category.GameID == dto.GameId.Value);
             }
 
-            return await query.ToListAsync();
+            var result = await query.ToListAsync();
+        
+            return result;
         }
     }
 

@@ -11,7 +11,7 @@ namespace KarmaMarketplace.Infrastructure.Data.Queries
         {
             return query
                 .Include(x => x.CreatedBy)
-                .Include(x => x.User); 
+                .Include(x => x.CreatedByUser); 
         }
 
         public static IQueryable<TransactionEntity> FilterByParams(this IQueryable<TransactionEntity> query, 

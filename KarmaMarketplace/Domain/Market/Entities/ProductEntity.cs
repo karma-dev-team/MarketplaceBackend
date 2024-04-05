@@ -39,6 +39,17 @@ namespace KarmaMarketplace.Domain.Market.Entities
         public string Attributes { get; set; } = null!;
         public ICollection<ImageEntity> Images { get; set; } = [];
         public ICollection<ProductViewEntity>? ProductViews { get; set; } = [];
+        [NotMapped]
+        public Money CurrentPrice { get
+            {
+                if (DiscountPrice == null)
+                {
+                    return BasePrice; 
+                } else
+                {
+                    return DiscountPrice;
+                }
+            }} 
 
         public static ProductEntity Create(
             UserEntity byUser, 

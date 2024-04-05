@@ -7,5 +7,6 @@ namespace KarmaMarketplace.Infrastructure.Adapters.Payment
     {
         BankCardRu, 
         Balance, 
+        Test
     }
 }

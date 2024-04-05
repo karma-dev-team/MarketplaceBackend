@@ -50,7 +50,7 @@ namespace KarmaMarketplace.Infrastructure.Adapters.Payment.Systems
 
             return new PaymentResult
             {
-                PaymentUrl = responseData["link_page_url"],
+                LinkUrl = responseData["link_page_url"],
                 QrLinkUrl= responseData["link_url"],
                 PaymentId = responseData["bill_id"],
                 Success = responseData["success"] == "true",

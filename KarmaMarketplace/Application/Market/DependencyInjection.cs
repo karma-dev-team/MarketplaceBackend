@@ -1,5 +1,7 @@
 ﻿using KarmaMarketplace.Application.Market.Interactors.Category;
 using KarmaMarketplace.Application.Market.Interactors.Game;
+using KarmaMarketplace.Application.Market.Interfaces;
+using KarmaMarketplace.Application.Market.Services;
 using KarmaMarketplace.Application.Market.UseCases.Product;
 using KarmaMarketplace.Application.Market.UseCases.Review;
 
@@ -13,7 +15,7 @@ namespace KarmaMarketplace.Application.Market
             services.AddScoped<CreateProduct>(); 
             services.AddScoped<UpdateProduct>();
             services.AddScoped<GetProduct>(); 
-            services.AddScoped<GetGamesList>();
+            services.AddScoped<GetProductsList>();
             services.AddScoped<DeleteProduct>();
             
             // Games 
@@ -33,6 +35,11 @@ namespace KarmaMarketplace.Application.Market
             // Reviews
             services.AddScoped<CreateReview>();
             services.AddScoped<GetReviewsList>(); 
+
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IGameService, GameService>();
+            services.AddScoped<IReviewService, ReviewService>();
 
             return services;
         }

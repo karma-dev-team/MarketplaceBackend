@@ -97,6 +97,10 @@ namespace KarmaMarketplace.Infrastructure.Data
                     new() {
                         Name = nameof(PaymentProviders.Balance), 
                         Systems = []
+                    }, 
+                    new() { 
+                        Name = nameof(PaymentProviders.Test), 
+                        Systems = []
                     }
                 };
 

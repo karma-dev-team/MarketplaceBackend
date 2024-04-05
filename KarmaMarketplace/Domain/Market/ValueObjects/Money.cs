@@ -14,5 +14,49 @@ namespace KarmaMarketplace.Domain.Market.ValueObjects
             Amount = amount;
             Currency = currency; 
         }
+
+        public static void VerifyCurrency(Money lhs, Money rhs)
+        {
+            if (lhs.Currency != rhs.Currency)
+            {
+                throw new ArgumentException("Currencies is not equal"); 
+            }
+        }
+
+        public static bool operator >(Money lhs, Money rhs)
+        {
+            VerifyCurrency(lhs, rhs);
+            return lhs.Amount > rhs.Amount;
+        }
+
+        public static bool operator <(Money lhs, Money rhs)
+        {
+            VerifyCurrency(lhs, rhs);
+            return lhs.Amount < rhs.Amount;
+        }
+
+        public static bool operator ==(Money lhs, Money rhs)
+        {
+            VerifyCurrency(lhs, rhs);
+            return lhs.Amount == rhs.Amount;
+        }
+
+        public static bool operator !=(Money lhs, Money rhs)
+        {
+            VerifyCurrency(lhs, rhs);
+            return lhs.Amount != rhs.Amount;
+        }
+
+        public static Money operator -(Money lhs, Money rhs)
+        {
+            VerifyCurrency(lhs, rhs);
+            return new Money(lhs.Amount - rhs.Amount, lhs.Currency);
+        }
+
+        public static Money operator +(Money lhs, Money rhs)
+        {
+            VerifyCurrency(lhs, rhs);
+            return new Money(lhs.Amount + rhs.Amount, lhs.Currency);
+        }
     }
 }

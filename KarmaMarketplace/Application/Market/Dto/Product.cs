@@ -1,4 +1,5 @@
-﻿using KarmaMarketplace.Application.Files.Dto;
+﻿using KarmaMarketplace.Application.Common.Models;
+using KarmaMarketplace.Application.Files.Dto;
 using KarmaMarketplace.Application.Files.UseCases;
 using KarmaMarketplace.Application.User.Dto;
 using KarmaMarketplace.Domain.Market.ValueObjects;
@@ -47,7 +48,7 @@ namespace KarmaMarketplace.Application.Market.Dto
         public Guid ProductId { get; set; } 
     }
 
-    public class GetProductsListDto
+    public class GetProductsListDto : InputPagination
     {
         public string? Name { get; set; }
         public Guid? CategoryId { get; set; }   

@@ -3,7 +3,6 @@ using KarmaMarketplace.Infrastructure.Adapters.Payment.Systems;
 
 namespace KarmaMarketplace.Application.Payment
 {
-    // PaymentAdapterFactory.cs
     public class PaymentAdapterFactory
     {
         private readonly Dictionary<PaymentProviders, IPaymentAdapter> Adapters = new();
@@ -19,6 +18,7 @@ namespace KarmaMarketplace.Application.Payment
                     SuccessUrl = "/api/payment/payout/paypalych"
                 }
             ));
+            Adapters.Add(PaymentProviders.Test, new TestPaymentAdapter()); 
             // Добавьте другие адаптеры здесь
         }
 
