@@ -85,7 +85,7 @@ namespace KarmaMarketplace.Infrastructure.Data
 
             // Default data
             // Seed, if necessary
-            if (!_context.PaymentProviders.Any())
+            if (!_context.TransactionProviders.Any())
             {
                 var providers = new List<TransactionProviderEntity>
                 {
@@ -100,7 +100,7 @@ namespace KarmaMarketplace.Infrastructure.Data
                     }
                 };
 
-                _context.PaymentProviders.AddRange(providers); 
+                _context.TransactionProviders.AddRange(providers); 
 
                 await _context.SaveChangesAsync();
             }
