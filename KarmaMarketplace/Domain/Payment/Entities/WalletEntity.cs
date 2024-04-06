@@ -66,7 +66,7 @@ namespace KarmaMarketplace.Domain.Payment.Entities
                 AvailableBalance += transaction.Amount;
         }
 
-        public void ConfirmTransaction(TransactionEntity transaction, WalletEntity fromWallet = null)
+        public void ConfirmTransaction(TransactionEntity transaction, WalletEntity? fromWallet = null)
         {
             VerifyTransaction(transaction, raiseErr: true);
 

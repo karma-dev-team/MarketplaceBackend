@@ -8,5 +8,6 @@ namespace KarmaMarketplace.Application.Messaging.Interfaces
         GetChatMessages GetChatMessages();
         GetChat GetChat();
         GetChatsList GetChatsList();
+        InitiateProductChat InitiateProductChat(); 
     }
 }

@@ -35,6 +35,7 @@ namespace KarmaMarketplace.Application.Payment.Dto
 
     public class HandleTransactionDto
     {
-
+        [Required]
+        public Guid TransactionId { get; set; } 
     }
 }

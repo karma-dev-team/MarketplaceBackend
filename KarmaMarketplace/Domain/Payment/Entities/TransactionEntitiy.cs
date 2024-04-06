@@ -26,10 +26,9 @@ namespace KarmaMarketplace.Domain.Payment.Entities
         [MaxLength(256)]
         public string StatusDescription { get; set; } = null!; 
 
-        public Money Fee { get; set; } = null!; 
+        public Money Fee { get; set; } = null!;
 
-        // Может сущестовать только при завершении транзакции!! 
-        public TransactionProviderEntity? Provider {  get; set; }
+        public TransactionProviderEntity Provider { get; set; } = null!; 
         public TransactionPropsEntity? Props { get; set; } 
 
         public static TransactionEntity Create(

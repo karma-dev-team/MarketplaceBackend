@@ -44,6 +44,7 @@ namespace KarmaMarketplace.Infrastructure.Data.Intercepters
 
             entities.ToList().ForEach(e => e.ClearDomainEvents());
 
+            // Note: if any event subscribers raise error, then transaction would halt! 
             foreach (var domainEvent in domainEvents)
                 _dispatcher.Dispatch(domainEvent);
         }

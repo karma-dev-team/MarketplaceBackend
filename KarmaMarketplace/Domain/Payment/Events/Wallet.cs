@@ -38,11 +38,11 @@ namespace KarmaMarketplace.Domain.Payment.Events
         public string Reason { get; set; } = reason; 
     }
 
-    public class ConfirmedTransaction(WalletEntity wallet, TransactionEntity transaction, WalletEntity fromWallet) : BaseEvent
+    public class ConfirmedTransaction(WalletEntity wallet, TransactionEntity transaction, WalletEntity? fromWallet) : BaseEvent
     {
         public WalletEntity Wallet { get; set; } = wallet;
         public TransactionEntity Transaction { get; set; } = transaction; 
-        public WalletEntity FromWallet { get; set; } = fromWallet;
+        public WalletEntity? FromWallet { get; set; } = fromWallet;
     }
 
     public class WalletBalanceDecreased(WalletEntity wallet, Money decreasedAmount) : BaseEvent
