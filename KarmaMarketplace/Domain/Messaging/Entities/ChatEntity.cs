@@ -5,6 +5,7 @@ using KarmaMarketplace.Domain.Messging.Events;
 using KarmaMarketplace.Domain.User.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Linq;
 using Telegram.Bot.Types;
 
 namespace KarmaMarketplace.Domain.Messging.Entities
@@ -17,7 +18,7 @@ namespace KarmaMarketplace.Domain.Messging.Entities
         public UserEntity Owner { get; set; } = null!;
 
         public ICollection<UserEntity> Participants { get; set; } = [];
-        public ImageEntity Photo { get; set; } = null!;
+        public ImageEntity? Image { get; set; } = null!;
         public bool Deleted { get; set; } = false; 
         public bool IsVerified { get; set; } = false;
 
@@ -90,6 +91,25 @@ namespace KarmaMarketplace.Domain.Messging.Entities
             chat.IsVerified = true;
 
             chat.AddDomainEvent(new ChatCreated(chat));
+
+            return chat; 
+        }
+
+        public static ChatEntity CreatePrivate(List<UserEntity> participants, string name, UserEntity owner, ImageEntity? image)
+        {
+            if (!participants.Contains(owner))
+                throw new ArgumentException("Owner not in participants.");
+
+            var chat = new ChatEntity
+            {
+                Name = name,
+                Participants = participants,
+                Image = image,
+                Type = ChatTypes.Private,
+                Owner = owner
+            };
+
+            chat.AddDomainEvent(new ChatCreated(chat)); 
 
             return chat; 
         }

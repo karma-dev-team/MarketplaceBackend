@@ -1,5 +1,5 @@
-﻿using KarmaMarketplace.Domain.Market.ValueObjects;
-using KarmaMarketplace.Domain.Payment.Entities;
+﻿using KarmaMarketplace.Domain.Payment.Entities;
+using KarmaMarketplace.Domain.Payment.ValueObjects;
 using KarmaMarketplace.Infrastructure.EventDispatcher;
 
 namespace KarmaMarketplace.Domain.Payment.Events

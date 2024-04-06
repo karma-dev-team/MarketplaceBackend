@@ -1,7 +1,7 @@
 ﻿using KarmaMarketplace.Domain.Payment.Enums;
 using Microsoft.EntityFrameworkCore;
 
-namespace KarmaMarketplace.Domain.Market.ValueObjects
+namespace KarmaMarketplace.Domain.Payment.ValueObjects
 {
     [Owned]
     public class Money
@@ -12,14 +12,14 @@ namespace KarmaMarketplace.Domain.Market.ValueObjects
         public Money(decimal amount, CurrencyEnum currency = CurrencyEnum.RussianRuble)
         {
             Amount = amount;
-            Currency = currency; 
+            Currency = currency;
         }
 
         public static void VerifyCurrency(Money lhs, Money rhs)
         {
             if (lhs.Currency != rhs.Currency)
             {
-                throw new ArgumentException("Currencies is not equal"); 
+                throw new ArgumentException("Currencies is not equal");
             }
         }
 
@@ -57,6 +57,22 @@ namespace KarmaMarketplace.Domain.Market.ValueObjects
         {
             VerifyCurrency(lhs, rhs);
             return new Money(lhs.Amount + rhs.Amount, lhs.Currency);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            Money other = (Money)obj;
+            return Amount == other.Amount && Currency == other.Currency;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Amount, Currency);
         }
     }
 }

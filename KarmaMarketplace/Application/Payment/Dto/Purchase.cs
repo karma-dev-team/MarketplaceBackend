@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using KarmaMarketplace.Application.Common.Models;
+using KarmaMarketplace.Domain.Payment.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace KarmaMarketplace.Application.Payment.Dto
 {
@@ -28,10 +30,11 @@ namespace KarmaMarketplace.Application.Payment.Dto
         
     }
 
-    public class GetPurchasesListDto
+    public class GetPurchasesListDto : InputPagination
     {
-
+        public PurchaseStatus? Status { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
+        public Guid? UserId { get; set; }
     }
-
-
 }

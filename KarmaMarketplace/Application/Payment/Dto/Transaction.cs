@@ -38,4 +38,22 @@ namespace KarmaMarketplace.Application.Payment.Dto
         [Required]
         public Guid TransactionId { get; set; } 
     }
+
+    public class GatewayResultDto
+    {
+        [Required]
+        public bool Success { get; set; } = false;
+        [Required]
+        public string CustomId { get; set; } = string.Empty;
+        [Required]
+        public decimal Fee { get; set; }
+        [Required]
+        public CurrencyEnum CurrencyIn { get; set; }
+        [Required]
+        public decimal Amount { get; set; }
+        [Required]
+        public string TransactionId { get; set; } = string.Empty;
+        [Required]
+        public string Custom { get; set; } = string.Empty; 
+    }
 }

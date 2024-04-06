@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Domain.Market.Enums;
-using KarmaMarketplace.Domain.Market.ValueObjects;
 using KarmaMarketplace.Domain.Market.Exceptions;
 using KarmaMarketplace.Domain.Market.Events;
 using KarmaMarketplace.Domain.Files.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using KarmaMarketplace.Domain.Payment.ValueObjects;
 
 namespace KarmaMarketplace.Domain.Market.Entities
 {

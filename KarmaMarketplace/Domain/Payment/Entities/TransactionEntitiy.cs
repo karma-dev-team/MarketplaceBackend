@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using KarmaMarketplace.Domain.Market.ValueObjects;
 using KarmaMarketplace.Domain.Payment.Enums;
 using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Domain.Payment.Events;
+using KarmaMarketplace.Domain.Payment.ValueObjects;
 
 namespace KarmaMarketplace.Domain.Payment.Entities
 {
@@ -17,9 +17,7 @@ namespace KarmaMarketplace.Domain.Payment.Entities
 
         public TransactionStatusEnum Status { get; set; }
 
-        [ForeignKey("User")]
-        public Guid CreatedBy { get; set; }
-        public virtual UserEntity CreatedByUser { get; set; } = null!; 
+        public UserEntity CreatedByUser { get; set; } = null!; 
 
         public DateTime? CompletedAt { get; set; }
 

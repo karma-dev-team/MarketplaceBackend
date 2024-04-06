@@ -4,7 +4,7 @@ using KarmaMarketplace.Application.Files.Interfaces;
 using KarmaMarketplace.Application.Market.Dto;
 using KarmaMarketplace.Domain.Files.Entities;
 using KarmaMarketplace.Domain.Market.Entities;
-using KarmaMarketplace.Domain.Market.ValueObjects;
+using KarmaMarketplace.Domain.Payment.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace KarmaMarketplace.Application.Market.UseCases.Product

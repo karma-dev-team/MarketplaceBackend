@@ -1,8 +1,8 @@
 ﻿using KarmaMarketplace.Application.Common.Interactors;
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Application.Payment.Dto;
-using KarmaMarketplace.Domain.Market.ValueObjects;
 using KarmaMarketplace.Domain.Payment.Entities;
+using KarmaMarketplace.Domain.Payment.ValueObjects;
 using KarmaMarketplace.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 

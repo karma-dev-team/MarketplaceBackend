@@ -28,7 +28,12 @@ namespace KarmaMarketplace.Application.Payment.EventHandlers
 
                 Guard.Against.Null(purchase, message: "Purchase is not bound error");
 
-                await _messaging.InitiateProductChat().Execute(); 
+                await _messaging.InitiateProductChat().Execute(new Messaging.Dto.InitiateProductChatDto()
+                {
+                    FromUserId = paymentEvent.Transaction.CreatedByUser.Id, 
+                    ProductId = purchase.Product.Id, 
+                    TransactionId = paymentEvent.Transaction.Id,
+                }); 
             }
         }
     }

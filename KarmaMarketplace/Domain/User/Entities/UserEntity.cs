@@ -1,4 +1,5 @@
 ﻿using KarmaMarketplace.Application.Common.Interfaces;
+using KarmaMarketplace.Domain.Files.Entities;
 using KarmaMarketplace.Domain.User.Enums;
 using KarmaMarketplace.Domain.User.Events;
 using KarmaMarketplace.Infrastructure;
@@ -21,6 +22,7 @@ namespace KarmaMarketplace.Domain.User.Entities
         public UserRoles Role { get; set; } = UserRoles.User;
         [Column(name: "TelegramId")]
         private string? _telegramId; // Закрытое поле для хранения значения
+        public ImageEntity? Image { get; set; }  
 
         [NotMapped]
         public string? TelegramId

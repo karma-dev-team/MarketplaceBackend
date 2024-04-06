@@ -1,4 +1,4 @@
-﻿using KarmaMarketplace.Domain.Market.ValueObjects;
+﻿using KarmaMarketplace.Domain.Payment.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 
 namespace KarmaMarketplace.Application.Payment.Dto

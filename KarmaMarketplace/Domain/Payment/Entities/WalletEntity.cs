@@ -1,7 +1,7 @@
-﻿using KarmaMarketplace.Domain.Market.ValueObjects;
-using KarmaMarketplace.Domain.Payment.Enums;
+﻿using KarmaMarketplace.Domain.Payment.Enums;
 using KarmaMarketplace.Domain.Payment.Events;
 using KarmaMarketplace.Domain.Payment.Exceptions;
+using KarmaMarketplace.Domain.Payment.ValueObjects;
 using KarmaMarketplace.Domain.User.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 

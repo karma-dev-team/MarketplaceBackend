@@ -5,7 +5,7 @@ using KarmaMarketplace.Domain.Files.Entities;
 using KarmaMarketplace.Domain.Market.Entities;
 using KarmaMarketplace.Domain.Market.Enums;
 using KarmaMarketplace.Domain.Market.Exceptions;
-using KarmaMarketplace.Domain.Market.ValueObjects;
+using KarmaMarketplace.Domain.Payment.ValueObjects;
 using KarmaMarketplace.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;

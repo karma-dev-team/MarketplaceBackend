@@ -12,7 +12,7 @@ namespace KarmaMarketplace.Infrastructure.Data.Queries
                 .Include(x => x.Participants)
                 .Include(x => x.Messages)
                 .Include(x => x.Owner)
-                .Include(x => x.Photo)
+                .Include(x => x.Image)
                 .Include(x => x.ReadRecords);
         }
     }

@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using KarmaMarketplace.Domain.Market.Entities;
 using KarmaMarketplace.Domain.Messging.Entities;
-using KarmaMarketplace.Domain.Market.ValueObjects;
 using KarmaMarketplace.Domain.Payment.Events;
 using Telegram.Bot.Types;
 using KarmaMarketplace.Domain.Payment.Exceptions;
+using KarmaMarketplace.Domain.Payment.ValueObjects;
 
 namespace KarmaMarketplace.Domain.Payment.Entities
 {

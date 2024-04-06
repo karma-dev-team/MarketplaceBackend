@@ -27,5 +27,10 @@ namespace KarmaMarketplace.Application.Messaging.Services
         {
             return _serviceProvider.GetRequiredService<GetChatsList>();
         }
+
+        public InitiateProductChat InitiateProductChat()
+        {
+            return _serviceProvider.GetRequiredService<InitiateProductChat>(); 
+        }
     }
 }

@@ -15,7 +15,6 @@ namespace KarmaMarketplace.Application.Payment.UseCases
     public class HandleTransaction : BaseUseCase<HandleTransactionDto, TransactionEntity>
     {
         private IApplicationDbContext _context;
-        private IUser _user; 
 
         public HandleTransaction(IApplicationDbContext dbContext) { 
             _context = dbContext;
@@ -61,8 +60,7 @@ namespace KarmaMarketplace.Application.Payment.UseCases
 
             Guard.Against.Null(productOwnerWallet, message: "Product owner wallet does not exists"); 
 
-            productOwnerWallet.ConfirmTransaction(transaction, userWallet); 
-            transaction.Confirm(); 
+            productOwnerWallet.ConfirmTransaction(transaction, userWallet);
 
             _context.Wallets.Update(productOwnerWallet);
             _context.Wallets.Update(userWallet); 

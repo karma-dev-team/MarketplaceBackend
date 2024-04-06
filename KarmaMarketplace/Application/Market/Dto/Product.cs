@@ -2,7 +2,7 @@
 using KarmaMarketplace.Application.Files.Dto;
 using KarmaMarketplace.Application.Files.UseCases;
 using KarmaMarketplace.Application.User.Dto;
-using KarmaMarketplace.Domain.Market.ValueObjects;
+using KarmaMarketplace.Domain.Payment.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 
 namespace KarmaMarketplace.Application.Market.Dto

@@ -4,7 +4,6 @@ using KarmaMarketplace.Application.Market.Dto;
 using KarmaMarketplace.Application.User.Dto;
 using KarmaMarketplace.Domain.Market.Entities;
 using KarmaMarketplace.Domain.Market.Enums;
-using KarmaMarketplace.Domain.Market.ValueObjects;
 using KarmaMarketplace.Infrastructure;
 using KarmaMarketplace.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
