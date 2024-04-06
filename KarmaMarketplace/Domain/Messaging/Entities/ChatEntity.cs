@@ -1,8 +1,11 @@
 ﻿using KarmaMarketplace.Domain.Files.Entities;
 using KarmaMarketplace.Domain.Messaging.Enums;
+using KarmaMarketplace.Domain.Messging.Enums;
 using KarmaMarketplace.Domain.Messging.Events;
 using KarmaMarketplace.Domain.User.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
+using Telegram.Bot.Types;
 
 namespace KarmaMarketplace.Domain.Messging.Entities
 {
@@ -54,6 +57,22 @@ namespace KarmaMarketplace.Domain.Messging.Entities
                 return unreadCount;
             }
         }
+
+        public MessageEntity? PurchaseMessage(Guid purchaseId)
+        {
+            foreach (var message in Messages)
+            {
+                if (message.Purchase != null)
+                {
+                    if (message.Type == MessageTypes.Purchase && message.Purchase.Id == purchaseId)
+                    {
+                        return message; 
+                    }
+                }
+            }
+            return null; 
+        }
+
         public void ReadMessages(ChatReadRecord chatRead)
         {
             ReadRecords.Add(chatRead);

@@ -38,7 +38,8 @@ namespace KarmaMarketplace.Domain.Market.Entities
         [Column(TypeName = "jsonb")]
         public string Attributes { get; set; } = null!;
         public ICollection<ImageEntity> Images { get; set; } = [];
-        public ICollection<ProductViewEntity>? ProductViews { get; set; } = [];
+        public ICollection<ProductViewEntity> ProductViews { get; set; } = [];
+
         [NotMapped]
         public Money CurrentPrice { get
             {
@@ -117,6 +118,16 @@ namespace KarmaMarketplace.Domain.Market.Entities
                     throw new IncorrectAttributes(attribute.Key, attribute.Value);
                 }
             }
+        }
+
+        public void Sold(ReviewEntity review)
+        {
+            if (review.Product.Id != Id)
+            {
+                throw new Exception("Critical, bug! Review product id is not bound to product"); 
+            }
+            Status = ProductStatus.Sold;
+            AddDomainEvent(new ProductSold(this, DateTime.UtcNow)); 
         }
     }
 }

@@ -18,7 +18,7 @@ namespace KarmaMarketplace.Domain.Payment.Entities
 
         public Money Amount { get; set; } = new(0); 
 
-        public virtual WalletEntity Wallet { get; set; } = null!;
+        public WalletEntity Wallet { get; set; } = null!;
 
         public ProductEntity Product { get; set; } = null!;
 

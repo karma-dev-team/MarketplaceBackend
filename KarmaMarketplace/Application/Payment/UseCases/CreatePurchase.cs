@@ -10,9 +10,9 @@ namespace KarmaMarketplace.Application.Payment.UseCases
 {
     public class CreatePurchase : BaseUseCase<CreatePurchaseDto, PurchaseEntity>
     {
-        private IApplicationDbContext _context;
-        private IUser _user;
-        private PaymentAdapterFactory _paymentAdapterFactory;
+        private readonly IApplicationDbContext _context;
+        private readonly IUser _user;
+        private readonly PaymentAdapterFactory _paymentAdapterFactory;
 
         public CreatePurchase(
             IApplicationDbContext dbContext, 
@@ -35,9 +35,9 @@ namespace KarmaMarketplace.Application.Payment.UseCases
 
             Guard.Against.Null(provider, message: "Provider does not exists");
 
-            var userWallet = await _context.Wallets.FirstOrDefaultAsync(x => x.UserID == _user.Id);
+            var userWallet = await _context.Wallets.FirstOrDefaultAsync(x => x.UserId == _user.Id);
 
-            var productOwnerWallet = await _context.Wallets.FirstOrDefaultAsync(x => x.UserID == product.CreatedBy.Id);
+            var productOwnerWallet = await _context.Wallets.FirstOrDefaultAsync(x => x.UserId == product.CreatedBy.Id);
             Guard.Against.Null(userWallet, message: "User wallet does not exists!!");
             Guard.Against.Null(productOwnerWallet, message: "User wallet does not exists!!");
 

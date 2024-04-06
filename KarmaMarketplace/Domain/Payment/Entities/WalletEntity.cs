@@ -10,7 +10,7 @@ namespace KarmaMarketplace.Domain.Payment.Entities
     public class WalletEntity : BaseAuditableEntity
     {
         [ForeignKey("User")]
-        public Guid UserID { get; set; }
+        public Guid UserId { get; set; }
         public virtual UserEntity User { get; set; } = null!;
         public CurrencyEnum Currency { get; set; } = Enums.CurrencyEnum.RussianRuble; 
         public Money Frozen { get; set; } = new(0, Enums.CurrencyEnum.RussianRuble);
@@ -23,7 +23,7 @@ namespace KarmaMarketplace.Domain.Payment.Entities
             var wallet = new WalletEntity();
 
             wallet.User = user;
-            wallet.UserID = user.Id;
+            wallet.UserId = user.Id;
 
             wallet.AddDomainEvent(new WalletCreated(wallet)); 
 
@@ -91,8 +91,8 @@ namespace KarmaMarketplace.Domain.Payment.Entities
 
         public bool VerifyTransaction(TransactionEntity transaction, bool raiseErr = false)
         {
-            bool fromUserWallet = transaction.CreatedByUser.Id == UserID;
-            bool createdByUserWallet = transaction.CreatedById == UserID;
+            bool fromUserWallet = transaction.CreatedByUser.Id == UserId;
+            bool createdByUserWallet = transaction.CreatedById == UserId;
             bool result = fromUserWallet || createdByUserWallet;
 
             if (!result && raiseErr)

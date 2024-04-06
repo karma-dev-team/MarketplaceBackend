@@ -8,9 +8,11 @@ namespace KarmaMarketplace.Domain.Messging.Enums
     {
         [Display(Name = "TEXT")]
         Text,
-        [Display(Name = "Image")]
+        [Display(Name = "IMAGE")]
         Image,
         [Display(Name = "PURCHASE")]
-        Purchase
+        Purchase, 
+        [Display(Name = "REVIEW")]
+        Review
     }
 }

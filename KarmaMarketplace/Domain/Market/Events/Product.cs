@@ -13,4 +13,10 @@ namespace KarmaMarketplace.Domain.Market.Events
         public ProductEntity Product { get; set; } = product;
 
     }
+
+    public class ProductSold(ProductEntity product, DateTime completedAt) : BaseEvent
+    {
+        public ProductEntity Product { get; set; } = product;
+        public DateTime CompletedAt { get; set; } = completedAt;
+    } 
 }

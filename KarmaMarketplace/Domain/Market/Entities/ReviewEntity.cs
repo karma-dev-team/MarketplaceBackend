@@ -3,12 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using KarmaMarketplace.Domain.Payment.Entities;
 using KarmaMarketplace.Domain.User.Entities;
+using KarmaMarketplace.Domain.Market.Events;
+using KarmaMarketplace.Domain.Payment.Exceptions;
 
 namespace KarmaMarketplace.Domain.Market.Entities
 {
     public class ReviewEntity : BaseAuditableEntity
     {
-        public virtual PurchaseEntity? Purchase { get; set; }
+        public PurchaseEntity Purchase { get; set; }
 
         [Range(1, 5, ErrorMessage = "Рейтинг может быть только 1 и до 5")]
         public int Rating { get; set; }
@@ -17,5 +19,31 @@ namespace KarmaMarketplace.Domain.Market.Entities
         public string Text { get; set; } = string.Empty;
         public UserEntity CreatedBy { get; set; } = null!; 
         public ProductEntity Product { get; set; } = null!;
+
+        public static ReviewEntity Create(
+            string text, 
+            int rating, 
+            UserEntity createdBy, 
+            PurchaseEntity purchase, 
+            ProductEntity product) 
+        {
+            if (purchase.Status == Payment.Enums.PurchaseStatus.Success)
+            {
+                throw new PurchaseIsAlreadyCompleted(purchase.Id); 
+            }
+
+            var review = new ReviewEntity()
+            {
+                CreatedBy = createdBy,
+                Text = text,
+                Rating = rating,
+                Product = product,
+                Purchase = purchase
+            };
+
+            review.AddDomainEvent(new ReviewCreated(review));
+
+            return review; 
+        }
     }
 }

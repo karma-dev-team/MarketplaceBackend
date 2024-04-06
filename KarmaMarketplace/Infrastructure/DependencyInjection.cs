@@ -37,7 +37,10 @@ namespace KarmaMarketplace.Infrastructure
             {
                 options.EnableDetailedErrors(true);
                 options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-                options.UseNpgsql(connectionString); 
+                options.UseNpgsql(
+                    connectionString, 
+                    o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
+                );
             });
 
             services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());

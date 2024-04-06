@@ -58,6 +58,29 @@ namespace KarmaMarketplace.Domain.Messging.Entities
             return newMessage;
         }
 
+        public static MessageEntity CreateWithReview(
+            PurchaseEntity purchase, 
+            Guid chatId , 
+            UserEntity fromUser, 
+            ReviewEntity review)
+        {
+            if (purchase == null) throw new ArgumentNullException(nameof(purchase));
+
+            var newMessage = new MessageEntity()
+            {
+                Purchase = purchase,
+                ChatID = chatId,
+                FromUser = fromUser,
+                Review = review, 
+                Type = MessageTypes.Review, 
+                Text = "REVIEW"
+            };
+
+            newMessage.AddDomainEvent(new MessageCreated(newMessage)); 
+
+            return newMessage; 
+        }
+
         public static MessageEntity CreateWithImage(
             Guid chatId, 
             UserEntity fromUser, 
