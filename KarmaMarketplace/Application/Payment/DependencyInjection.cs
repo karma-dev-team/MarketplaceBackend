@@ -24,6 +24,7 @@ namespace KarmaMarketplace.Application.Payment
             services.AddScoped<UpdatePurchase>();
             services.AddScoped<UpdateTransaction>(); 
             services.AddScoped<HandleGatewayResult>();
+            services.AddScoped<BlockWallet>(); 
 
             services.AddScoped<IPurchaseService, PurchaseService>();
             services.AddScoped<ITransactionService, TransactionService>();

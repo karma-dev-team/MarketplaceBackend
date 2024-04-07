@@ -21,7 +21,7 @@ namespace KarmaMarketplace.Application.Payment.UseCases
         {
             var wallet = await _context.Wallets
                 .IncludeStandard()
-                .FirstOrDefaultAsync(x => x.Id == dto.WalletId);
+                .FirstOrDefaultAsync(x => x.Id == dto.WalletId || x.UserId == dto.UserId);
 
             Guard.Against.Null(wallet, message: "Wallet does not exists");
 
