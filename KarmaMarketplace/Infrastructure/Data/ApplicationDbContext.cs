@@ -23,6 +23,7 @@ namespace KarmaMarketplace.Infrastructure.Data
         public DbSet<TransactionProviderEntity> TransactionProviders { get; set; }
         public DbSet<PaymentSystemEntity> PaymentSystems { get; set; }
         public DbSet<OptionEntity> Options { get; set;} 
+        public DbSet<NotificationEntity> Notifications { get; set; }
         public DbSet<PurchaseEntity> Purchases { get; set;} 
         public DbSet<ChatEntity> Chats { get; set;} 
         public DbSet<MessageEntity> Messages { get; set;} 
