@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using KarmaMarketplace.Domain.User.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json;
 
 namespace KarmaMarketplace.Domain.User.Entities
 {
@@ -13,8 +15,12 @@ namespace KarmaMarketplace.Domain.User.Entities
         public Guid? FromUserId { get; set; }
         [ForeignKey(nameof(UserEntity))]
         public Guid ToUserId { get; set; }
+        public NotificationTypes Type { get; set; } = NotificationTypes.Other;
+        [Column(TypeName = "jsonb")]
+        public string? Data { get; set; } = string.Empty; 
         
-        public static NotificationEntity CreateFromSystem(string Title, string Text, Guid toUserId)
+        public static NotificationEntity CreateFromSystem(
+            string Title, string Text, Guid toUserId, Dictionary<string, string> data)
         {
             var notification = new NotificationEntity();
 
@@ -22,18 +28,21 @@ namespace KarmaMarketplace.Domain.User.Entities
             notification.Title = Title;
             notification.Text = Text;
             notification.FromUserId = toUserId;
+            notification.Data = JsonSerializer.Serialize(data); 
 
             return notification;
         } 
 
-        public static NotificationEntity CreateFromUser(string Title, string Text, Guid toUserId, Guid fromUserId)
+        public static NotificationEntity CreateFromUser(
+            string Title, string Text, Guid toUserId, Guid fromUserId, Dictionary<string, string> data)
         {
             var notification = new NotificationEntity();
 
             notification.Title = Title;
             notification.Text = Text;
             notification.FromUserId = fromUserId;
-            notification.ToUserId = toUserId; 
+            notification.ToUserId = toUserId;
+            notification.Data = JsonSerializer.Serialize(data);
 
             return notification;
 

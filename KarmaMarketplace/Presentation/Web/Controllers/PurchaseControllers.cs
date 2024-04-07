@@ -24,7 +24,7 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
             return Ok(await _purchaseService.GetPurchasesList().Execute(model)); 
         }
 
-        [HttpPost("product/{productId}")]
+        [HttpPost("product/{productId}/buy")]
         public async Task<ActionResult<PurchaseEntity>> CreatePurchase([FromBody] CreatePurchaseDto model) 
         {
             return Ok(await _purchaseService.CreatePurchase().Execute(model)); 
