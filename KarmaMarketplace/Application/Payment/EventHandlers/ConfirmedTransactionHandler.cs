@@ -1,5 +1,8 @@
 ﻿using KarmaMarketplace.Application.Common.Interfaces;
+using KarmaMarketplace.Application.Files.Interfaces;
+using KarmaMarketplace.Application.Messaging.Dto;
 using KarmaMarketplace.Application.Messaging.Interfaces;
+using KarmaMarketplace.Application.Messaging.UseCases;
 using KarmaMarketplace.Domain.Payment.Enums;
 using KarmaMarketplace.Domain.Payment.Events;
 using KarmaMarketplace.Infrastructure.Data.Queries;
@@ -10,10 +13,12 @@ namespace KarmaMarketplace.Application.Payment.EventHandlers
 {
     public class ConfirmedTransactionHandler : IEventSubscriber<ConfirmedTransaction>
     {
-        private IMessagingService _messaging; 
-        private IApplicationDbContext _context;
+        private readonly IMessagingService _messaging; 
+        private readonly IApplicationDbContext _context;
 
-        public ConfirmedTransactionHandler(IMessagingService messaging, IApplicationDbContext dbContext) {
+        public ConfirmedTransactionHandler(
+            IMessagingService messaging, 
+            IApplicationDbContext dbContext) {
             _messaging = messaging;
             _context = dbContext;
         }
@@ -28,12 +33,26 @@ namespace KarmaMarketplace.Application.Payment.EventHandlers
 
                 Guard.Against.Null(purchase, message: "Purchase is not bound error");
 
-                await _messaging.InitiateProductChat().Execute(new Messaging.Dto.InitiateProductChatDto()
+                var chat = await _messaging.InitiateProductChat().Execute(new InitiateProductChatDto()
                 {
                     FromUserId = paymentEvent.Transaction.CreatedByUser.Id, 
                     ProductId = purchase.Product.Id, 
                     TransactionId = paymentEvent.Transaction.Id,
-                }); 
+                });
+
+                var autoAnswer = await _context.AutoAnswers.FirstOrDefaultAsync(x => x.ProductId == purchase.Product.Id);                      
+
+                if (autoAnswer == null)
+                {
+                    return; 
+                }
+
+                await _messaging.SendMessage().Execute(new SendMessageDto()
+                {
+                    Text = autoAnswer.Answer,
+                    FromUserId = purchase.Product.CreatedBy.Id, 
+                    ChatId = chat.Id,
+                });
             }
         }
     }

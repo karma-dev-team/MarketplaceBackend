@@ -44,7 +44,7 @@ namespace KarmaMarketplace.Application.Payment.UseCases
 
             var userWallet = await _context.Wallets
                 .IncludeStandard()
-                .FirstAsync(x => x.UserId == user.Id);
+                .FirstAsync(x => x.User.Id == user.Id);
 
             Guard.Against.Null(userWallet, message: "User wallet");
 
@@ -56,7 +56,7 @@ namespace KarmaMarketplace.Application.Payment.UseCases
 
             var productOwnerWallet = await _context.Wallets
                 .IncludeStandard()
-                .FirstOrDefaultAsync(x => x.UserId == purchase.Product.CreatedBy.Id);
+                .FirstOrDefaultAsync(x => x.User.Id == purchase.Product.CreatedBy.Id);
 
             Guard.Against.Null(productOwnerWallet, message: "Product owner wallet does not exists"); 
 

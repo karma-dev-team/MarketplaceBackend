@@ -9,6 +9,7 @@ using System.Reflection.Emit;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using KarmaMarketplace.Domain.Payment.Entities;
 using KarmaMarketplace.Domain.Messging.Entities;
+using KarmaMarketplace.Domain.Staff.Entities;
 
 namespace KarmaMarketplace.Infrastructure.Data
 {
@@ -24,14 +25,15 @@ namespace KarmaMarketplace.Infrastructure.Data
         public DbSet<PaymentSystemEntity> PaymentSystems { get; set; }
         public DbSet<OptionEntity> Options { get; set;} 
         public DbSet<NotificationEntity> Notifications { get; set; }
-        public DbSet<PurchaseEntity> Purchases { get; set;} 
-        public DbSet<ChatEntity> Chats { get; set;} 
-        public DbSet<MessageEntity> Messages { get; set;} 
-        public DbSet<ProductViewEntity> ProductViews { get; set;} 
-        public DbSet<ChatReadRecord> ChatReads { get; set;} 
-        public DbSet<TransactionEntity> Transactions { get; set;} 
-        public DbSet<WalletEntity> Wallets { get; set;} 
-        public DbSet<ImageEntity> Images { get; set;}  
+        public DbSet<PurchaseEntity> Purchases { get; set; } 
+        public DbSet<ChatEntity> Chats { get; set; } 
+        public DbSet<MessageEntity> Messages { get; set; } 
+        public DbSet<ProductViewEntity> ProductViews { get; set; } 
+        public DbSet<ChatReadRecord> ChatReads { get; set; } 
+        public DbSet<TransactionEntity> Transactions { get; set; } 
+        public DbSet<WalletEntity> Wallets { get; set; } 
+        public DbSet<ImageEntity> Images { get; set; }  
+        public DbSet<TicketEntity> Tickets { get; set; }
 
         public ApplicationDbContext(DbContextOptions options) : base(options) { }
 

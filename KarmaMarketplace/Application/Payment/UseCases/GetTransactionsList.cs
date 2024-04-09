@@ -28,7 +28,7 @@ namespace KarmaMarketplace.Application.Payment.UseCases
             Guard.Against.Null(wallet, message: "Wallet does not exists"); 
 
             await _accessPolicy.FailIfNotSelfOrNoAccess(
-                wallet.User.Id, Domain.User.Enums.UserRoles.Moderator);
+                wallet.UserId, Domain.User.Enums.UserRoles.Moderator);
 
             var result = await _context.Transactions
                 .IncludeStandard()

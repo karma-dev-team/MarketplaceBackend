@@ -11,15 +11,12 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
     public class SendMessage : BaseUseCase<SendMessageDto, MessageEntity>
     {
         private IApplicationDbContext _context;
-        private IUser _user;
         private IFileService _fileService; 
 
         public SendMessage(
             IApplicationDbContext context, 
-            IUser user,
             IFileService fileService ) {
             _context = context; 
-            _user = user;
             _fileService = fileService; 
         }
 
@@ -31,7 +28,7 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
 
             Guard.Against.Null(chat, message: "Chat does not exists");
 
-            var fromUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == _user.Id);
+            var fromUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == dto.FromUserId);
 
             Guard.Against.Null(fromUser, message: "User does not exists");
 
@@ -63,7 +60,7 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
                     chat.Participants.Add(fromUser);
                 }
 
-                var someUser = chat.Participants.FirstOrDefault(x => x.Id == _user.Id);
+                var someUser = chat.Participants.FirstOrDefault(x => x.Id == dto.FromUserId);
                 Guard.Against.Null(someUser, message: "You are not in participants"); 
             }
 

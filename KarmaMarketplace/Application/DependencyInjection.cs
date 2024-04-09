@@ -3,6 +3,7 @@ using KarmaMarketplace.Application.Files;
 using KarmaMarketplace.Application.Market;
 using KarmaMarketplace.Application.Messaging;
 using KarmaMarketplace.Application.Payment;
+using KarmaMarketplace.Application.Staff;
 using KarmaMarketplace.Application.User;
 using KarmaMarketplace.Application.User.Interfaces;
 using KarmaMarketplace.Domain.User.Events;
@@ -22,6 +23,7 @@ namespace KarmaMarketplace.Application
             services.AddPaymentApplicationServices(); 
             services.AddMessagingApplicationServices(); 
             services.AddFilesApplicationServices();
+            services.AddStaffApplicationServices(); 
 
             services.AddSingleton<IEventDispatcher, EventDispatcher>(sp => {
                 var dispatcher = new EventDispatcher(sp);

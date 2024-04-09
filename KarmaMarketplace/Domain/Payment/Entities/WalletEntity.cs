@@ -23,7 +23,6 @@ namespace KarmaMarketplace.Domain.Payment.Entities
             var wallet = new WalletEntity();
 
             wallet.User = user;
-            wallet.UserId = user.Id;
 
             wallet.AddDomainEvent(new WalletCreated(wallet)); 
 

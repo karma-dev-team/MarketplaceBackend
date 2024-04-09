@@ -1,6 +1,7 @@
 ﻿using KarmaMarketplace.Application.Messaging.Dto;
 using KarmaMarketplace.Application.Messaging.Interfaces;
 using KarmaMarketplace.Domain.Messging.Entities;
+using KarmaMarketplace.Presentation.Web.Schemas;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,11 +26,17 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
         }
 
         [HttpPost("chat/{chatId}")]
-        public async Task<ActionResult<MessageEntity>> SendMessage([FromBody] SendMessageDto model, Guid chatId)
+        public async Task<ActionResult<MessageEntity>> SendMessage([FromBody] SendMessageScheme model, Guid chatId)
         {
             return Ok(await _messagingService
                 .SendMessage()
-                .Execute(model)); 
+                .Execute(new SendMessageDto()
+                {
+                    ChatId = model.ChatId, 
+                    PurchaseId = model.PurchaseId, 
+                    Image = model.Image, 
+                    Text = model.Text
+                })); 
         }
 
         [HttpPost("subscribe")]

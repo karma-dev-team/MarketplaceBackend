@@ -9,6 +9,7 @@ namespace KarmaMarketplace.Application.Messaging.Dto
         [Required]
         public Guid ChatId { get; set; }
         public CreateFileDto? Image { get; set; }
+        public Guid? FromUserId { get; set; }
         public Guid? PurchaseId { get; set; }
     }
 
