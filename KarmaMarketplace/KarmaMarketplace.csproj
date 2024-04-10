@@ -41,6 +41,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Application\Stuff\Dto\" />
+    <Folder Include="Application\Stuff\EventHandlers\" />
+    <Folder Include="Application\Stuff\Exceptions\" />
+    <Folder Include="Application\Stuff\Interfaces\" />
+    <Folder Include="Application\Stuff\UseCases\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

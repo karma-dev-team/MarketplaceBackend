@@ -16,6 +16,8 @@ namespace KarmaMarketplace.Application.User
         {
             services.AddScoped<IUserService, UserService>();
 
+            services.AddScoped<CreateNotification>();
+            services.AddScoped<GetNotifications>(); 
             services.AddScoped<CreateUser>(); 
             services.AddScoped<UpdateUser>();
             services.AddScoped<DeleteUser>();   

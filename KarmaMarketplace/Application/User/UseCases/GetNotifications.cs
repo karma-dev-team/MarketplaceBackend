@@ -2,6 +2,7 @@
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Application.User.Dto;
 using KarmaMarketplace.Domain.User.Entities;
+using KarmaMarketplace.Infrastructure.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace KarmaMarketplace.Application.User.UseCases
@@ -41,6 +42,8 @@ namespace KarmaMarketplace.Application.User.UseCases
                     .Where(x => x.User.Role == dto.Role)
                     .Select(x => x.Notification); 
             }
+
+            query = query.Paginate(dto.Start, dto.Ends); 
 
             return await query.ToListAsync();
         }

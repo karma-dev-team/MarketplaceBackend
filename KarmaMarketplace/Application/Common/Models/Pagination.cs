@@ -32,7 +32,7 @@ namespace KarmaMarketplace.Application.Common.Models
 
     public class InputPagination
     {
-        public int? Start { get; set; }
-        public int? Ends { get; set; }
+        public int Start { get; set; } = 0; 
+        public int Ends { get; set; } = 10; 
     } 
 }

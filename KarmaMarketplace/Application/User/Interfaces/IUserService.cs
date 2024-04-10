@@ -13,6 +13,8 @@ namespace KarmaMarketplace.Application.User.Interfaces
         public abstract GetUser Get();
         public abstract GetUsersList GetList();
         public abstract SendResetCode SendResetPasswordCode();
-        public abstract ResetPassword ResetPassword(); 
+        public abstract ResetPassword ResetPassword();
+        public abstract GetNotifications GetNotifications();
+        public abstract CreateNotification CreateNotification(); 
     }
 }

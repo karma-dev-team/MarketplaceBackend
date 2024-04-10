@@ -26,7 +26,7 @@ builder.Services.AddMvc().AddJsonOptions(c =>
                 = JsonNamingPolicy.CamelCase);
 builder.Services.AddSwaggerGen(options =>
 {
-    var info = new OpenApiInfo { Title = "TaskManager", Version = "v1" };
+    var info = new OpenApiInfo { Title = "KarmaMarketplace", Version = "v1" };
     options.SwaggerDoc(name: "v1", info: info);
     options.EnableAnnotations();
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

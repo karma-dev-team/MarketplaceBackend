@@ -44,5 +44,15 @@ namespace KarmaMarketplace.Application.User
         {
             return ServiceProvider.GetRequiredService<ResetPassword>();
         }
+
+        public GetNotifications GetNotifications()
+        {
+            return ServiceProvider.GetRequiredService<GetNotifications>();
+        }
+
+        public CreateNotification CreateNotification()
+        {
+            return ServiceProvider.GetRequiredService<CreateNotification>();
+        }
     }
 }
