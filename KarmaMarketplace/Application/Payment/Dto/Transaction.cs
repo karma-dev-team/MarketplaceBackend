@@ -13,15 +13,21 @@ namespace KarmaMarketplace.Application.Payment.Dto
 
     }
 
-    public class GetTransactionsListDto : InputPagination
+
+    public class GetTransactionsListFilterDto : InputPagination
     {
-        [Required]
-        public Guid WalletId { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public TransactionOperations? Operation { get; set; }
         public string? TransactionProvider { get; set; }
     }
+
+    public class GetTransactionsListDto : GetTransactionsListFilterDto
+    {
+        [Required]
+        public Guid WalletId { get; set; }
+    }
+
 
     public class UpdateTransactionDto
     {

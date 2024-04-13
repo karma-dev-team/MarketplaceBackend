@@ -15,11 +15,11 @@ namespace KarmaMarketplace.Application.Payment.Services
         {
             return _serviceProvider.GetRequiredService<HandleTransaction>();
         }
-        public GetTransactionsList GetAllTransactions()
+        public GetTransactionsList GetTransactionsList()
         {
             return _serviceProvider.GetRequiredService<GetTransactionsList>();
         }
-        public UpdateTransaction EditTransaction()
+        public UpdateTransaction UpdateTransaction()
         {
             return _serviceProvider.GetRequiredService<UpdateTransaction>();
         }

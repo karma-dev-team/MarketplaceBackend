@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using KarmaMarketplace.Application.Common.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace KarmaMarketplace.Application.Market.Dto
 {
@@ -14,7 +15,7 @@ namespace KarmaMarketplace.Application.Market.Dto
         public Guid? ChatID { get; set; }
     }
 
-    public class GetReviewsListDto
+    public class GetReviewsListDto : InputPagination
     {
         public Guid? ChatID { get; set; }
         public Guid? UserId { get; set; }

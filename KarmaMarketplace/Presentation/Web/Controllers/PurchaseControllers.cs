@@ -19,18 +19,28 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
         }
 
         [HttpGet("me")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<ActionResult<ICollection<PurchaseEntity>>> GetMyPurchases([FromBody] GetPurchasesListDto model)
         {
             return Ok(await _purchaseService.GetPurchasesList().Execute(model)); 
         }
 
         [HttpPost("product/{productId}/buy")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<ActionResult<PurchaseEntity>> CreatePurchase([FromBody] CreatePurchaseDto model) 
         {
             return Ok(await _purchaseService.CreatePurchase().Execute(model)); 
         }
 
+        [HttpPost("{purchaseId}/confirm")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        public async Task<ActionResult<PurchaseEntity>> ConfirmPurchase([FromBody] ConfirmPurchaseDto model)
+        {
+            return Ok(await _purchaseService.ConfirmPurchase().Execute(model));
+        }
+
         [HttpGet("user/{userId}")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<ActionResult<ICollection<PurchaseEntity>>> GetUserPurchases(
             [FromBody] GetPurchasesListDto model, 
             Guid userId)
@@ -39,6 +49,7 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
         }
 
         [HttpPatch("{purchaseId}")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<ActionResult<PurchaseEntity>> UpdatePurchase([FromBody] UpdatePurchaseDto model)
         {
             return Ok(await _purchaseService.UpdatePurchase().Execute(model));
