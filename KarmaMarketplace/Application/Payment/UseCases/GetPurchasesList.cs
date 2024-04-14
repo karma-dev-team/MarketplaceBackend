@@ -36,14 +36,8 @@ namespace KarmaMarketplace.Application.Payment.UseCases
                 query = query
                     .Where(x => x.CreatedAt <= dto.StartTime && x.CreatedAt >= dto.EndTime); 
             }
-            if (dto.Start != null)
-            {
-                query = query.Skip((int)dto.Start); 
-            }
-            if (dto.Ends != null)
-            {
-                query = query.Take((int)dto.Ends);
-            }
+            query = query.Skip(dto.Start); 
+            query = query.Take(dto.Ends);
 
             return await query.ToListAsync();
         }

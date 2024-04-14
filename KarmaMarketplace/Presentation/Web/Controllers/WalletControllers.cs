@@ -21,27 +21,30 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
         }
 
         [HttpGet("user/{userId}")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<ActionResult<WalletEntity>> GetWalletByUserId(Guid userId)
         {
             return Ok(await _walletService
                 .GetWallet()
                 .Execute(
-                    new Application.Payment.Dto.GetWalletDto() { UserId = userId }
+                    new GetWalletDto() { UserId = userId }
                 )
             ); 
         }
 
         [HttpPost("{walletId}/block")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<ActionResult<bool>> BlockWallet(Guid walletId, [FromBody] string reason)
         {
             return Ok(await _walletService
                 .BlockWallet()
                 .Execute(
-                    new Application.Payment.Dto.BlockWalletDto() { 
+                    new BlockWalletDto() { 
                         Reason = reason, WalletId = walletId })); 
         }
 
         [HttpPost("{walletId}/balance")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<ActionResult<bool>> BalanceOperation(Guid walletId, [FromBody] Money balance)
         {
             return Ok(await _walletService

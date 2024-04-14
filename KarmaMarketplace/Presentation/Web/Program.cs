@@ -92,9 +92,9 @@ builder.Services.AddAuthentication(options =>
     };
 });
 builder.Services.AddScoped<IPasswordHasher<UserEntity>, PasswordHasher<UserEntity>>();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUser, CurrentUser>();
 
-builder.Services.AddHttpContextAccessor();
 builder.Services.AddCoreAdmin();
 
 builder.Services.AddCors(option => option.AddPolicy("TaskManger", builder =>

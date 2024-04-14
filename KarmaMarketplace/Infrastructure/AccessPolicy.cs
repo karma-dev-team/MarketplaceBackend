@@ -8,11 +8,14 @@ namespace KarmaMarketplace.Infrastructure
     public class AccessPolicy : IAccessPolicy
     {
         private IApplicationDbContext _context;
-        private IUser currentUser; 
+        private IUser currentUser;
+        private ILogger _logger;    
 
-        public AccessPolicy(IApplicationDbContext context, IUser user) { 
+        public AccessPolicy(
+            IApplicationDbContext context, IUser user, ILogger<AccessPolicy> logger) { 
             _context = context;
             currentUser = user;
+            _logger = logger;
         }
 
         public static void UnauthorizedIfNull(Guid? userId)
@@ -34,7 +37,7 @@ namespace KarmaMarketplace.Infrastructure
                 return await CanAccess(role, currentUser.Id);
             } 
 
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId); 
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
             if (user == null)
             {
                 return false;
@@ -43,14 +46,17 @@ namespace KarmaMarketplace.Infrastructure
             {
                 return false; 
             }
+
             return user.Role >= role; 
         }
 
         public async Task FailIfNoAccess(UserRoles role, Guid? userId = null)
         {
-            if (!(await CanAccess(role, userId)))
+            var canAccess = await CanAccess(role, userId);
+
+            if (!canAccess)
             {
-                throw new AccessDenied(""); 
+                throw new AccessDenied($"Role: {role}, userId: {userId}, currentUserId: {currentUser.Id}"); 
             }
         }
 

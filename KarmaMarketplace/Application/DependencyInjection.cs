@@ -26,7 +26,7 @@ namespace KarmaMarketplace.Application
             services.AddStaffApplicationServices(); 
 
             services.AddSingleton<IEventDispatcher, EventDispatcher>(sp => {
-                var dispatcher = new EventDispatcher(sp);
+                var dispatcher = new EventDispatcher(sp, sp.GetService<ILogger<EventDispatcher>>());
 
                 dispatcher.RegisterEventSubscribers(Assembly.GetExecutingAssembly());
                 return dispatcher;

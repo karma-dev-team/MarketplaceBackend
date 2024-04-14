@@ -7,9 +7,13 @@ namespace KarmaMarketplace.Infrastructure.EventDispatcher
     {
         private readonly Dictionary<Type, List<Delegate>> eventListeners = new();
         private readonly IServiceProvider serviceProvider;
+        private readonly ILogger _logger;
 
-        public EventDispatcher(IServiceProvider serviceProvider)
+        public EventDispatcher(
+            IServiceProvider serviceProvider, 
+            ILogger<EventDispatcher> logger)
         {
+            _logger = logger;
             this.serviceProvider = serviceProvider;
         }
 
@@ -17,14 +21,16 @@ namespace KarmaMarketplace.Infrastructure.EventDispatcher
         {
             var eventSubscriberTypes = assembly.GetTypes()
                 .Where(type => type.IsClass && !type.IsAbstract && ImplementsEventSubscriberInterface(type));
+            _logger.LogInformation(
+                $"Started to registering event subscribers, types: {eventSubscriberTypes}");
+            using var scope = serviceProvider.CreateScope(); 
 
             foreach (var eventSubscriberType in eventSubscriberTypes)
             {
-                var eventSubscriber = serviceProvider.GetService(eventSubscriberType);
-                if (eventSubscriber != null)
-                {
-                    RegisterEventSubscriber((IEventSubscriber<BaseEvent>)eventSubscriber);
-                }
+                var eventSubscriber = scope.ServiceProvider.GetRequiredService(eventSubscriberType);
+
+                _logger.LogInformation($"added event subscriber, info: {eventSubscriberType}");
+                RegisterEventSubscriber((IEventSubscriber<BaseEvent>)eventSubscriber);
             }
         }
 
@@ -67,7 +73,9 @@ namespace KarmaMarketplace.Infrastructure.EventDispatcher
 
         public void Dispatch<TEvent>(TEvent @event) where TEvent : BaseEvent
         {
+            _logger.LogInformation($"Trying to dispatch events: {@event}"); 
             var eventType = typeof(TEvent);
+            
             if (eventListeners.ContainsKey(eventType))
             {
                 foreach (var listener in eventListeners[eventType].ToList())

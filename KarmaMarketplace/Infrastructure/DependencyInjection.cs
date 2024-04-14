@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Infrastructure.Adapters.FileStorage;
 using KarmaMarketplace.Infrastructure.Adapters.Mailing;
+using KarmaMarketplace.Infrastructure.EventDispatcher;
 
 namespace KarmaMarketplace.Infrastructure
 {
@@ -47,6 +48,7 @@ namespace KarmaMarketplace.Infrastructure
             services.AddScoped<ApplicationDbContextInitialiser>();
 
             services.AddSingleton(TimeProvider.System);
+            //services.AddScoped<IEventSubscriber<BaseEvent>, LoggingHandler<BaseEvent>>(); 
 
             services.AddScoped<PasswordService, PasswordService>(
                 x => {
