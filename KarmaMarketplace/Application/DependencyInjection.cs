@@ -3,9 +3,11 @@ using KarmaMarketplace.Application.Files;
 using KarmaMarketplace.Application.Market;
 using KarmaMarketplace.Application.Messaging;
 using KarmaMarketplace.Application.Payment;
+using KarmaMarketplace.Application.Payment.EventHandlers;
 using KarmaMarketplace.Application.Staff;
 using KarmaMarketplace.Application.User;
 using KarmaMarketplace.Application.User.Interfaces;
+using KarmaMarketplace.Domain.Payment.Events;
 using KarmaMarketplace.Domain.User.Events;
 using KarmaMarketplace.Infrastructure;
 using KarmaMarketplace.Infrastructure.EventDispatcher;
@@ -26,9 +28,9 @@ namespace KarmaMarketplace.Application
             services.AddStaffApplicationServices(); 
 
             services.AddSingleton<IEventDispatcher, EventDispatcher>(sp => {
-                var dispatcher = new EventDispatcher(sp, sp.GetService<ILogger<EventDispatcher>>());
-
-                dispatcher.RegisterEventSubscribers(Assembly.GetExecutingAssembly());
+                var dispatcher = new EventDispatcher(sp, sp.GetRequiredService<ILogger<EventDispatcher>>());
+                dispatcher.RegisterEventSubscriber(
+                    (IEventSubscriber<BaseEvent>)sp.GetRequiredService<IEventSubscriber<UserCreated>>());
                 return dispatcher;
             });
 

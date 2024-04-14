@@ -23,11 +23,9 @@ namespace KarmaMarketplace.Infrastructure.EventDispatcher
                 .Where(type => type.IsClass && !type.IsAbstract && ImplementsEventSubscriberInterface(type));
             _logger.LogInformation(
                 $"Started to registering event subscribers, types: {eventSubscriberTypes}");
-            using var scope = serviceProvider.CreateScope(); 
-
             foreach (var eventSubscriberType in eventSubscriberTypes)
             {
-                var eventSubscriber = scope.ServiceProvider.GetRequiredService(eventSubscriberType);
+                var eventSubscriber = serviceProvider.GetRequiredService(eventSubscriberType);
 
                 _logger.LogInformation($"added event subscriber, info: {eventSubscriberType}");
                 RegisterEventSubscriber((IEventSubscriber<BaseEvent>)eventSubscriber);
@@ -39,6 +37,8 @@ namespace KarmaMarketplace.Infrastructure.EventDispatcher
         {
             var eventTypes = GetEventTypes(eventSubscriber.GetType());
 
+
+            _logger.LogInformation($"added event subscriber, info: {eventSubscriber}");
             foreach (var eventType in eventTypes)
             {
                 if (!eventListeners.ContainsKey(eventType))
