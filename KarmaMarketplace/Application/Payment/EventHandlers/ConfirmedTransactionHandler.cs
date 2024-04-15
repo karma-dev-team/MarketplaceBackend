@@ -22,6 +22,8 @@ namespace KarmaMarketplace.Application.Payment.EventHandlers
 
         public async Task HandleEvent(ConfirmedTransaction paymentEvent, IApplicationDbContext _context)
         {
+            await _context.SaveChangesAsync(); 
+
             if (paymentEvent.Transaction.Direction == TransactionDirection.Out 
                     && paymentEvent.Transaction.Operation == TransactionOperations.Buy) {
                 var purchase = await _context.Purchases

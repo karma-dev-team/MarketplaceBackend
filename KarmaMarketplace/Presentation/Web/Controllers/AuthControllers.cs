@@ -72,12 +72,18 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponseSchema>> Login([FromBody] LoginUserSchema model)
         {
-            await _userService
+            var user = await _userService
                 .Get()
-                .Execute(new GetUserDto() { Email = model.Email }); 
+                .Execute(new GetUserDto() { Email = model.Email });
+
+            if (user == null)
+            {
+                // Handle invalid user
+                return Unauthorized();
+            }
 
             // Генерируем JWT токен
-            var token = GenerateJwtToken(model.Email);
+            var token = GenerateJwtToken(user.Id, user.UserName); // Pass user ID and username
             var expiresIn = _configuration["Jwt:ExpireMinutes"];
             if (expiresIn == null)
             {
@@ -88,20 +94,28 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
             return Ok(new LoginResponseSchema { AccessToken = token, ExpiresIn = expiresIn });
         }
 
-        private string GenerateJwtToken(string username)
+
+        private string GenerateJwtToken(Guid userId, string username)
         {
             var secretKey = _configuration["Jwt:SecretKey"];
             if (string.IsNullOrEmpty(secretKey))
             {
                 throw new Exception("Jwt:SecretKey is empty");
             }
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString()), // Add user ID to claims
+                new Claim(ClaimTypes.Name, username) // Optionally, add username to claims
+            };
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
-                claims: [new Claim(ClaimTypes.Name, username)],
+                claims: claims,
                 expires: DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["Jwt:ExpireMinutes"])),
                 signingCredentials: credentials
             );

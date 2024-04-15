@@ -1,12 +1,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using KarmaMarketplace.Application;
-using KarmaMarketplace.Domain;
 using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Infrastructure;
 using KarmaMarketplace.Infrastructure.Data;
@@ -59,7 +55,6 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddHealthChecks();
-builder.Services.AddApplicationServices();
 builder.Services.AddHttpClient();
 if (builder.Environment.IsProduction()) {
     builder.Logging.AddSentry(options =>
@@ -94,6 +89,8 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped<IPasswordHasher<UserEntity>, PasswordHasher<UserEntity>>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUser, CurrentUser>();
+
+builder.Services.AddApplicationServices();
 
 builder.Services.AddCoreAdmin();
 

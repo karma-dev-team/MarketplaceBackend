@@ -6,12 +6,10 @@ namespace KarmaMarketplace.Presentation.Web.Services
     public class CurrentUser : IUser
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ILogger<CurrentUser> _logger;
 
-        public CurrentUser(IHttpContextAccessor httpContextAccessor, ILogger<CurrentUser> logger)
+        public CurrentUser(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
-            _logger = logger;
         }
 
         public Guid? Id
@@ -25,14 +23,6 @@ namespace KarmaMarketplace.Presentation.Web.Services
                     {
                         return result;
                     }
-                    else
-                    {
-                        _logger.LogWarning($"User ID claim not found or invalid. userIdClaim: {userIdClaim}");
-                    }
-                }
-                else
-                {
-                    _logger.LogWarning("User is not authenticated.");
                 }
 
                 return null;

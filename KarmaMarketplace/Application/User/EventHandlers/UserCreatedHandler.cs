@@ -17,8 +17,10 @@ namespace KarmaMarketplace.Application.User.EventHandlers
             _logger = logger;
         }
 
-        public Task HandleEvent(UserCreated eventValue, IApplicationDbContext _context)
+        public async Task HandleEvent(UserCreated eventValue, IApplicationDbContext _context)
         {
+            await _context.SaveChangesAsync();
+
             var supportChat = ChatEntity.CreateSupport(eventValue.User);
 
             var wallet = WalletEntity.Create(eventValue.User);
@@ -27,7 +29,6 @@ namespace KarmaMarketplace.Application.User.EventHandlers
 
             _context.Chats.Add(supportChat);
 
-            return Task.CompletedTask;
         }
     }
 }
