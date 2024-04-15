@@ -71,11 +71,11 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
             }
             if (dto.Images != null)
             {
-                List<ImageEntity> images = []; 
+                List<FileEntity> images = []; 
 
                 foreach (var imageId in dto.Images)
                 {
-                    var image = await _context.Images.FirstOrDefaultAsync(x => x.Id == imageId);
+                    var image = await _context.Files.FirstOrDefaultAsync(x => x.Id == imageId);
 
                     Guard.Against.Null(image, message: "Image does not exists");
 

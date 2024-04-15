@@ -9,11 +9,11 @@ namespace KarmaMarketplace.Domain.Staff.Entities
     {
         public string Text { get; set; } = string.Empty;
         public string Subject { get; set; } = string.Empty; 
-        public ICollection<ImageEntity> Images { get; set; } = new List<ImageEntity>();
+        public ICollection<FileEntity> Images { get; set; } = new List<FileEntity>();
         public TicketStatus Status { get; set; } = TicketStatus.Open; 
 
         public static TicketEntity Create(
-            string text, string subject, ICollection<ImageEntity> images)
+            string text, string subject, ICollection<FileEntity> images)
         {
             var ticket = new TicketEntity()
             {

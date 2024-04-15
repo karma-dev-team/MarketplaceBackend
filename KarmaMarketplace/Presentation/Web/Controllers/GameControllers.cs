@@ -18,22 +18,22 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
             _gameService = gameService;
         }
 
-        [HttpPost("")]
+        [HttpPost("", Name = "create-game")]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<ActionResult<CategoryEntity>> CreateCategory([FromBody] CreateGameDto model)
+        public async Task<ActionResult<GameEntity>> CreateGame([FromBody] CreateGameDto model)
         {
             return Ok(await _gameService.CreateGame().Execute(model));
         }
 
         [HttpGet("")]
-        public async Task<ActionResult<ICollection<CategoryEntity>>> GetCategoriesList(
+        public async Task<ActionResult<ICollection<GameEntity>>> GetGamesList(
             [FromQuery] GetGamesListDto dto)
         {
             return Ok(await _gameService.GetGamesList().Execute(dto));
         }
 
         [HttpGet("{gameId}")]
-        public async Task<ActionResult<CategoryEntity>> GetCategory(Guid gameId)
+        public async Task<ActionResult<GameEntity>> GetGame(Guid gameId)
         {
             return Ok(await _gameService
                 .GetGame()
@@ -41,7 +41,7 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
         }
 
         [HttpDelete("{gameId}")]
-        public async Task<ActionResult<CategoryEntity>> DeleteCategory(Guid gameId)
+        public async Task<ActionResult<GameEntity>> DeleteGame(Guid gameId)
         {
             return Ok(await _gameService
                 .DeleteGame()
@@ -49,7 +49,7 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
         }
 
         [HttpPatch("{gameId}")]
-        public async Task<ActionResult<CategoryEntity>> UpdateCategory(Guid categoryId, [FromBody] UpdateGameDto model)
+        public async Task<ActionResult<GameEntity>> UpdateGame(Guid gameId, [FromBody] UpdateGameDto model)
         {
             return Ok(await _gameService.UpdateGame().Execute(model));
         }

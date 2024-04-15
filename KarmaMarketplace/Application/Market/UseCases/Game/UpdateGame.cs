@@ -45,7 +45,7 @@ namespace KarmaMarketplace.Application.Market.Interactors.Game
             }
             if (dto.Logo != null)
             {
-                var file = await _fileService.UploadImage().Execute(dto.Logo);
+                var file = await _fileService.UploadFile().Execute(dto.Logo);
 
                 game.LogoID = file.Id;
                 game.Logo = file;
@@ -53,7 +53,7 @@ namespace KarmaMarketplace.Application.Market.Interactors.Game
 
             if (dto.Banner != null)
             {
-                var file = await _fileService.UploadImage().Execute(dto.Banner);
+                var file = await _fileService.UploadFile().Execute(dto.Banner);
 
                 game.Banner = file;
                 game.BannerID = file.Id; 

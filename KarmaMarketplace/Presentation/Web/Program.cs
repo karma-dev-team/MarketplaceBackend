@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.Json;
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Presentation.Web.Services;
+using KarmaMarketplace.Presentation.Web.Schemas.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,7 @@ builder.Services.AddSwaggerGen(options =>
         Scheme = "bearer",
         BearerFormat = "JWT"
     });
+    options.SchemaFilter<StreamSchemaFilter>();
 
     options.UseInlineDefinitionsForEnums();
 

@@ -14,9 +14,9 @@ namespace KarmaMarketplace.Application.Files
             ServiceProvider = serviceProvider;
         }
 
-        public UploadImage UploadImage()
+        public UploadFile UploadFile()
         {
-            return ServiceProvider.GetRequiredService<UploadImage>();
+            return ServiceProvider.GetRequiredService<UploadFile>();
         }
     }
 }

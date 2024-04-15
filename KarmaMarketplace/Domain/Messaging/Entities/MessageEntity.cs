@@ -1,10 +1,12 @@
 ﻿using KarmaMarketplace.Domain.Messging.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Domain.Files.Entities;
 using KarmaMarketplace.Domain.Market.Entities;
 using KarmaMarketplace.Domain.Payment.Entities;
 using KarmaMarketplace.Domain.Messging.Events;
+using KarmaMarketplace.Application.Payment.Dto;
 
 namespace KarmaMarketplace.Domain.Messging.Entities
 {
@@ -19,7 +21,7 @@ namespace KarmaMarketplace.Domain.Messging.Entities
 
         public MessageTypes Type { get; set; } = MessageTypes.Text; 
 
-        public ImageEntity? Image { get; set; }         
+        public FileEntity? Image { get; set; }         
         public ReviewEntity? Review { get; set; }
 
         public PurchaseEntity? Purchase { get; set; }
@@ -81,7 +83,7 @@ namespace KarmaMarketplace.Domain.Messging.Entities
         public static MessageEntity CreateWithImage(
             Guid chatId, 
             UserEntity fromUser, 
-            ImageEntity image)
+            FileEntity image)
         {
             var newMessage = new MessageEntity();
 

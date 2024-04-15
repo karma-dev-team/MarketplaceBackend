@@ -27,21 +27,21 @@ namespace KarmaMarketplace.Domain.Market.Entities
         // Assuming Logo and Banner are optional foreign keys to the Image table
         [ForeignKey("Logo")]
         public Guid? LogoID { get; set; }
-        public virtual ImageEntity Logo { get; set; } = null!;
+        public virtual FileEntity Logo { get; set; } = null!;
 
         public ICollection<CategoryEntity> Categories { get; set; } = []; 
 
         [ForeignKey("Banner")]
         public Guid? BannerID { get; set; }
-        public virtual ImageEntity Banner { get; set; } = null!;
+        public virtual FileEntity Banner { get; set; } = null!;
 
         public static GameEntity Create(
             string name, 
             string? description, 
             GameTypes type, 
             string tags, 
-            ImageEntity banner, 
-            ImageEntity logo)
+            FileEntity banner, 
+            FileEntity logo)
         {
             var game = new GameEntity();
 

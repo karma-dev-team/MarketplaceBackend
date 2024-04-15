@@ -27,7 +27,7 @@ namespace KarmaMarketplace.Application.Common.Interfaces
         DbSet<ChatReadRecord> ChatReads { get; set;} 
         DbSet<TransactionEntity> Transactions { get; set;} 
         DbSet<WalletEntity> Wallets { get; set;} 
-        DbSet<ImageEntity> Images { get; set;} 
+        DbSet<FileEntity> Files { get; set;} 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         EntityEntry<TEntity> Update<TEntity>(TEntity entity) where TEntity : class; 

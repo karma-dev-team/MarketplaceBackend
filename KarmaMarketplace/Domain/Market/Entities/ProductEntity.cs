@@ -37,7 +37,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
 
         [Column(TypeName = "jsonb")]
         public string Attributes { get; set; } = null!;
-        public ICollection<ImageEntity> Images { get; set; } = [];
+        public ICollection<FileEntity> Images { get; set; } = [];
         public ICollection<ProductViewEntity> ProductViews { get; set; } = [];
 
         [NotMapped]
@@ -59,7 +59,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
             Money price, 
             string description,
             Dictionary<string, string> attributes,             
-            ICollection<ImageEntity> images,
+            ICollection<FileEntity> images,
             ProductStatus status = ProductStatus.Processing) 
         {
             ProductEntity newProduct = new ProductEntity()

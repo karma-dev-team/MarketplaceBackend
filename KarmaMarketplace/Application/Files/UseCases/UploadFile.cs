@@ -7,24 +7,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KarmaMarketplace.Application.Files.UseCases
 {
-    public class UploadImage : BaseUseCase<CreateFileDto, ImageEntity>
+    public class UploadFile : BaseUseCase<CreateFileDto, FileEntity>
     {
         private readonly IApplicationDbContext _context;
         private readonly IFileStorageAdapter _fileStorage;
         private readonly HttpClient _httpClient;
 
-        public UploadImage(IApplicationDbContext dbContext, IFileStorageAdapter fileStorage, IHttpClientFactory httpClient)
+        public UploadFile(IApplicationDbContext dbContext, IFileStorageAdapter fileStorage, IHttpClientFactory httpClient)
         {
             _context = dbContext;
             _fileStorage = fileStorage;
             _httpClient = httpClient.CreateClient(); 
         }
 
-        public async Task<ImageEntity> Execute(CreateFileDto dto)
+        public async Task<FileEntity> Execute(CreateFileDto dto)
         {
             if (dto.FileId != null)
             {
-                var image = await _context.Images.FirstOrDefaultAsync(x => x.Id == dto.FileId);
+                var image = await _context.Files.FirstOrDefaultAsync(x => x.Id == dto.FileId);
                 Guard.Against.Null(image, message: $"Image does not exists with id: {dto.FileId}"); 
             }
             Stream? fileStream = dto.Stream;
@@ -41,21 +41,30 @@ namespace KarmaMarketplace.Application.Files.UseCases
                 throw new InvalidOperationException("Не удалось получить поток файла.");
             }
 
-            var uniqueFileName = GenerateUniqueFileName(dto.Name);
-            var filePath = $"images/{uniqueFileName}"; // Пример пути для сохранения файла
+            string name; 
+            if (dto.Name != null)
+            {
+                name = dto.Name;
+            } else
+            {
+                name = Guid.NewGuid().ToString(); 
+            }
+
+            var uniqueFileName = GenerateUniqueFileName(name);
+            var filePath = $"files/{uniqueFileName}"; // Пример пути для сохранения файла
 
             // Сохраняем файл во внешнем хранилище
             await _fileStorage.UploadFileAsync(filePath, fileStream);
 
             // Создаем новую сущность ImageEntity для сохранения информации о загруженном файле
-            var imageEntity = new ImageEntity(Guid.NewGuid(), dto.Name!, filePath, dto.MimeType, 0); // Размер может быть установлен, если доступен
+            var fileEntity = new FileEntity(Guid.NewGuid(), dto.Name!, filePath, dto.MimeType, 0); // Размер может быть установлен, если доступен
 
             // Сохраняем сущность в базе данных
-            _context.Images.Add(imageEntity);
+            _context.Files.Add(fileEntity);
             await _context.SaveChangesAsync();
 
             // Возвращаем сущность для дальнейшего использования
-            return imageEntity;
+            return fileEntity;
         }
 
         private string GenerateUniqueFileName(string? originalFileName)

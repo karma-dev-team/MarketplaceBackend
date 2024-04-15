@@ -35,10 +35,10 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
 
             Guard.Against.Null(category, message: "category does not exists");
 
-            ICollection<ImageEntity> images = []; 
+            ICollection<FileEntity> images = []; 
             foreach (var createImage in dto.Images)
             {
-                var image = await _fileService.UploadImage().Execute(createImage); 
+                var image = await _fileService.UploadFile().Execute(createImage); 
                 Guard.Against.Null(image, message: $"Image does not exists, image: {createImage.Name}"); 
                 images.Add(image);
             }

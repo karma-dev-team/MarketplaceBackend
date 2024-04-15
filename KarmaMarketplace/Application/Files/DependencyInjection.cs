@@ -7,7 +7,7 @@ namespace KarmaMarketplace.Application.Files
     {
         public static IServiceCollection AddFilesApplicationServices(this IServiceCollection services)
         {
-            services.AddScoped<UploadImage>(); 
+            services.AddScoped<UploadFile>(); 
 
             services.AddScoped<IFileService, FileService>(); 
 

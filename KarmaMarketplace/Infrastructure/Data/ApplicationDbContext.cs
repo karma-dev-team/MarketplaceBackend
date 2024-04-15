@@ -32,17 +32,15 @@ namespace KarmaMarketplace.Infrastructure.Data
         public DbSet<ChatReadRecord> ChatReads { get; set; } 
         public DbSet<TransactionEntity> Transactions { get; set; } 
         public DbSet<WalletEntity> Wallets { get; set; } 
-        public DbSet<ImageEntity> Images { get; set; }  
+        public DbSet<FileEntity> Files { get; set; }  
         public DbSet<TicketEntity> Tickets { get; set; }
 
-        public ApplicationDbContext(DbContextOptions options) : base(options) {
-            
-        }
+        public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.EnableSensitiveDataLogging();
-            optionsBuilder.EnableDetailedErrors(); 
+            optionsBuilder.EnableDetailedErrors();
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

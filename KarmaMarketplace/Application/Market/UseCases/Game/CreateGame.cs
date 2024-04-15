@@ -21,8 +21,8 @@ namespace KarmaMarketplace.Application.Market.Interactors.Game
 
         public async Task<GameEntity> Execute(CreateGameDto dto)
         {
-            var logo = await _fileService.UploadImage().Execute(dto.Logo);
-            var banner = await _fileService.UploadImage().Execute(dto.Banner);
+            var logo = await _fileService.UploadFile().Execute(dto.Logo);
+            var banner = await _fileService.UploadFile().Execute(dto.Banner);
 
             var game = GameEntity.Create(
                 name: dto.Name,
