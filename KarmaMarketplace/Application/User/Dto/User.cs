@@ -11,7 +11,7 @@ namespace KarmaMarketplace.Application.User.Dto
         public string Password { get; set; } = null!;
         [Required]
         public string EmailAddress { get; set; } = null!;
-        public UserRoles Role { get; set; }
+        public UserRoles? Role { get; set; }
     }
     public class GetUserDto
     {

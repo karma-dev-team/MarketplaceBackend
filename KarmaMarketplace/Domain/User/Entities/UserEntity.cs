@@ -50,12 +50,14 @@ namespace KarmaMarketplace.Domain.User.Entities
             string UserName,
             string email,
             string password, 
-            PasswordService passwordService)
+            PasswordService passwordService, 
+            UserRoles role = UserRoles.User)
         {
             var user = new UserEntity()
             {
                 Email = email,
                 UserName = UserName,
+                Role = role, 
             };
             var hashedPassword = passwordService.HashPassword(user, password);
 

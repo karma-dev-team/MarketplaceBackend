@@ -17,9 +17,10 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
 
         [HttpPost("/user/{userId}/block")]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<bool> BlockUser(Guid userId)
+        public async Task<ActionResult<bool>> BlockUser(Guid userId)
         {
-            return _userService.Update().Execute(new Application.User.Dto.UpdateUserDto { UserId = userId, });
+            await _userService.Update().Execute(new Application.User.Dto.UpdateUserDto { UserId = userId, Blocked = true });
+            return Ok(true);
         }
     }
 }

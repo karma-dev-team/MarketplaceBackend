@@ -11,6 +11,6 @@ namespace KarmaMarketplace.Application.Payment.UseCases
         public async Task<bool> Execute(SolveProblemDto dto)
         {
             return new();
-        }
+        } 
     }
 }

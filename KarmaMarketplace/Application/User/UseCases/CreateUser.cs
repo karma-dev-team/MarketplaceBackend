@@ -33,7 +33,8 @@ namespace KarmaMarketplace.Application.User.Interactors
                 UserName: dto.UserName, 
                 email: dto.EmailAddress, 
                 password: dto.Password, 
-                passwordService: passwordService
+                passwordService: passwordService, 
+                role: dto.Role ?? Domain.User.Enums.UserRoles.User
             ); 
 
             await _context.Users.AddAsync(newUser);
