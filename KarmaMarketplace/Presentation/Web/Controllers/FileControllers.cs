@@ -34,19 +34,23 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
                 .Execute(new Application.Files.Dto.CreateFileDto() { Stream = file.OpenReadStream() })); 
         }
 
-        [HttpPost("download/{fileId}")]
+        [HttpGet("download/{fileId}")]
         public async Task<IActionResult> DownloadFile(Guid fileId)
         {
             var fileModel = await _context.Files.FirstOrDefaultAsync(x => x.Id == fileId);
             if (fileModel == null)
                 return NotFound();
-            // very ineffective!!!  
-            var file = await _fileStorage.DownloadFileAsync(fileModel.FilePath);
-            byte[] buffer = []; 
 
-            await file.ReadAsync(buffer); 
+            using var fileStream = await _fileStorage.DownloadFileAsync(fileModel.FilePath);
+            if (fileStream == null)
+                return NotFound();
 
-            return new FileContentResult(buffer, "application/octet-stream");
+            var memoryStream = new MemoryStream();
+            await fileStream.CopyToAsync(memoryStream);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            var contentType = "application/octet-stream";
+            return File(memoryStream, contentType, fileModel.FileName);
         }
     }
 }

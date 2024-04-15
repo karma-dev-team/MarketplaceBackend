@@ -58,6 +58,10 @@ namespace KarmaMarketplace.Application.Market.Interactors.Game
                         .Matches(EF.Functions.ToTsQuery(dto.Name))
                     ); 
             }
+            if (dto.Type != null)
+            {
+                query = query.Where(x => x.Type == dto.Type); 
+            }
 
             return await query.ToListAsync(); 
         }

@@ -17,7 +17,7 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
         }
 
         [HttpGet("")]   
-        public async Task<ActionResult<ProductEntity>> GetProducts([FromQuery] GetProductsListDto dto)
+        public async Task<ActionResult<ICollection<ProductEntity>>> GetProducts([FromQuery] GetProductsListDto dto)
         {
             return Ok(await _productService.GetProductsList().Execute(dto));
         }

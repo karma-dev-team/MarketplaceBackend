@@ -4,7 +4,7 @@ namespace KarmaMarketplace.Domain.Files.Entities
 {
     public class FileEntity
     {
-        [Key]
+        [Key, Required]
         public Guid Id { get; set; }
 
         [Required, MaxLength(256)]

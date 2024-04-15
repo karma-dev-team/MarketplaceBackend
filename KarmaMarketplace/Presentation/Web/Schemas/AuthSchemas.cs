@@ -15,7 +15,7 @@ namespace KarmaMarketplace.Presentation.Web.Schemas
         [Required]
         public string NewPassword { get; set; } = null!;
         [Required]
-        public string Code { get; set; } = null!; 
+        public string Email { get; set; } = null!;
     }
 
     public class LoginUserSchema

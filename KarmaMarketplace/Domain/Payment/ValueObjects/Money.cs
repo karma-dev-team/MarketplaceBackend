@@ -1,12 +1,15 @@
 ﻿using KarmaMarketplace.Domain.Payment.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace KarmaMarketplace.Domain.Payment.ValueObjects
 {
     [Owned]
     public class Money
     {
+        [Required]
         public decimal Amount { get; set; }
+        [Required]
         public CurrencyEnum Currency { get; set; }
 
         public Money(decimal amount, CurrencyEnum currency = CurrencyEnum.RussianRuble)

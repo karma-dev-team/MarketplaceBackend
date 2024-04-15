@@ -10,22 +10,30 @@ namespace KarmaMarketplace.Domain.Payment.Entities
     public class TransactionEntity : BaseAuditableEntity
     {
 
+        [Required]
         public Money Amount { get; set; } = null!; 
+        [Required]
         public TransactionOperations Operation { get; set; }
 
+        [Required]
         public TransactionDirection Direction { get; set; }
 
+        [Required]
         public TransactionStatusEnum Status { get; set; }
 
+        [Required]
         public UserEntity CreatedByUser { get; set; } = null!; 
 
         public DateTime? CompletedAt { get; set; }
 
         [MaxLength(256)]
+        [Required]
         public string StatusDescription { get; set; } = null!; 
 
+        [Required]
         public Money Fee { get; set; } = null!;
 
+        [Required]
         public TransactionProviderEntity Provider { get; set; } = null!; 
         public TransactionPropsEntity? Props { get; set; } 
 

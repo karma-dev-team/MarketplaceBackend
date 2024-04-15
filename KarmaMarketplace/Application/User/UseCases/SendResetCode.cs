@@ -24,7 +24,7 @@ namespace KarmaMarketplace.Application.User.UseCases
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == dto.Email);
 
-            Guard.Against.Null("User does not exists"); 
+            Guard.Against.Null(user, message: "User does not exists"); 
             
             Random rnd = new Random();
 

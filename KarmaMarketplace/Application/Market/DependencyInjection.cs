@@ -2,6 +2,7 @@
 using KarmaMarketplace.Application.Market.Interactors.Game;
 using KarmaMarketplace.Application.Market.Interfaces;
 using KarmaMarketplace.Application.Market.Services;
+using KarmaMarketplace.Application.Market.UseCases.Game;
 using KarmaMarketplace.Application.Market.UseCases.Product;
 using KarmaMarketplace.Application.Market.UseCases.Review;
 
@@ -24,6 +25,7 @@ namespace KarmaMarketplace.Application.Market
             services.AddScoped<GetGame>();  
             services.AddScoped<DeleteGame>();
             services.AddScoped<GetGamesList>();
+            services.AddScoped<CountGames>(); 
 
             // Categories 
             services.AddScoped<CreateCategory>();

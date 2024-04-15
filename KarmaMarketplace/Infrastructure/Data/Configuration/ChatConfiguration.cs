@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using KarmaMarketplace.Domain.Messging.Entities;
-using KarmaMarketplace.Domain.Messaging.Entities;
 
 namespace KarmaMarketplace.Infrastructure.Data.Configuration
 {

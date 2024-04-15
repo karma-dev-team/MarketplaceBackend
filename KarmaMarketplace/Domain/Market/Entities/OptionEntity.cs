@@ -17,17 +17,19 @@ namespace KarmaMarketplace.Domain.Market.Entities
         public string Label { get; set; } = null!;
 
         // Тип Опции, Свитч для True и False, Selector для выбора только одного атрибута, Range для цифры 
+        [Required]
         public OptionTypes Type { get; set; }
 
         // Значение типо True, False, 1800
-        [MaxLength(256)]
+        [MaxLength(256), Required]
         public string Value { get; set; } = null!;
 
         // Репрезинтация атрибута как англиский аналог для разделения и перевода 
-        [MaxLength(256)]
+        [MaxLength(256), Required]
         public string Field { get; set; } = null!;
 
         // Очередь, типо 1, 2, 3 и т.д. 
+        [Required]
         public int Sequence { get; set; }
 
         // Для RANGE цифр. 

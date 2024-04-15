@@ -14,6 +14,7 @@ namespace KarmaMarketplace.Domain.User.Entities
         [ForeignKey(nameof(UserEntity))]
         public Guid? FromUserId { get; set; }
         [ForeignKey(nameof(UserEntity))]
+        [Required]
         public Guid ToUserId { get; set; }
         public NotificationTypes Type { get; set; } = NotificationTypes.Other;
         [Column(TypeName = "jsonb")]

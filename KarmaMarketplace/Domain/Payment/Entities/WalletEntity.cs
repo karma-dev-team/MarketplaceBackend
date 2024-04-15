@@ -3,6 +3,7 @@ using KarmaMarketplace.Domain.Payment.Events;
 using KarmaMarketplace.Domain.Payment.Exceptions;
 using KarmaMarketplace.Domain.Payment.ValueObjects;
 using KarmaMarketplace.Domain.User.Entities;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KarmaMarketplace.Domain.Payment.Entities
@@ -10,12 +11,19 @@ namespace KarmaMarketplace.Domain.Payment.Entities
     public class WalletEntity : BaseAuditableEntity
     {
         [ForeignKey("User")]
+        [Required]
         public Guid UserId { get; set; }
+        [Required]
         public virtual UserEntity User { get; set; } = null!;
+        [Required]
         public CurrencyEnum Currency { get; set; } = Enums.CurrencyEnum.RussianRuble; 
+        [Required]
         public Money Frozen { get; set; } = new(0, Enums.CurrencyEnum.RussianRuble);
+        [Required]
         public Money AvailableBalance { get; set; } = new(0, Enums.CurrencyEnum.RussianRuble); 
+        [Required]
         public Money PendingIncome { get; set; } = new(0, Enums.CurrencyEnum.RussianRuble);
+        [Required]
         public bool Blocked { get; set; } = false;
 
         public static WalletEntity Create(UserEntity user)

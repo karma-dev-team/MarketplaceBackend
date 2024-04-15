@@ -47,6 +47,7 @@ namespace KarmaMarketplace.Application.Market.Dto
 
     public class GetGamesListDto
     {
+        public GameTypes? Type { get; set; }
         public string? Name { get; set; }
     }
 }

@@ -6,7 +6,7 @@ namespace KarmaMarketplace.Domain.Common
 {
     public class BaseEntity
     {
-        [Key]
+        [Key, Required]
         public Guid Id { get; set; }
 
         private readonly List<BaseEvent> _domainEvents = new();

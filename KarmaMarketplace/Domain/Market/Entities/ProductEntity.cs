@@ -15,7 +15,9 @@ namespace KarmaMarketplace.Domain.Market.Entities
     public class ProductEntity : BaseAuditableEntity
     {
         // Часть смыслового ядра, нужны тесты!! 
+        [Required]
         public UserEntity CreatedBy { get; set; } = null!;
+        [Required]
         public CategoryEntity Category { get; set; } = null!;
 
         [Required, MaxLength(256)]
@@ -26,18 +28,23 @@ namespace KarmaMarketplace.Domain.Market.Entities
 
         // Assuming Money is a decimal. If Money is a complex type, adjust accordingly.
         public Money? DiscountPrice { get; set; }
+        [Required]
+        public Money BasePrice { get; set; } = new Money(0);
+        [Required]
+        public string Description { get; set; } = null!;
+        [Required]
+        public GameEntity Game {  get; set; } = null!;
 
-        public Money BasePrice { get; set; } = new Money(0); 
-
-        public string Description { get; set; } = null!; 
-
+        [Required]
         public ProductStatus Status { get; set; } 
 
         public UserEntity? BuyerUser { get; set; }
 
         [Column(TypeName = "jsonb")]
         public string Attributes { get; set; } = null!;
+        [Required]
         public ICollection<FileEntity> Images { get; set; } = [];
+        [Required]
         public ICollection<ProductViewEntity> ProductViews { get; set; } = [];
 
         [NotMapped]
@@ -55,6 +62,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
         public static ProductEntity Create(
             UserEntity byUser, 
             CategoryEntity category, 
+            GameEntity game, 
             string name,
             Money price, 
             string description,
@@ -69,6 +77,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
                 Name = name,
                 BasePrice = price,
                 Description = description,
+                Game = game,
                 Attributes = "{}",
                 Status = status,
                 Images = images, 

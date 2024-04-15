@@ -1,6 +1,7 @@
 ﻿using KarmaMarketplace.Application.Market.Dto;
 using KarmaMarketplace.Application.Market.Interfaces;
 using KarmaMarketplace.Domain.Market.Entities;
+using KarmaMarketplace.Domain.Market.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -52,6 +53,12 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
         public async Task<ActionResult<GameEntity>> UpdateGame(Guid gameId, [FromBody] UpdateGameDto model)
         {
             return Ok(await _gameService.UpdateGame().Execute(model));
+        }
+
+        [HttpGet("count")]
+        public async Task<ActionResult<int>> CountGames([FromQuery] GameTypes type = GameTypes.Game)
+        {
+            return Ok(await _gameService.CountGames().Execute(type));
         }
     }
 }

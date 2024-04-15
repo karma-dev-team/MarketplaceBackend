@@ -13,22 +13,30 @@ namespace KarmaMarketplace.Domain.Payment.Entities
     public class PurchaseEntity : BaseAuditableEntity
     {
         // Assuming there's an enum for Currency that was not included in the initial schema
+        [Required]
         public CurrencyEnum Currency { get; set; }
 
+        [Required]
         public Money Amount { get; set; } = new(0); 
 
+        [Required]
         public WalletEntity Wallet { get; set; } = null!;
 
+        [Required]
         public ProductEntity Product { get; set; } = null!;
 
+        [Required]
         public bool Completed { get; set; } = false; 
 
+        [Required]
         public ChatEntity Chat { get; set; } = null!;
 
+        [Required]
         public PurchaseStatus Status { get; set; }
         [ForeignKey(nameof(ReviewEntity))]
         public Guid? ReviewId { get; set; }
 
+        [Required]
         public TransactionEntity Transaction { get; set; } = null!;
 
         [MaxLength(256)]

@@ -40,6 +40,12 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
 
             Guard.Against.Null(category, message: "category does not exists");
 
+            var game = await _context.Games
+                .IncludeStandard()
+                .FirstOrDefaultAsync(x => x.Id == dto.GameId);
+
+            Guard.Against.Null(game, message: "game does not exists");
+
             ICollection<FileEntity> images = []; 
             foreach (var createImage in dto.Images)
             {
@@ -50,6 +56,7 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
 
             var product = ProductEntity.Create(
                 byUser: byUser,
+                game: game, 
                 category: category,
                 name: dto.Name,
                 price: new Money(dto.Price),

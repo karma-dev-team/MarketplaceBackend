@@ -4,21 +4,26 @@ using KarmaMarketplace.Domain.Messging.Enums;
 using KarmaMarketplace.Domain.Messging.Events;
 using KarmaMarketplace.Domain.User.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KarmaMarketplace.Domain.Messging.Entities
 {
     public class ChatEntity : BaseAuditableEntity
     {
+        [Required]
         public string Name { get; set; } = null!;
 
         public ICollection<UserEntity> Participants { get; set; } = [];
         public FileEntity? Image { get; set; } = null!;
+        [Required]
         public bool Deleted { get; set; } = false; 
+        [Required]
         public bool IsVerified { get; set; } = false;
 
         public IList<ChatReadRecord> ReadRecords { get; set; } = []; 
 
+        [Required]
         public ChatTypes Type { get; set; } = ChatTypes.Private;
 
         public ICollection<MessageEntity> Messages { get; set; } = [];

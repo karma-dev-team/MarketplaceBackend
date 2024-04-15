@@ -10,6 +10,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
 {
     public class ReviewEntity : BaseAuditableEntity
     {
+        [Required]
         public PurchaseEntity Purchase { get; set; }
 
         [Range(1, 5, ErrorMessage = "Рейтинг может быть только 1 и до 5")]
@@ -17,7 +18,9 @@ namespace KarmaMarketplace.Domain.Market.Entities
 
         [MaxLength(200)]
         public string Text { get; set; } = string.Empty;
+        [Required]
         public UserEntity CreatedBy { get; set; } = null!; 
+        [Required]
         public ProductEntity Product { get; set; } = null!;
 
         public static ReviewEntity Create(

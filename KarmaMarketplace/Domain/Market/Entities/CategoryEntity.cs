@@ -10,6 +10,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
         [Required, MaxLength(256)]
         public string Name { get; set; } = null!;
 
+        [Required]
         public ICollection<OptionEntity> Options { get; set; } = null!; 
 
         [ForeignKey(nameof(GameEntity))]

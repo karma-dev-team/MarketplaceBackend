@@ -27,6 +27,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
         // Assuming Logo and Banner are optional foreign keys to the Image table
         [ForeignKey("Logo")]
         public Guid? LogoID { get; set; }
+        [Required]
         public virtual FileEntity Logo { get; set; } = null!;
 
         public ICollection<CategoryEntity> Categories { get; set; } = []; 

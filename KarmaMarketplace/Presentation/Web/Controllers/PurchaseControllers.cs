@@ -39,11 +39,11 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
             return Ok(await _purchaseService.ConfirmPurchase().Execute(model));
         }
 
-        [HttpGet("user/{userId}")]
+        [HttpGet("user/{tempUserId}")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<ActionResult<ICollection<PurchaseEntity>>> GetUserPurchases(
             [FromQuery] GetPurchasesListDto model, 
-            Guid userId)
+            Guid tempUserId)
         {
             return Ok(await _purchaseService.GetPurchasesList().Execute(model)); 
         }

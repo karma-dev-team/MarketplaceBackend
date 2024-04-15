@@ -13,12 +13,16 @@ namespace KarmaMarketplace.Domain.Messging.Entities
     public class MessageEntity : BaseAuditableEntity
     {
         [ForeignKey("ChatEntity")]
+        [Required]
         public Guid ChatID { get; set; }
 
+        [Required]
         public UserEntity FromUser { get; set; } = null!;
 
+        [Required]
         public string Text { get; set; } = null!;
 
+        [Required]
         public MessageTypes Type { get; set; } = MessageTypes.Text; 
 
         public FileEntity? Image { get; set; }         

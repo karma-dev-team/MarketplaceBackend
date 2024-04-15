@@ -19,6 +19,7 @@ namespace KarmaMarketplace.Domain.User.Entities
         [Required] 
         [EmailAddress(ErrorMessage = "Email address is not correct")]
         public string Email { get; set; } = null!;
+        [Required]
         public UserRoles Role { get; set; } = UserRoles.User;
         [Column(name: "TelegramId")]
         private string? _telegramId; // Закрытое поле для хранения значения
