@@ -28,7 +28,8 @@ namespace KarmaMarketplace.Application.Market
             // Categories 
             services.AddScoped<CreateCategory>();
             services.AddScoped<UpdateCategory>();
-            services.AddScoped<UpdateCategory>(); 
+            services.AddScoped<UpdateCategory>();
+            services.AddScoped<DeleteCategory>(); 
             services.AddScoped<GetCategoriesList>();
             services.AddScoped<GetCategory>();
 

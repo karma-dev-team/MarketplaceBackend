@@ -57,7 +57,7 @@ namespace KarmaMarketplace.Application.Files.UseCases
             await _fileStorage.UploadFileAsync(filePath, fileStream);
 
             // Создаем новую сущность ImageEntity для сохранения информации о загруженном файле
-            var fileEntity = new FileEntity(Guid.NewGuid(), dto.Name!, filePath, dto.MimeType, 0); // Размер может быть установлен, если доступен
+            var fileEntity = new FileEntity(Guid.NewGuid(), name, filePath, dto.MimeType, 0); // Размер может быть установлен, если доступен
 
             // Сохраняем сущность в базе данных
             _context.Files.Add(fileEntity);

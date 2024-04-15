@@ -92,6 +92,11 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
                 query = query.Where(x => x.Category.GameID == dto.GameId.Value);
             }
 
+            if (dto.UserId != null)
+            {
+                query = query.Where(x => x.CreatedBy.Id == dto.UserId); 
+            }
+
             var result = await query.ToListAsync();
         
             return result;

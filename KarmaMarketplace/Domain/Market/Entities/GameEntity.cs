@@ -51,7 +51,8 @@ namespace KarmaMarketplace.Domain.Market.Entities
             game.Tags = tags;
             game.Banner = banner;
             game.Logo = logo;
-            
+            game.Slug = Guid.NewGuid().ToString(); 
+
             game.AddDomainEvent(new GameCreated(game));
 
             return game;

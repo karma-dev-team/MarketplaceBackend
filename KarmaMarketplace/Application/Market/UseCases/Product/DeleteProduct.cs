@@ -2,6 +2,7 @@
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Application.Market.Dto;
 using KarmaMarketplace.Domain.Market.Entities;
+using KarmaMarketplace.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 
 namespace KarmaMarketplace.Application.Market.UseCases.Product
@@ -20,7 +21,9 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
 
         public async Task<ProductEntity> Execute(DeleteProductDto dto)
         {
-            var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == dto.ProductId);
+            var product = await _context.Products
+                .IncludeStandard()
+                .FirstOrDefaultAsync(x => x.Id == dto.ProductId);
 
             Guard.Against.Null(product, message: "product does not exists");
             Guard.Against.Null(_user.Id); 

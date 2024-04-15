@@ -29,7 +29,7 @@ namespace KarmaMarketplace.Application.Market.Interactors.Game
                     .IncludeStandard()
                     .FirstOrDefaultAsync(x => x.Name == dto.Name);
             }
-            Guard.Against.Null(game, message: "game does not exists"); 
+            Guard.Against.Null(game, message: $"game does not exists, id: {dto.GameId}"); 
 
             return game;
         }

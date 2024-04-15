@@ -1,7 +1,9 @@
-﻿using KarmaMarketplace.Application.Messaging.Dto;
+﻿using KarmaMarketplace.Application.Common.Interfaces;
+using KarmaMarketplace.Application.Messaging.Dto;
 using KarmaMarketplace.Application.Messaging.Interfaces;
 using KarmaMarketplace.Domain.Messging.Entities;
 using KarmaMarketplace.Presentation.Web.Schemas;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,9 +14,11 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
     public class MessagesController : ControllerBase
     {
         private IMessagingService _messagingService;
+        private IUser _user; 
 
-        public MessagesController(IMessagingService messagingService) { 
+        public MessagesController(IMessagingService messagingService, IUser user) { 
             _messagingService = messagingService;
+            _user = user; 
         }
 
         [HttpGet("chat/{chatId}/messages")]
@@ -25,7 +29,7 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
                 .Execute(new GetChatMessagesDto { ChatId = chatId }));
         }
 
-        [HttpPost("chat/{chatId}")]
+        [HttpPost("chat/{chatId}/send")]
         public async Task<ActionResult<MessageEntity>> SendMessage([FromBody] SendMessageScheme model, Guid chatId)
         {
             return Ok(await _messagingService
@@ -33,13 +37,15 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
                 .Execute(new SendMessageDto()
                 {
                     ChatId = model.ChatId, 
-                    PurchaseId = model.PurchaseId, 
+                    //PurchaseId = model.PurchaseId, 
                     Image = model.Image, 
-                    Text = model.Text
+                    Text = model.Text, 
+                    FromUserId = _user.Id, 
                 })); 
         }
 
         [HttpPost("subscribe")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task Subscribe()
         {
             if (HttpContext.WebSockets.IsWebSocketRequest)

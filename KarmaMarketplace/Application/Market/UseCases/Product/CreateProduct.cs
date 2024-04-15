@@ -5,6 +5,7 @@ using KarmaMarketplace.Application.Market.Dto;
 using KarmaMarketplace.Domain.Files.Entities;
 using KarmaMarketplace.Domain.Market.Entities;
 using KarmaMarketplace.Domain.Payment.ValueObjects;
+using KarmaMarketplace.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 
 namespace KarmaMarketplace.Application.Market.UseCases.Product
@@ -27,11 +28,15 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
         {
             await _accessPolicy.FailIfNoAccess(Domain.User.Enums.UserRoles.User);
 
-            var byUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == _user.Id);
+            var byUser = await _context.Users
+                .IncludeStandard()
+                .FirstOrDefaultAsync(x => x.Id == _user.Id);
 
             Guard.Against.Null(byUser, message: "correct user is not provided");
 
-            var category = await _context.Categories.FirstOrDefaultAsync(x => x.Id == dto.CategoryId);
+            var category = await _context.Categories
+                .IncludeStandard()
+                .FirstOrDefaultAsync(x => x.Id == dto.CategoryId);
 
             Guard.Against.Null(category, message: "category does not exists");
 
@@ -66,7 +71,7 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
             _context.AutoAnswers.AddRange(autoAnswers);
             await _context.SaveChangesAsync(); 
 
-            return new(); 
+            return product; 
         }
     }
 }

@@ -10,7 +10,9 @@ namespace KarmaMarketplace.Infrastructure.Data.Queries
             return query
                 .Include(x => x.Category)
                 .Include(x => x.BuyerUser)
-                .Include(x => x.CreatedBy);
+                .Include(x => x.CreatedBy)
+                .Include(x => x.ProductViews)
+                .Include(x => x.Images);
         }
     }
 }

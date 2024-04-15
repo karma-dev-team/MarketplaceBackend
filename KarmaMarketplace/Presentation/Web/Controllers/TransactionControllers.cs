@@ -67,7 +67,7 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
                     .Execute(dto));
         }
 
-        [HttpPost("/payout/paypalych")]
+        [HttpPost("payout/paypalych")]
         public async Task<ActionResult<bool>> HandlePaypalychResult([FromBody] GatewayResultDto model)
         {
             return Ok(await _transactionService
@@ -75,11 +75,11 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
                 .Execute(model)); 
         }
 
-        [HttpGet("/providers")]
+        [HttpGet("providers")]
         public async Task<ActionResult<ICollection<TransactionProviderEntity>>> GetProviders()
         {
             return Ok(
-                _transactionService
+                await _transactionService
                     .GetTransactionProviders()
                     .Execute(new GetTransactionProvidersDto() { })); 
         }

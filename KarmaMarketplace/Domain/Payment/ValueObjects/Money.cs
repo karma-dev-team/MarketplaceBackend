@@ -17,9 +17,14 @@ namespace KarmaMarketplace.Domain.Payment.ValueObjects
 
         public static void VerifyCurrency(Money lhs, Money rhs)
         {
+            if (ReferenceEquals(lhs, null) || ReferenceEquals(rhs, null))
+            {
+                throw new ArgumentNullException("One or both Money objects are null");
+            }
+
             if (lhs.Currency != rhs.Currency)
             {
-                throw new ArgumentException("Currencies is not equal");
+                throw new ArgumentException("Currencies are not equal");
             }
         }
 

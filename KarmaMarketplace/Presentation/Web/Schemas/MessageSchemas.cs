@@ -9,6 +9,6 @@ namespace KarmaMarketplace.Presentation.Web.Schemas
         [Required]
         public Guid ChatId { get; set; }
         public CreateFileDto? Image { get; set; }
-        public Guid? PurchaseId { get; set; }
+        //public Guid? PurchaseId { get; set; }
     }
 }

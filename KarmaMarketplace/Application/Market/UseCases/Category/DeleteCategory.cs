@@ -3,6 +3,7 @@ using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Application.Market.Dto;
 using KarmaMarketplace.Domain.Market.Entities;
 using KarmaMarketplace.Domain.Market.Events;
+using KarmaMarketplace.Infrastructure.Data.Queries;
 using KarmaMarketplace.Infrastructure.EventDispatcher;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,12 +24,14 @@ namespace KarmaMarketplace.Application.Market.Interactors.Category
 
         public async Task<CategoryEntity> Execute(DeleteCategoryDto dto)
         {
-            var category = await _context.Categories.FirstOrDefaultAsync(x => x.Id == dto.CategoryId);
+            var category = await _context.Categories
+                .IncludeStandard()
+                .FirstOrDefaultAsync(x => x.Id == dto.CategoryId);
 
             await _accessPolicy.FailIfNoAccess(Domain.User.Enums.UserRoles.Owner); 
 
             Guard.Against.Null(category, message: "Category does not exists");
-
+            
             _context.Categories.Remove(category);
             await _context.SaveChangesAsync(); 
 

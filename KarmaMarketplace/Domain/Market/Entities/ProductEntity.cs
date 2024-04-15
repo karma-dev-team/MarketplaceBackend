@@ -43,7 +43,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
         [NotMapped]
         public Money CurrentPrice { get
             {
-                if (DiscountPrice == null)
+                if (ReferenceEquals(DiscountPrice, null))
                 {
                     return BasePrice; 
                 } else
@@ -72,6 +72,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
                 Attributes = "{}",
                 Status = status,
                 Images = images, 
+                Slug = Guid.NewGuid().ToString(),
             };
 
             VerifyAttributes(attributes, category);

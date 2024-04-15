@@ -20,7 +20,7 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
 
         [HttpGet("me")]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<ActionResult<ICollection<PurchaseEntity>>> GetMyPurchases([FromBody] GetPurchasesListDto model)
+        public async Task<ActionResult<ICollection<PurchaseEntity>>> GetMyPurchases([FromQuery] GetPurchasesListDto model)
         {
             return Ok(await _purchaseService.GetPurchasesList().Execute(model)); 
         }
@@ -42,7 +42,7 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
         [HttpGet("user/{userId}")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<ActionResult<ICollection<PurchaseEntity>>> GetUserPurchases(
-            [FromBody] GetPurchasesListDto model, 
+            [FromQuery] GetPurchasesListDto model, 
             Guid userId)
         {
             return Ok(await _purchaseService.GetPurchasesList().Execute(model)); 
