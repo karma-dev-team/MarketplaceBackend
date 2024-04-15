@@ -45,7 +45,7 @@ namespace KarmaMarketplace.Application.Market.Interactors.Category
                 category.Options = options; 
             }
 
-            _eventDispatcher.Dispatch(new CategoryUpdated(category, oldCategory)); 
+            await _eventDispatcher.Dispatch(new CategoryUpdated(category, oldCategory)); 
 
             return category;
         }

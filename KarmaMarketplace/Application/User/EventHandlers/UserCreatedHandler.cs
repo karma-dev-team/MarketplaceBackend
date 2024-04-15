@@ -4,6 +4,7 @@ using KarmaMarketplace.Domain.Messging.Entities;
 using KarmaMarketplace.Domain.Payment.Entities;
 using KarmaMarketplace.Domain.User.Events;
 using KarmaMarketplace.Infrastructure.EventDispatcher;
+using Microsoft.EntityFrameworkCore;
 
 namespace KarmaMarketplace.Application.User.EventHandlers
 {
@@ -20,22 +21,16 @@ namespace KarmaMarketplace.Application.User.EventHandlers
 
         public async Task HandleEvent(UserCreated eventValue)
         {
-            try
-            {
-                var supportChat = ChatEntity.CreateSupport(eventValue.User);
+            var supportChat = ChatEntity.CreateSupport(eventValue.User);
 
-                var existingWallet = _context.Wallets.FirstOrDefault(x => x.UserId == eventValue.User.Id);
+            var existingWallet = await _context.Wallets.FirstOrDefaultAsync(x => x.UserId == eventValue.User.Id);
 
-                var wallet = WalletEntity.Create(eventValue.User);
+            var wallet = WalletEntity.Create(eventValue.User);
 
-                _context.Wallets.Add(wallet);
+            _context.Wallets.Add(wallet);
 
-                _context.Chats.Add(supportChat);
-                await _context.SaveChangesAsync();
-            } catch (Exception ex)
-            {
-                _logger.LogCritical($"{ex}"); 
-            }
+            _context.Chats.Add(supportChat);
+            await _context.SaveChangesAsync(); 
         }
     }
 }

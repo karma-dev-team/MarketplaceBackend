@@ -9,13 +9,14 @@ namespace KarmaMarketplace.Infrastructure.Data.Intercepters
     {
         private readonly IEventDispatcher _dispatcher;
         private readonly ILogger _logger;
-        private readonly IServiceScopeFactory _scopeFactory;
+        private readonly IServiceProvider _serviceProvider;
 
-        public EventDispatcherInterceptor(IEventDispatcher dispatcher, ILogger<EventDispatcherInterceptor> logger, IServiceScopeFactory scopeFactory)
+        public EventDispatcherInterceptor(
+            IEventDispatcher dispatcher, ILogger<EventDispatcherInterceptor> logger, IServiceProvider serviceProvider)
         {
             _logger = logger;
             _dispatcher = dispatcher;
-            _scopeFactory = scopeFactory;
+            _serviceProvider = serviceProvider;
         }
 
         public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
@@ -34,36 +35,32 @@ namespace KarmaMarketplace.Infrastructure.Data.Intercepters
 
         public async Task DispatchDomainEvents(DbContext? context)
         {
-            if (context == null) return;
+            if (context == null) return ;
 
-            using (var scope = _scopeFactory.CreateScope())
+            var entities = context.ChangeTracker
+                .Entries<BaseEntity>()
+                .Where(e => e.Entity.DomainEvents.Any())
+                .Select(e => e.Entity);
+
+            var domainEvents = entities
+                .SelectMany(e => e.DomainEvents)
+                .ToList();
+
+            entities.ToList().ForEach(e => e.ClearDomainEvents());
+
+            foreach (var domainEvent in domainEvents)
             {
-                var entities = context.ChangeTracker
-                    .Entries<BaseEntity>()
-                    .Where(e => e.Entity.DomainEvents.Any())
-                    .Select(e => e.Entity);
-
-                var domainEvents = entities
-                    .SelectMany(e => e.DomainEvents)
-                    .ToList();
-
-                entities.ToList().ForEach(e => e.ClearDomainEvents());
-
-                foreach (var domainEvent in domainEvents)
+                try
                 {
-                    try
-                    {
-                        var dispatcher = scope.ServiceProvider.GetRequiredService<IEventDispatcher>();
-                        dispatcher.Dispatch(domainEvent);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, $"Error dispatching domain event: {domainEvent}");
-                        throw; 
-                    }
+                    var dispatcher = _serviceProvider.GetRequiredService<IEventDispatcher>();
+                    await dispatcher.Dispatch(domainEvent);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, $"Error dispatching domain event: {domainEvent}");
+                    throw; 
                 }
             }
         }
     }
-
 }

@@ -89,7 +89,7 @@ namespace KarmaMarketplace.Infrastructure.EventDispatcher
             }
         }
 
-        public void Dispatch<TEvent>(TEvent @event) where TEvent : BaseEvent
+        public async Task Dispatch<TEvent>(TEvent @event) where TEvent : BaseEvent
         {
             _logger.LogInformation($"Dispatching event: {@event}, its type: {@event.GetType()}");
 
@@ -104,7 +104,7 @@ namespace KarmaMarketplace.Infrastructure.EventDispatcher
                         var eventSubscriber = scope.ServiceProvider.GetRequiredService(eventSubscriberType);
                         dynamic dynamicSubscriber = Convert.ChangeType(eventSubscriber, eventSubscriberType);
 
-                        dynamicSubscriber.HandleEvent((dynamic)@event);
+                        await dynamicSubscriber.HandleEvent((dynamic)@event);
                     }
                 }
             }

@@ -32,7 +32,7 @@ namespace KarmaMarketplace.Application.Market.Interactors.Category
             _context.Categories.Remove(category);
             await _context.SaveChangesAsync(); 
 
-            _eventDispatcher.Dispatch(new CategoryDeleted(category)); 
+            await _eventDispatcher.Dispatch(new CategoryDeleted(category)); 
 
             return category;
         }
