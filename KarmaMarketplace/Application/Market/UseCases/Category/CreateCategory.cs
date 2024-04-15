@@ -3,6 +3,7 @@ using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Application.Market.Dto;
 using KarmaMarketplace.Application.Market.Utils;
 using KarmaMarketplace.Domain.Market.Entities;
+using KarmaMarketplace.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 
 namespace KarmaMarketplace.Application.Market.Interactors.Category
@@ -21,7 +22,9 @@ namespace KarmaMarketplace.Application.Market.Interactors.Category
         {
             await _accessPolicy.FailIfNoAccess(Domain.User.Enums.UserRoles.Admin);
 
-            var game = await _context.Games.FirstOrDefaultAsync(x => x.Id == dto.GameId);
+            var game = await _context.Games
+                .IncludeStandard()
+                .FirstOrDefaultAsync(x => x.Id == dto.GameId);
 
             Guard.Against.Null(game, "Game does not exists"); 
 
@@ -29,8 +32,11 @@ namespace KarmaMarketplace.Application.Market.Interactors.Category
                 name: dto.Name,
                 options: OptionFactory.CreateOptions(dto.Options), 
                 gameId: dto.GameId, 
-                slug: null); 
+                slug: null);
 
+            game.Categories.Add(newCategory);
+
+            _context.Games.Update(game); 
             _context.Categories.Add(newCategory); 
             await _context.SaveChangesAsync(); 
 
