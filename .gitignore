@@ -97,6 +97,8 @@ ClientBin/
 *~
 *.dbmdl
 *.[Pp]ublish.xml
+KarmaMarketplace/Data
+KarmaMarketplace/appsettings.json
 
 *.publishsettings
 
