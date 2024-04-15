@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace KarmaMarketplace.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240328171925_InitialMigrations")]
-    partial class InitialMigrations
+    [Migration("20240415051237_ChatUpdate")]
+    partial class ChatUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace KarmaMarketplace.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("ChatEntityUserEntity", b =>
+                {
+                    b.Property<Guid>("ChatsId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ParticipantsId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ChatsId", "ParticipantsId");
+
+                    b.HasIndex("ParticipantsId");
+
+                    b.ToTable("ChatEntityUserEntity");
+                });
 
             modelBuilder.Entity("KarmaMarketplace.Domain.Files.Entities.ImageEntity", b =>
                 {
@@ -51,11 +66,55 @@ namespace KarmaMarketplace.Migrations
                     b.Property<long>("Size")
                         .HasColumnType("bigint");
 
+                    b.Property<Guid?>("TicketEntityId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProductEntityId");
 
+                    b.HasIndex("TicketEntityId");
+
                     b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("KarmaMarketplace.Domain.Market.Entities.AutoAnswerEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("PurchaseId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("UsedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AutoAnswers");
                 });
 
             modelBuilder.Entity("KarmaMarketplace.Domain.Market.Entities.CategoryEntity", b =>
@@ -67,6 +126,9 @@ namespace KarmaMarketplace.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid?>("GameEntityId")
                         .HasColumnType("uuid");
 
@@ -76,7 +138,7 @@ namespace KarmaMarketplace.Migrations
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("LastModifiedBy")
+                    b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -108,6 +170,9 @@ namespace KarmaMarketplace.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
@@ -115,7 +180,7 @@ namespace KarmaMarketplace.Migrations
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("LastModifiedBy")
+                    b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("LogoID")
@@ -159,6 +224,9 @@ namespace KarmaMarketplace.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Field")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -177,7 +245,7 @@ namespace KarmaMarketplace.Migrations
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("LastModifiedBy")
+                    b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
                     b.Property<int>("Sequence")
@@ -224,7 +292,7 @@ namespace KarmaMarketplace.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("CreatedById")
+                    b.Property<Guid?>("CreatedById")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Description")
@@ -235,7 +303,7 @@ namespace KarmaMarketplace.Migrations
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("LastModifiedBy")
+                    b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -272,13 +340,16 @@ namespace KarmaMarketplace.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Info")
                         .HasColumnType("jsonb");
 
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("LastModifiedBy")
+                    b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("ProductEntityId")
@@ -306,19 +377,19 @@ namespace KarmaMarketplace.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("CreatedById")
+                    b.Property<Guid?>("CreatedById")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("LastModifiedBy")
+                    b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("PurchaseId")
+                    b.Property<Guid>("PurchaseId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("Rating")
@@ -349,8 +420,14 @@ namespace KarmaMarketplace.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
                     b.Property<bool>("Deleted")
                         .HasColumnType("boolean");
+
+                    b.Property<Guid?>("ImageId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsVerified")
                         .HasColumnType("boolean");
@@ -358,7 +435,7 @@ namespace KarmaMarketplace.Migrations
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("LastModifiedBy")
+                    b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -366,21 +443,13 @@ namespace KarmaMarketplace.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("PhotoId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerId");
-
-                    b.HasIndex("PhotoId");
+                    b.HasIndex("ImageId");
 
                     b.ToTable("Chats");
                 });
@@ -400,10 +469,13 @@ namespace KarmaMarketplace.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("LastModifiedBy")
+                    b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("ReadAt")
@@ -434,19 +506,22 @@ namespace KarmaMarketplace.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("FromUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ImageId")
+                    b.Property<Guid?>("ImageId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("LastModifiedBy")
+                    b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("PurchaseId")
+                    b.Property<Guid?>("PurchaseId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("ReviewId")
@@ -474,14 +549,46 @@ namespace KarmaMarketplace.Migrations
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("KarmaMarketplace.Domain.Payment.Entities.PurchaseEntity", b =>
+            modelBuilder.Entity("KarmaMarketplace.Domain.Payment.Entities.PaymentSystemEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("numeric");
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("TransactionProviderEntityId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TransactionProviderEntityId");
+
+                    b.ToTable("PaymentSystems");
+                });
+
+            modelBuilder.Entity("KarmaMarketplace.Domain.Payment.Entities.PurchaseEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("ChatId")
                         .HasColumnType("uuid");
@@ -492,6 +599,9 @@ namespace KarmaMarketplace.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Currency")
                         .IsRequired()
                         .HasColumnType("text");
@@ -499,10 +609,13 @@ namespace KarmaMarketplace.Migrations
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("LastModifiedBy")
+                    b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ReviewId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Status")
@@ -510,7 +623,6 @@ namespace KarmaMarketplace.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("StatusDescription")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
@@ -545,7 +657,10 @@ namespace KarmaMarketplace.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("CreatedBy")
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CreatedByUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Direction")
@@ -555,12 +670,18 @@ namespace KarmaMarketplace.Migrations
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("LastModifiedBy")
+                    b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Operation")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<Guid?>("PropsId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProviderId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -573,9 +694,84 @@ namespace KarmaMarketplace.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedBy");
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("PropsId");
+
+                    b.HasIndex("ProviderId");
 
                     b.ToTable("Transactions");
+                });
+
+            modelBuilder.Entity("KarmaMarketplace.Domain.Payment.Entities.TransactionPropsEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool?>("PaidFromPendingIncome")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("PaymentGateway")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PaymentUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("SuccessUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TransactionPropsEntity");
+                });
+
+            modelBuilder.Entity("KarmaMarketplace.Domain.Payment.Entities.TransactionProviderEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("Fee")
+                        .HasColumnType("numeric");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TransactionProviders");
                 });
 
             modelBuilder.Entity("KarmaMarketplace.Domain.Payment.Entities.WalletEntity", b =>
@@ -590,20 +786,103 @@ namespace KarmaMarketplace.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Currency")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("LastModifiedBy")
+                    b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("UserID")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Wallets");
+                });
+
+            modelBuilder.Entity("KarmaMarketplace.Domain.Staff.Entities.TicketEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tickets");
+                });
+
+            modelBuilder.Entity("KarmaMarketplace.Domain.User.Entities.NotificationEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Data")
+                        .HasColumnType("jsonb");
+
+                    b.Property<Guid?>("FromUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ToUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("KarmaMarketplace.Domain.User.Entities.UserEntity", b =>
@@ -615,11 +894,11 @@ namespace KarmaMarketplace.Migrations
                     b.Property<bool>("Blocked")
                         .HasColumnType("boolean");
 
-                    b.Property<Guid?>("ChatEntityId")
-                        .HasColumnType("uuid");
-
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -629,17 +908,17 @@ namespace KarmaMarketplace.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("ImageId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("LastModifiedBy")
+                    b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("TelegramId")
                         .HasColumnType("text");
 
                     b.Property<string>("UserName")
@@ -649,9 +928,24 @@ namespace KarmaMarketplace.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChatEntityId");
+                    b.HasIndex("ImageId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ChatEntityUserEntity", b =>
+                {
+                    b.HasOne("KarmaMarketplace.Domain.Messging.Entities.ChatEntity", null)
+                        .WithMany()
+                        .HasForeignKey("ChatsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("KarmaMarketplace.Domain.User.Entities.UserEntity", null)
+                        .WithMany()
+                        .HasForeignKey("ParticipantsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("KarmaMarketplace.Domain.Files.Entities.ImageEntity", b =>
@@ -659,6 +953,10 @@ namespace KarmaMarketplace.Migrations
                     b.HasOne("KarmaMarketplace.Domain.Market.Entities.ProductEntity", null)
                         .WithMany("Images")
                         .HasForeignKey("ProductEntityId");
+
+                    b.HasOne("KarmaMarketplace.Domain.Staff.Entities.TicketEntity", null)
+                        .WithMany("Images")
+                        .HasForeignKey("TicketEntityId");
                 });
 
             modelBuilder.Entity("KarmaMarketplace.Domain.Market.Entities.CategoryEntity", b =>
@@ -704,11 +1002,9 @@ namespace KarmaMarketplace.Migrations
 
                     b.HasOne("KarmaMarketplace.Domain.User.Entities.UserEntity", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CreatedById");
 
-                    b.OwnsOne("KarmaMarketplace.Domain.Market.ValueObjects.Money", "BasePrice", b1 =>
+                    b.OwnsOne("KarmaMarketplace.Domain.Payment.ValueObjects.Money", "BasePrice", b1 =>
                         {
                             b1.Property<Guid>("ProductEntityId")
                                 .HasColumnType("uuid");
@@ -727,7 +1023,7 @@ namespace KarmaMarketplace.Migrations
                                 .HasForeignKey("ProductEntityId");
                         });
 
-                    b.OwnsOne("KarmaMarketplace.Domain.Market.ValueObjects.Money", "DiscountPrice", b1 =>
+                    b.OwnsOne("KarmaMarketplace.Domain.Payment.ValueObjects.Money", "DiscountPrice", b1 =>
                         {
                             b1.Property<Guid>("ProductEntityId")
                                 .HasColumnType("uuid");
@@ -769,9 +1065,7 @@ namespace KarmaMarketplace.Migrations
                 {
                     b.HasOne("KarmaMarketplace.Domain.User.Entities.UserEntity", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CreatedById");
 
                     b.HasOne("KarmaMarketplace.Domain.Market.Entities.ProductEntity", "Product")
                         .WithMany()
@@ -781,7 +1075,9 @@ namespace KarmaMarketplace.Migrations
 
                     b.HasOne("KarmaMarketplace.Domain.Payment.Entities.PurchaseEntity", "Purchase")
                         .WithMany()
-                        .HasForeignKey("PurchaseId");
+                        .HasForeignKey("PurchaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CreatedBy");
 
@@ -792,21 +1088,11 @@ namespace KarmaMarketplace.Migrations
 
             modelBuilder.Entity("KarmaMarketplace.Domain.Messging.Entities.ChatEntity", b =>
                 {
-                    b.HasOne("KarmaMarketplace.Domain.User.Entities.UserEntity", "Owner")
+                    b.HasOne("KarmaMarketplace.Domain.Files.Entities.ImageEntity", "Image")
                         .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ImageId");
 
-                    b.HasOne("KarmaMarketplace.Domain.Files.Entities.ImageEntity", "Photo")
-                        .WithMany()
-                        .HasForeignKey("PhotoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
-
-                    b.Navigation("Photo");
+                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("KarmaMarketplace.Domain.Messging.Entities.ChatReadRecord", b =>
@@ -830,15 +1116,11 @@ namespace KarmaMarketplace.Migrations
 
                     b.HasOne("KarmaMarketplace.Domain.Files.Entities.ImageEntity", "Image")
                         .WithMany()
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ImageId");
 
                     b.HasOne("KarmaMarketplace.Domain.Payment.Entities.PurchaseEntity", "Purchase")
                         .WithMany()
-                        .HasForeignKey("PurchaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PurchaseId");
 
                     b.HasOne("KarmaMarketplace.Domain.Market.Entities.ReviewEntity", "Review")
                         .WithMany()
@@ -851,6 +1133,13 @@ namespace KarmaMarketplace.Migrations
                     b.Navigation("Purchase");
 
                     b.Navigation("Review");
+                });
+
+            modelBuilder.Entity("KarmaMarketplace.Domain.Payment.Entities.PaymentSystemEntity", b =>
+                {
+                    b.HasOne("KarmaMarketplace.Domain.Payment.Entities.TransactionProviderEntity", null)
+                        .WithMany("Systems")
+                        .HasForeignKey("TransactionProviderEntityId");
                 });
 
             modelBuilder.Entity("KarmaMarketplace.Domain.Payment.Entities.PurchaseEntity", b =>
@@ -879,6 +1168,28 @@ namespace KarmaMarketplace.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsOne("KarmaMarketplace.Domain.Payment.ValueObjects.Money", "Amount", b1 =>
+                        {
+                            b1.Property<Guid>("PurchaseEntityId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<decimal>("Amount")
+                                .HasColumnType("numeric");
+
+                            b1.Property<int>("Currency")
+                                .HasColumnType("integer");
+
+                            b1.HasKey("PurchaseEntityId");
+
+                            b1.ToTable("Purchases");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PurchaseEntityId");
+                        });
+
+                    b.Navigation("Amount")
+                        .IsRequired();
+
                     b.Navigation("Chat");
 
                     b.Navigation("Product");
@@ -890,13 +1201,23 @@ namespace KarmaMarketplace.Migrations
 
             modelBuilder.Entity("KarmaMarketplace.Domain.Payment.Entities.TransactionEntity", b =>
                 {
-                    b.HasOne("KarmaMarketplace.Domain.User.Entities.UserEntity", "User")
+                    b.HasOne("KarmaMarketplace.Domain.User.Entities.UserEntity", "CreatedByUser")
                         .WithMany()
-                        .HasForeignKey("CreatedBy")
+                        .HasForeignKey("CreatedByUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("KarmaMarketplace.Domain.Market.ValueObjects.Money", "Amount", b1 =>
+                    b.HasOne("KarmaMarketplace.Domain.Payment.Entities.TransactionPropsEntity", "Props")
+                        .WithMany()
+                        .HasForeignKey("PropsId");
+
+                    b.HasOne("KarmaMarketplace.Domain.Payment.Entities.TransactionProviderEntity", "Provider")
+                        .WithMany()
+                        .HasForeignKey("ProviderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("KarmaMarketplace.Domain.Payment.ValueObjects.Money", "Amount", b1 =>
                         {
                             b1.Property<Guid>("TransactionEntityId")
                                 .HasColumnType("uuid");
@@ -915,7 +1236,7 @@ namespace KarmaMarketplace.Migrations
                                 .HasForeignKey("TransactionEntityId");
                         });
 
-                    b.OwnsOne("KarmaMarketplace.Domain.Market.ValueObjects.Money", "Fee", b1 =>
+                    b.OwnsOne("KarmaMarketplace.Domain.Payment.ValueObjects.Money", "Fee", b1 =>
                         {
                             b1.Property<Guid>("TransactionEntityId")
                                 .HasColumnType("uuid");
@@ -937,21 +1258,25 @@ namespace KarmaMarketplace.Migrations
                     b.Navigation("Amount")
                         .IsRequired();
 
+                    b.Navigation("CreatedByUser");
+
                     b.Navigation("Fee")
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Props");
+
+                    b.Navigation("Provider");
                 });
 
             modelBuilder.Entity("KarmaMarketplace.Domain.Payment.Entities.WalletEntity", b =>
                 {
                     b.HasOne("KarmaMarketplace.Domain.User.Entities.UserEntity", "User")
                         .WithMany()
-                        .HasForeignKey("UserID")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("KarmaMarketplace.Domain.Market.ValueObjects.Money", "AvailableBalance", b1 =>
+                    b.OwnsOne("KarmaMarketplace.Domain.Payment.ValueObjects.Money", "AvailableBalance", b1 =>
                         {
                             b1.Property<Guid>("WalletEntityId")
                                 .HasColumnType("uuid");
@@ -970,7 +1295,7 @@ namespace KarmaMarketplace.Migrations
                                 .HasForeignKey("WalletEntityId");
                         });
 
-                    b.OwnsOne("KarmaMarketplace.Domain.Market.ValueObjects.Money", "Frozen", b1 =>
+                    b.OwnsOne("KarmaMarketplace.Domain.Payment.ValueObjects.Money", "Frozen", b1 =>
                         {
                             b1.Property<Guid>("WalletEntityId")
                                 .HasColumnType("uuid");
@@ -989,7 +1314,7 @@ namespace KarmaMarketplace.Migrations
                                 .HasForeignKey("WalletEntityId");
                         });
 
-                    b.OwnsOne("KarmaMarketplace.Domain.Market.ValueObjects.Money", "PendingIncome", b1 =>
+                    b.OwnsOne("KarmaMarketplace.Domain.Payment.ValueObjects.Money", "PendingIncome", b1 =>
                         {
                             b1.Property<Guid>("WalletEntityId")
                                 .HasColumnType("uuid");
@@ -1022,9 +1347,11 @@ namespace KarmaMarketplace.Migrations
 
             modelBuilder.Entity("KarmaMarketplace.Domain.User.Entities.UserEntity", b =>
                 {
-                    b.HasOne("KarmaMarketplace.Domain.Messging.Entities.ChatEntity", null)
-                        .WithMany("Participants")
-                        .HasForeignKey("ChatEntityId");
+                    b.HasOne("KarmaMarketplace.Domain.Files.Entities.ImageEntity", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId");
+
+                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("KarmaMarketplace.Domain.Market.Entities.CategoryEntity", b =>
@@ -1048,9 +1375,17 @@ namespace KarmaMarketplace.Migrations
                 {
                     b.Navigation("Messages");
 
-                    b.Navigation("Participants");
-
                     b.Navigation("ReadRecords");
+                });
+
+            modelBuilder.Entity("KarmaMarketplace.Domain.Payment.Entities.TransactionProviderEntity", b =>
+                {
+                    b.Navigation("Systems");
+                });
+
+            modelBuilder.Entity("KarmaMarketplace.Domain.Staff.Entities.TicketEntity", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

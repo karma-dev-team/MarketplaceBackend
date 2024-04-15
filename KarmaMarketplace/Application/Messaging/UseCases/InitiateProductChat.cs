@@ -35,7 +35,7 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
 
             var chat = ChatEntity.CreatePrivate(
                 name: product.Name,
-                participants: new List<UserEntity> { fromUser, toUser },
+                userParticipants: new List<UserEntity> { fromUser, toUser },
                 owner: toUser,
                 image: toUser.Image
             );

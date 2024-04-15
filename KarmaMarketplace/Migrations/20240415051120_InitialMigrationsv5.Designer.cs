@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace KarmaMarketplace.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240409163730_AddedTicket")]
-    partial class AddedTicket
+    [Migration("20240415051120_InitialMigrationsv5")]
+    partial class InitialMigrationsv5
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -428,9 +428,6 @@ namespace KarmaMarketplace.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("text");
@@ -438,8 +435,6 @@ namespace KarmaMarketplace.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ImageId");
-
-                    b.HasIndex("OwnerId");
 
                     b.ToTable("Chats");
                 });
@@ -1072,15 +1067,7 @@ namespace KarmaMarketplace.Migrations
                         .WithMany()
                         .HasForeignKey("ImageId");
 
-                    b.HasOne("KarmaMarketplace.Domain.User.Entities.UserEntity", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Image");
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("KarmaMarketplace.Domain.Messging.Entities.ChatReadRecord", b =>

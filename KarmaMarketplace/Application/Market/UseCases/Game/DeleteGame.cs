@@ -35,7 +35,7 @@ namespace KarmaMarketplace.Application.Market.Interactors.Game
             _context.Games.Remove(game);
             await _context.SaveChangesAsync();
 
-            await _eventDispatcher.Dispatch(new GameDeleted(game, DateTime.UtcNow));
+            await _eventDispatcher.Dispatch(new GameDeleted(game, DateTime.UtcNow), _context);
 
             return game;
         }

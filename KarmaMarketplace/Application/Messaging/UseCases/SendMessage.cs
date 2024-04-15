@@ -2,6 +2,7 @@
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Application.Files.Interfaces;
 using KarmaMarketplace.Application.Messaging.Dto;
+using KarmaMarketplace.Domain.Messaging.Entities;
 using KarmaMarketplace.Domain.Messging.Entities;
 using KarmaMarketplace.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
@@ -57,7 +58,8 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
             {
                 if (fromUser.Role == Domain.User.Enums.UserRoles.Moderator)
                 {
-                    chat.Participants.Add(fromUser);
+                    chat.AddParticipant(fromUser); 
+                    //chat.Participants.Add(new ChatParticipant() { ChatId = chat.Id, UserId = fromUser.Id });
                 }
 
                 var someUser = chat.Participants.FirstOrDefault(x => x.Id == dto.FromUserId);

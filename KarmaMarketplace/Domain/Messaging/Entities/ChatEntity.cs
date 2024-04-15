@@ -1,4 +1,5 @@
 ﻿using KarmaMarketplace.Domain.Files.Entities;
+using KarmaMarketplace.Domain.Messaging.Entities;
 using KarmaMarketplace.Domain.Messaging.Enums;
 using KarmaMarketplace.Domain.Messging.Enums;
 using KarmaMarketplace.Domain.Messging.Events;
@@ -6,7 +7,6 @@ using KarmaMarketplace.Domain.User.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Linq;
-using Telegram.Bot.Types;
 
 namespace KarmaMarketplace.Domain.Messging.Entities
 {
@@ -15,7 +15,7 @@ namespace KarmaMarketplace.Domain.Messging.Entities
         public string Name { get; set; } = null!;
 
         // Handling the Participants as a many-to-many relationship might require an additional entity or configuration outside this code snippet
-        public UserEntity Owner { get; set; } = null!;
+        //public UserEntity Owner { get; set; } = null!;
 
         public ICollection<UserEntity> Participants { get; set; } = [];
         public ImageEntity? Image { get; set; } = null!;
@@ -59,6 +59,11 @@ namespace KarmaMarketplace.Domain.Messging.Entities
             }
         }
 
+        public void AddParticipant(UserEntity user)
+        {
+            Participants.Add(user); 
+        }
+
         public MessageEntity? PurchaseMessage(Guid purchaseId)
         {
             foreach (var message in Messages)
@@ -87,7 +92,8 @@ namespace KarmaMarketplace.Domain.Messging.Entities
 
             chat.Name = "Поддержка";
             chat.Participants = [user]; 
-            chat.Owner = user;
+            //chat.Participants = [new ChatParticipant() { ChatId = chat.Id, UserId = user.Id}]; 
+            //chat.Owner = user;
             chat.IsVerified = true;
 
             chat.AddDomainEvent(new ChatCreated(chat));
@@ -95,19 +101,30 @@ namespace KarmaMarketplace.Domain.Messging.Entities
             return chat; 
         }
 
-        public static ChatEntity CreatePrivate(List<UserEntity> participants, string name, UserEntity owner, ImageEntity? image)
+        public static ChatEntity CreatePrivate(List<UserEntity> userParticipants, string name, UserEntity owner, ImageEntity? image)
         {
-            if (!participants.Contains(owner))
+            if (!userParticipants.Contains(owner))
                 throw new ArgumentException("Owner not in participants.");
+
+
 
             var chat = new ChatEntity
             {
                 Name = name,
-                Participants = participants,
                 Image = image,
                 Type = ChatTypes.Private,
-                Owner = owner
+                Participants = userParticipants, 
+                //Owner = owner
             };
+
+            //ICollection<ChatParticipant> participants = [];
+
+            //foreach (var userPart in userParticipants)
+            //{
+            //    participants.Add(new ChatParticipant() { ChatId = chat.Id, UserId = userPart.Id });
+            //}
+
+            //chat.Participants = participants;
 
             chat.AddDomainEvent(new ChatCreated(chat)); 
 

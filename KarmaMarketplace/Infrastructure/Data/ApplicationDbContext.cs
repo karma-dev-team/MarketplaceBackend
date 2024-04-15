@@ -35,10 +35,14 @@ namespace KarmaMarketplace.Infrastructure.Data
         public DbSet<ImageEntity> Images { get; set; }  
         public DbSet<TicketEntity> Tickets { get; set; }
 
-        public ApplicationDbContext(DbContextOptions options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions options) : base(options) {
+            
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.EnableSensitiveDataLogging();
+            optionsBuilder.EnableDetailedErrors(); 
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

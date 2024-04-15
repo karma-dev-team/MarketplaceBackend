@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-
+﻿
 namespace KarmaMarketplace.Infrastructure.EventDispatcher
 {
     //public class LoggingHandler<Event> : IEventSubscriber<Event> where Event : BaseEvent

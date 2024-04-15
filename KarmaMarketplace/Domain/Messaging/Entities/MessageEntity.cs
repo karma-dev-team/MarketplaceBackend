@@ -1,13 +1,10 @@
 ﻿using KarmaMarketplace.Domain.Messging.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Domain.Files.Entities;
 using KarmaMarketplace.Domain.Market.Entities;
 using KarmaMarketplace.Domain.Payment.Entities;
-using Telegram.Bot.Types;
 using KarmaMarketplace.Domain.Messging.Events;
-using KarmaMarketplace.Application.Payment.Dto;
 
 namespace KarmaMarketplace.Domain.Messging.Entities
 {

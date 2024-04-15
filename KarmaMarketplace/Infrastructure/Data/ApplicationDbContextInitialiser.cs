@@ -4,10 +4,7 @@ using KarmaMarketplace.Domain.Payment.Entities;
 using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Domain.User.Enums;
 using KarmaMarketplace.Infrastructure.Adapters.Payment;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SKitLs.Bots.Telegram.Core.Users;
-using System.Data;
 
 namespace KarmaMarketplace.Infrastructure.Data
 {

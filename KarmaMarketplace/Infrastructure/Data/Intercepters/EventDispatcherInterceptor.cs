@@ -53,11 +53,10 @@ namespace KarmaMarketplace.Infrastructure.Data.Intercepters
                 try
                 {
                     var dispatcher = _serviceProvider.GetRequiredService<IEventDispatcher>();
-                    await dispatcher.Dispatch(domainEvent);
+                    await dispatcher.Dispatch(domainEvent, (ApplicationDbContext)context);
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, $"Error dispatching domain event: {domainEvent}");
                     throw; 
                 }
             }

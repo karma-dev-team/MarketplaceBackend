@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
-namespace KarmaMarketplace.Infrastructure.Adapters.Payment.Systems
+﻿namespace KarmaMarketplace.Infrastructure.Adapters.Payment.Systems
 {
     public class PayPalychConfiguration
     {

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace KarmaMarketplace.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240407111751_AddedDataFieldNotification")]
-    partial class AddedDataFieldNotification
+    [Migration("20240415051611_InitialMigrationsv6")]
+    partial class InitialMigrationsv6
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,9 +51,14 @@ namespace KarmaMarketplace.Migrations
                     b.Property<long>("Size")
                         .HasColumnType("bigint");
 
+                    b.Property<Guid?>("TicketEntityId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProductEntityId");
+
+                    b.HasIndex("TicketEntityId");
 
                     b.ToTable("Images");
                 });
@@ -423,9 +428,6 @@ namespace KarmaMarketplace.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("text");
@@ -433,8 +435,6 @@ namespace KarmaMarketplace.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ImageId");
-
-                    b.HasIndex("OwnerId");
 
                     b.ToTable("Chats");
                 });
@@ -793,6 +793,40 @@ namespace KarmaMarketplace.Migrations
                     b.ToTable("Wallets");
                 });
 
+            modelBuilder.Entity("KarmaMarketplace.Domain.Staff.Entities.TicketEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tickets");
+                });
+
             modelBuilder.Entity("KarmaMarketplace.Domain.User.Entities.NotificationEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -894,6 +928,10 @@ namespace KarmaMarketplace.Migrations
                     b.HasOne("KarmaMarketplace.Domain.Market.Entities.ProductEntity", null)
                         .WithMany("Images")
                         .HasForeignKey("ProductEntityId");
+
+                    b.HasOne("KarmaMarketplace.Domain.Staff.Entities.TicketEntity", null)
+                        .WithMany("Images")
+                        .HasForeignKey("TicketEntityId");
                 });
 
             modelBuilder.Entity("KarmaMarketplace.Domain.Market.Entities.CategoryEntity", b =>
@@ -1029,15 +1067,7 @@ namespace KarmaMarketplace.Migrations
                         .WithMany()
                         .HasForeignKey("ImageId");
 
-                    b.HasOne("KarmaMarketplace.Domain.User.Entities.UserEntity", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Image");
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("KarmaMarketplace.Domain.Messging.Entities.ChatReadRecord", b =>
@@ -1332,6 +1362,11 @@ namespace KarmaMarketplace.Migrations
             modelBuilder.Entity("KarmaMarketplace.Domain.Payment.Entities.TransactionProviderEntity", b =>
                 {
                     b.Navigation("Systems");
+                });
+
+            modelBuilder.Entity("KarmaMarketplace.Domain.Staff.Entities.TicketEntity", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

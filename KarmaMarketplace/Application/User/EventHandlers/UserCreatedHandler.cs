@@ -10,27 +10,24 @@ namespace KarmaMarketplace.Application.User.EventHandlers
 {
     public class UserCreatedHandler : IEventSubscriber<UserCreated>
     {
-        private IApplicationDbContext _context;
         private ILogger _logger;
 
-        public UserCreatedHandler(IApplicationDbContext dbContext, ILogger<UserCreatedHandler> logger)
+        public UserCreatedHandler(ILogger<UserCreatedHandler> logger)
         {
             _logger = logger;
-            _context = dbContext;
         }
 
-        public async Task HandleEvent(UserCreated eventValue)
+        public Task HandleEvent(UserCreated eventValue, IApplicationDbContext _context)
         {
             var supportChat = ChatEntity.CreateSupport(eventValue.User);
-
-            var existingWallet = await _context.Wallets.FirstOrDefaultAsync(x => x.UserId == eventValue.User.Id);
 
             var wallet = WalletEntity.Create(eventValue.User);
 
             _context.Wallets.Add(wallet);
 
             _context.Chats.Add(supportChat);
-            await _context.SaveChangesAsync(); 
+
+            return Task.CompletedTask;
         }
     }
 }

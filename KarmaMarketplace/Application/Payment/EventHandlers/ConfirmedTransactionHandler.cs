@@ -14,16 +14,13 @@ namespace KarmaMarketplace.Application.Payment.EventHandlers
     public class ConfirmedTransactionHandler : IEventSubscriber<ConfirmedTransaction>
     {
         private readonly IMessagingService _messaging; 
-        private readonly IApplicationDbContext _context;
 
         public ConfirmedTransactionHandler(
-            IMessagingService messaging, 
-            IApplicationDbContext dbContext) {
+            IMessagingService messaging) {
             _messaging = messaging;
-            _context = dbContext;
         }
 
-        public async Task HandleEvent(ConfirmedTransaction paymentEvent)
+        public async Task HandleEvent(ConfirmedTransaction paymentEvent, IApplicationDbContext _context)
         {
             if (paymentEvent.Transaction.Direction == TransactionDirection.Out 
                     && paymentEvent.Transaction.Operation == TransactionOperations.Buy) {

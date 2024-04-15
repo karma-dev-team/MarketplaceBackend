@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using KarmaMarketplace.Domain.Messging.Entities;
+using KarmaMarketplace.Domain.Messaging.Entities;
 
 namespace KarmaMarketplace.Infrastructure.Data.Configuration
 {
@@ -15,6 +16,9 @@ namespace KarmaMarketplace.Infrastructure.Data.Configuration
             builder
                 .Property(e => e.Type)
                 .HasConversion<string>();
+            //builder
+            //    .HasMany(e => e.Participants)
+            //    .WithMany(e => e.Chats);
         }
     }
 }
