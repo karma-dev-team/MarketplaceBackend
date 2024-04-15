@@ -31,7 +31,7 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
 
             return Ok(await _fileService
                 .UploadFile()
-                .Execute(new Application.Files.Dto.CreateFileDto() { Stream = file.OpenReadStream() })); 
+                .Execute(new Application.Files.Dto.CreateFileDto() { Stream = file.OpenReadStream(), Name = file.FileName })); 
         }
 
         [HttpGet("download/{fileId}")]

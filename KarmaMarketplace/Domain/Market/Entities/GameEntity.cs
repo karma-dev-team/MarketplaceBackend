@@ -29,7 +29,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
         public Guid? LogoID { get; set; }
         [Required]
         public virtual FileEntity Logo { get; set; } = null!;
-
+        [Required]
         public ICollection<CategoryEntity> Categories { get; set; } = []; 
 
         [ForeignKey("Banner")]

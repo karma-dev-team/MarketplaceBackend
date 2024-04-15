@@ -9,6 +9,7 @@ namespace KarmaMarketplace.Infrastructure.Data.Queries
         {
             return query
                 .Include(x => x.Categories)
+                    .ThenInclude(x => x.Options)
                 .Include(x => x.Banner)
                 .Include(x => x.Logo); 
         }
