@@ -57,6 +57,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddHealthChecks();
 builder.Services.AddApplicationServices();
 builder.Services.AddHttpClient();
@@ -69,7 +70,6 @@ if (builder.Environment.IsProduction()) {
         options.Release = "app"; 
     });
 }
-builder.Services.AddInfrastructureServices(builder.Configuration); 
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -119,6 +119,7 @@ if (app.Environment.IsDevelopment())
     });
     await app.InitialiseDatabaseAsync(); 
 }
+app.UseEventDispatcher(); 
 app.UseStaticFiles();
 app.MapDefaultControllerRoute();
 

@@ -1,53 +1,66 @@
-﻿using System.Reflection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace KarmaMarketplace.Infrastructure.EventDispatcher
 {
 
     public class EventDispatcher : IEventDispatcher
     {
-        private readonly Dictionary<Type, List<Delegate>> eventListeners = new();
-        private readonly IServiceProvider serviceProvider;
-        private readonly ILogger _logger;
+        private readonly Dictionary<Type, List<Type>> eventListeners = new();
+        private readonly IServiceScopeFactory _scopeFactory;
+        private readonly ILogger<EventDispatcher> _logger;
+        private readonly IServiceProvider _serviceProvider;
 
-        public EventDispatcher(
-            IServiceProvider serviceProvider, 
-            ILogger<EventDispatcher> logger)
+        public EventDispatcher(ILogger<EventDispatcher> logger, IServiceScopeFactory scopeFactory, IServiceProvider serviceProvider)
         {
+            _serviceProvider = serviceProvider;
             _logger = logger;
-            this.serviceProvider = serviceProvider;
+            _scopeFactory = scopeFactory;
         }
 
-        public void RegisterEventSubscribers(Assembly assembly)
+        public void RegisterEventSubscribers(Assembly assembly, IServiceScope scope)
         {
             var eventSubscriberTypes = assembly.GetTypes()
                 .Where(type => type.IsClass && !type.IsAbstract && ImplementsEventSubscriberInterface(type));
             _logger.LogInformation(
-                $"Started to registering event subscribers, types: {eventSubscriberTypes}");
+                $"Started to registering event subscribers, types: {string.Join(", ", eventSubscriberTypes.Select(t => t.FullName))}");
             foreach (var eventSubscriberType in eventSubscriberTypes)
             {
-                var eventSubscriber = serviceProvider.GetRequiredService(eventSubscriberType);
+                // verfication! 
+                scope.ServiceProvider.GetRequiredService(eventSubscriberType); 
+                var eventTypes = GetEventTypes(eventSubscriberType);
+                foreach (var eventType in eventTypes)
+                {
+                    if (!eventListeners.ContainsKey(eventType))
+                    {
+                        eventListeners[eventType] = new List<Type>();
+                    }
 
-                _logger.LogInformation($"added event subscriber, info: {eventSubscriberType}");
-                RegisterEventSubscriber((IEventSubscriber<BaseEvent>)eventSubscriber);
+                    if (!eventListeners[eventType].Contains(eventSubscriberType))
+                    {
+                        eventListeners[eventType].Add(eventSubscriberType);
+                        _logger.LogInformation($"Added event subscriber {eventSubscriberType.FullName} for event type {eventType.FullName}");
+                    }
+                }
             }
         }
 
-        public void RegisterEventSubscriber<TEventSubscriber>(TEventSubscriber eventSubscriber)
-            where TEventSubscriber : IEventSubscriber<BaseEvent>
+        public void RegisterEventSubscriber<TEvent>(IEventSubscriber<TEvent> eventSubscriber) where TEvent : BaseEvent
         {
-            var eventTypes = GetEventTypes(eventSubscriber.GetType());
+            var eventTypes = GetEventTypes(typeof(TEvent));
 
-
-            _logger.LogInformation($"added event subscriber, info: {eventSubscriber}");
             foreach (var eventType in eventTypes)
             {
                 if (!eventListeners.ContainsKey(eventType))
                 {
-                    eventListeners[eventType] = new List<Delegate>();
+                    eventListeners[eventType] = new List<Type>();
                 }
 
-                var eventHandler = CreateEventHandlerDelegate(eventSubscriber, eventType);
-                eventListeners[eventType].Add(eventHandler);
+                var eventSubscriberType = typeof(IEventSubscriber<>).MakeGenericType(typeof(TEvent));
+                if (!eventListeners[eventType].Contains(eventSubscriberType))
+                {
+                    eventListeners[eventType].Add(eventSubscriberType);
+                }
             }
         }
 
@@ -56,10 +69,14 @@ namespace KarmaMarketplace.Infrastructure.EventDispatcher
             var eventType = typeof(TEvent);
             if (!eventListeners.ContainsKey(eventType))
             {
-                eventListeners[eventType] = new List<Delegate>();
+                eventListeners[eventType] = new List<Type>();
             }
 
-            eventListeners[eventType].Add(listener);
+            var listenerType = listener.GetType();
+            if (!eventListeners[eventType].Contains(listenerType))
+            {
+                eventListeners[eventType].Add(listenerType);
+            }
         }
 
         public void RemoveListener<TEvent>(Action<TEvent> listener) where TEvent : BaseEvent
@@ -67,30 +84,30 @@ namespace KarmaMarketplace.Infrastructure.EventDispatcher
             var eventType = typeof(TEvent);
             if (eventListeners.ContainsKey(eventType))
             {
-                eventListeners[eventType].Remove(listener);
+                var listenerType = listener.GetType();
+                eventListeners[eventType].Remove(listenerType);
             }
         }
 
         public void Dispatch<TEvent>(TEvent @event) where TEvent : BaseEvent
         {
-            _logger.LogInformation($"Trying to dispatch events: {@event}"); 
-            var eventType = typeof(TEvent);
-            
+            _logger.LogInformation($"Dispatching event: {@event}, its type: {@event.GetType()}");
+
+            var eventType = @event.GetType();
+
             if (eventListeners.ContainsKey(eventType))
             {
-                foreach (var listener in eventListeners[eventType].ToList())
+                foreach (var eventSubscriberType in eventListeners[eventType])
                 {
-                    if (listener is Action<TEvent> action)
+                    using (var scope = _scopeFactory.CreateScope())
                     {
-                        action(@event);
+                        var eventSubscriber = scope.ServiceProvider.GetRequiredService(eventSubscriberType);
+                        dynamic dynamicSubscriber = Convert.ChangeType(eventSubscriber, eventSubscriberType);
+
+                        dynamicSubscriber.HandleEvent((dynamic)@event);
                     }
                 }
             }
-        }
-
-        private bool ImplementsEventSubscriberInterface(Type type)
-        {
-            return type.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEventSubscriber<>));
         }
 
         private IEnumerable<Type> GetEventTypes(Type eventSubscriberType)
@@ -100,10 +117,9 @@ namespace KarmaMarketplace.Infrastructure.EventDispatcher
                 .Select(i => i.GetGenericArguments()[0]);
         }
 
-        private Delegate CreateEventHandlerDelegate(object eventSubscriber, Type eventType)
+        private bool ImplementsEventSubscriberInterface(Type type)
         {
-            var handleEventMethod = eventSubscriber.GetType().GetMethod("HandleEvent", new[] { eventType });
-            return Delegate.CreateDelegate(typeof(Action<>).MakeGenericType(eventType), eventSubscriber, handleEventMethod, false);
+            return type.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEventSubscriber<>));
         }
     }
 }

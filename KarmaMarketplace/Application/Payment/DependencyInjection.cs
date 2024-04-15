@@ -33,8 +33,7 @@ namespace KarmaMarketplace.Application.Payment
             services.AddScoped<IPurchaseService, PurchaseService>();
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<IWalletService, WalletService>();
-            services.AddScoped<IEventSubscriber<UserCreated>, CreateWalletUserCreated>();
-            services.AddScoped<IEventSubscriber<ConfirmedTransaction>, ConfirmedTransactionHandler>(); 
+            services.AddScoped<ConfirmedTransactionHandler>(); 
 
             return services;
         }
