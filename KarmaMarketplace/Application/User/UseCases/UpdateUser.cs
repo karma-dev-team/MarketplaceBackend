@@ -69,6 +69,9 @@ namespace KarmaMarketplace.Application.User.Interactors
                 }
             }
 
+            Context.Users.Update(user);
+            await Context.SaveChangesAsync(); 
+
             return user;
         }
     }

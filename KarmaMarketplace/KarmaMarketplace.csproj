@@ -41,6 +41,7 @@
     <Folder Include="Application\Stuff\Exceptions\" />
     <Folder Include="Application\Stuff\Interfaces\" />
     <Folder Include="Application\Stuff\UseCases\" />
+    <Folder Include="Data\files\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

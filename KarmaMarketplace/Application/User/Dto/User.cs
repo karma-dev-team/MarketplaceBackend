@@ -42,6 +42,7 @@ namespace KarmaMarketplace.Application.User.Dto
         public string? OldPassword { get; set; }
         public string? NewPassword { get; set; }
         public string? TelegramId { get; set; }
+        public bool? Blocked { get; set; }
     }
 
     public class DeleteUserDto 
