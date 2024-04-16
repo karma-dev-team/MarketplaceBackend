@@ -9,6 +9,7 @@ namespace KarmaMarketplace.Infrastructure.Data.Queries
         {
             return query
                 .Include(x => x.Transaction)
+                    .ThenInclude(x => x.Props)
                 .Include(x => x.Product)
                     .ThenInclude(x => x.CreatedBy)
                 .Include(x => x.Product)

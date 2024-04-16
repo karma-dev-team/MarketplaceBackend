@@ -28,8 +28,7 @@ namespace KarmaMarketplace.Domain.Payment.Entities
         [Required]
         public bool Completed { get; set; } = false; 
 
-        [Required]
-        public ChatEntity Chat { get; set; } = null!;
+        public ChatEntity? Chat { get; set; } = null!;
 
         [Required]
         public PurchaseStatus Status { get; set; }

@@ -1,6 +1,7 @@
 ﻿using KarmaMarketplace.Application.Common.Exceptions;
 using KarmaMarketplace.Application.Common.Interactors;
 using KarmaMarketplace.Application.Common.Interfaces;
+using KarmaMarketplace.Application.Files.Interfaces;
 using KarmaMarketplace.Application.User.Dto;
 using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Domain.User.Enums;
@@ -15,14 +16,17 @@ namespace KarmaMarketplace.Application.User.Interactors
         private IApplicationDbContext Context;
         private IAccessPolicy AccessPolicy;
         private PasswordService PasswordService;
-        private IUser User; 
+        private IUser User;
+        private IFileService _fileService; 
 
         public UpdateUser( 
             IApplicationDbContext context,
             IAccessPolicy accessPolicy, 
             PasswordService passwordService, 
-            IUser user)
+            IUser user, 
+            IFileService fileService)
         {
+            _fileService = fileService; 
             User = user; 
             PasswordService = passwordService; 
             Context = context;
@@ -67,6 +71,14 @@ namespace KarmaMarketplace.Application.User.Interactors
                 {
                     throw new AccessDenied(null);
                 }
+            }
+            if (!string.IsNullOrEmpty(dto.Description))
+            {
+                user.Description = dto.Description; 
+            }
+            if (dto.Avatar != null)
+            {
+                user.Image = await _fileService.UploadFile().Execute(dto.Avatar); 
             }
 
             Context.Users.Update(user);

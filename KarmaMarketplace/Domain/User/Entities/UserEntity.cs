@@ -24,6 +24,9 @@ namespace KarmaMarketplace.Domain.User.Entities
         [Column(name: "TelegramId")]
         private string? _telegramId; // Закрытое поле для хранения значения
         public FileEntity? Image { get; set; }  
+        public string? Description { get; set; }
+        [Required]
+        public bool IsOnline { get; set; } = false; 
 
         [NotMapped]
         public string? TelegramId

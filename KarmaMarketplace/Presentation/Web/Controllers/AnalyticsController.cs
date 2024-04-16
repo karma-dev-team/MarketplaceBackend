@@ -33,7 +33,7 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
             {
                 rating = reviews.Select(reviews => reviews.Rating).Sum();
             } 
-            return Ok(new UserAnalyticsSchema() { AvarageRating = rating }); 
+            return Ok(new UserAnalyticsSchema() { AvarageRating = rating, ReviewsCount = reviews.Count }); 
         }
 
         [HttpGet("product/{tempProductId}/analytics")]

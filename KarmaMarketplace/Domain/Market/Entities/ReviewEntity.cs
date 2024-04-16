@@ -13,7 +13,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
         [Required]
         public PurchaseEntity Purchase { get; set; }
 
-        [Range(1, 5, ErrorMessage = "Рейтинг может быть только 1 и до 5")]
+        [Range(1, 5, ErrorMessage = "Рейтинг может быть только 1 и до 5"), Required]
         public int Rating { get; set; }
 
         [MaxLength(200)]

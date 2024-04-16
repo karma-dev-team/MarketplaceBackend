@@ -26,10 +26,6 @@ namespace KarmaMarketplace.Domain.Payment.Entities
 
         public DateTime? CompletedAt { get; set; }
 
-        [MaxLength(256)]
-        [Required]
-        public string StatusDescription { get; set; } = null!; 
-
         [Required]
         public Money Fee { get; set; } = null!;
 

@@ -3,6 +3,7 @@ using System;
 using KarmaMarketplace.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace KarmaMarketplace.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240416165242_UpdateUserV2")]
+    partial class UpdateUserV2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -580,7 +583,7 @@ namespace KarmaMarketplace.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ChatId")
+                    b.Property<Guid>("ChatId")
                         .HasColumnType("uuid");
 
                     b.Property<bool>("Completed")
@@ -677,6 +680,11 @@ namespace KarmaMarketplace.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("StatusDescription")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedByUserId");
@@ -750,16 +758,11 @@ namespace KarmaMarketplace.Migrations
                     b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("LogoId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LogoId");
 
                     b.ToTable("TransactionProviders");
                 });
@@ -906,9 +909,6 @@ namespace KarmaMarketplace.Migrations
 
                     b.Property<Guid?>("ImageId")
                         .HasColumnType("uuid");
-
-                    b.Property<bool>("IsOnline")
-                        .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp with time zone");
@@ -1146,7 +1146,9 @@ namespace KarmaMarketplace.Migrations
                 {
                     b.HasOne("KarmaMarketplace.Domain.Messging.Entities.ChatEntity", "Chat")
                         .WithMany()
-                        .HasForeignKey("ChatId");
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("KarmaMarketplace.Domain.Market.Entities.ProductEntity", "Product")
                         .WithMany()
@@ -1264,17 +1266,6 @@ namespace KarmaMarketplace.Migrations
                     b.Navigation("Props");
 
                     b.Navigation("Provider");
-                });
-
-            modelBuilder.Entity("KarmaMarketplace.Domain.Payment.Entities.TransactionProviderEntity", b =>
-                {
-                    b.HasOne("KarmaMarketplace.Domain.Files.Entities.FileEntity", "Logo")
-                        .WithMany()
-                        .HasForeignKey("LogoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Logo");
                 });
 
             modelBuilder.Entity("KarmaMarketplace.Domain.Payment.Entities.WalletEntity", b =>

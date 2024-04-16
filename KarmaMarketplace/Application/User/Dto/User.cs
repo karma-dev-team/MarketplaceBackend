@@ -1,4 +1,5 @@
-﻿using KarmaMarketplace.Domain.User.Enums;
+﻿using KarmaMarketplace.Application.Files.Dto;
+using KarmaMarketplace.Domain.User.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace KarmaMarketplace.Application.User.Dto
@@ -38,6 +39,8 @@ namespace KarmaMarketplace.Application.User.Dto
         public Guid UserId { get; set; }
         public string? Email { get; set; }
         public UserRoles? Role { get; set; }
+        public CreateFileDto? Avatar { get; set; }
+        public string? Description { get; set; }
         public string? Name { get; set; }
         public string? OldPassword { get; set; }
         public string? NewPassword { get; set; }

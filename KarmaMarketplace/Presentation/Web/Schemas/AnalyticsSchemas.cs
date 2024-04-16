@@ -6,5 +6,7 @@ namespace KarmaMarketplace.Presentation.Web.Schemas
     {
         [Required]
         public decimal AvarageRating { get; set; }
+        [Required]
+        public int ReviewsCount { get; set; }
     }
 }

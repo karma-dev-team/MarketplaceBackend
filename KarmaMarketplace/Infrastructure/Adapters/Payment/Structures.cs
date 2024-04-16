@@ -7,7 +7,7 @@
         public string PaymentId { get; set; } = string.Empty; // Уникальный идентификатор транзакции
                                               // Другие свойства, специфичные для результата платежа
         public string LinkUrl { get; set; } = string.Empty;
-        public string QrLinkUrl { get; set; } = string.Empty;
+        public string? QrLinkUrl { get; set; } = string.Empty;
     }
 
     public class PaymentPayload

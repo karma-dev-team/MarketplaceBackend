@@ -44,7 +44,7 @@ namespace KarmaMarketplace.Application.Payment.UseCases
 
             var transaction = TransactionEntity.Create(
                 value: product.CurrentPrice, 
-                fee: new Money(0), 
+                fee: new Money(1), 
                 operation: Domain.Payment.Enums.TransactionOperations.Buy, 
                 direction: Domain.Payment.Enums.TransactionDirection.Out, 
                 provider: provider, 
@@ -60,7 +60,7 @@ namespace KarmaMarketplace.Application.Payment.UseCases
             var result = await adapter.InitPayment(new Infrastructure.Adapters.Payment.PaymentPayload()
             {
                 Currency = nameof(transaction.Amount.Currency), 
-                Amount = transaction.Amount.Amount + CalculateFee(product.CurrentPrice, provider.Fee), 
+                Amount = transaction.Amount.Amount + CalculateFee(product.CurrentPrice, provider.Fee == 0 ? 1 : provider.Fee), 
                 AdditionalInfo = {}, 
                 Custom = $"Оплата за {product.Name}", 
                 Name = $"Оплата за {product.Name}", 
@@ -82,7 +82,7 @@ namespace KarmaMarketplace.Application.Payment.UseCases
             _context.Wallets.UpdateRange([productOwnerWallet, userWallet]);
             await _context.SaveChangesAsync(); 
 
-            return new();
+            return purchase;
         }
 
         private decimal CalculateFee(Money price, decimal fee)

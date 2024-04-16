@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using KarmaMarketplace.Domain.Files.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace KarmaMarketplace.Domain.Payment.Entities
 {
@@ -10,5 +11,7 @@ namespace KarmaMarketplace.Domain.Payment.Entities
         public decimal Fee { get; set; } = 0; 
         [Required]
         public List<PaymentSystemEntity> Systems { get; set; } = new List<PaymentSystemEntity>();
+        [Required]
+        public FileEntity Logo { get; set; } = null!; 
     }
 }

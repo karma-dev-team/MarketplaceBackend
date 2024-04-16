@@ -8,7 +8,8 @@ namespace KarmaMarketplace.Infrastructure.Data.Queries
     {
         public static IQueryable<UserEntity> IncludeStandard(this IQueryable<UserEntity> query)
         {
-            return query; // lol, userentity has no relationships ¯\_(ツ)_/¯
-        }
+            return query
+                .Include(x => x.Image); 
+        }   
     }
 }

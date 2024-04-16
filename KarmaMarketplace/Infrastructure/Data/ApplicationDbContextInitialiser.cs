@@ -1,4 +1,5 @@
-﻿using KarmaMarketplace.Application.User.Dto;
+﻿using KarmaMarketplace.Application.Files.Interfaces;
+using KarmaMarketplace.Application.User.Dto;
 using KarmaMarketplace.Application.User.Interfaces;
 using KarmaMarketplace.Domain.Payment.Entities;
 using KarmaMarketplace.Domain.User.Entities;
@@ -26,13 +27,16 @@ namespace KarmaMarketplace.Infrastructure.Data
     {
         private readonly ILogger<ApplicationDbContextInitialiser> _logger;
         private readonly ApplicationDbContext _context;
-        private readonly IUserService _userService; 
+        private readonly IUserService _userService;
+        private readonly IFileService _fileService;
 
         public ApplicationDbContextInitialiser(
             ILogger<ApplicationDbContextInitialiser> logger,
             ApplicationDbContext context, 
-            IUserService userService )
+            IUserService userService, 
+            IFileService fileService)
         {
+            _fileService = fileService;
             _logger = logger;
             _context = context;
             _userService = userService;
@@ -84,6 +88,12 @@ namespace KarmaMarketplace.Infrastructure.Data
             // Seed, if necessary
             if (!_context.TransactionProviders.Any())
             {
+                var providerImages = new Dictionary<string, string>();
+
+                providerImages[nameof(PaymentProviders.BankCardRu)] = "https://playerok4.com/images/Icons/CardRF.svg";
+                providerImages[nameof(PaymentProviders.Balance)] = "https://playerok4.com/images/Icons/WalletMoney.png";
+                providerImages[nameof(PaymentProviders.Test)] = "https://playerok4.com/images/Icons/WalletMoney.png"; 
+
                 var providers = new List<TransactionProviderEntity>
                 {
                     new()
@@ -93,13 +103,22 @@ namespace KarmaMarketplace.Infrastructure.Data
                     }, 
                     new() {
                         Name = nameof(PaymentProviders.Balance), 
-                        Systems = []
+                        Systems = [], 
                     }, 
                     new() { 
                         Name = nameof(PaymentProviders.Test), 
-                        Systems = []
+                        Systems = [], 
                     }
                 };
+
+                foreach (var provider in providers)
+                {
+                    provider.Logo = await _fileService.UploadFile().Execute(
+                        new Application.Files.Dto.CreateFileDto()
+                        {
+                            DownloadUrl = providerImages[provider.Name]
+                        }); 
+                }
 
                 _context.TransactionProviders.AddRange(providers); 
 

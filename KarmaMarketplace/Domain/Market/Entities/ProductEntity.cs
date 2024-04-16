@@ -54,7 +54,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
                 return ProductViews.Count; 
             }}
 
-        [NotMapped]
+        [NotMapped, Required]
         public Money CurrentPrice { get
             {
                 if (ReferenceEquals(DiscountPrice, null))

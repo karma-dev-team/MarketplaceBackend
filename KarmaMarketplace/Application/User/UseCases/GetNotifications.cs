@@ -43,7 +43,7 @@ namespace KarmaMarketplace.Application.User.UseCases
                     .Select(x => x.Notification); 
             }
 
-            query = query.Paginate(dto.Start, dto.Ends); 
+            //query = query.Paginate(dto.Start, dto.Ends); 
 
             return await query.ToListAsync();
         }
