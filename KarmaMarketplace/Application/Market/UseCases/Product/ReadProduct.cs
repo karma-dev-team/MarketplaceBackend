@@ -71,11 +71,13 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
 
             if (!string.IsNullOrEmpty(dto.Status))
             {
-                Enum.TryParse(dto.Status, out ProductStatus status);
-                List<ProductStatus> canSee = [ProductStatus.Approved, ProductStatus.Sold, ProductStatus.Approved]; 
-                if (canSee.Contains(status) && await _accessPolicy.CanAccess(Domain.User.Enums.UserRoles.Moderator))
+                if (Enum.TryParse(dto.Status, out ProductStatus status))
                 {
+                    //List<ProductStatus> canSee = [ProductStatus.Approved, ProductStatus.Sold, ProductStatus.Approved]; 
+                    //if (canSee.Contains(status) && await _accessPolicy.CanAccess(Domain.User.Enums.UserRoles.Moderator))
+                    //{
                     query = query.Where(x => x.Status == status);
+                    //}
                 }
             }
 

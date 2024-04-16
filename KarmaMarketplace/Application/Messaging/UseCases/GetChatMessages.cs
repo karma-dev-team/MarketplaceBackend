@@ -20,6 +20,7 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
             var messages = await _context.Messages
                 .IncludeStandard()
                 .Where(x => x.ChatID == dto.ChatId)
+                .OrderByDescending(x => x.CreatedAt)
                 .ToListAsync();
 
             return messages; 

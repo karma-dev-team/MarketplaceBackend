@@ -36,7 +36,7 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
             return Ok(new UserAnalyticsSchema() { AvarageRating = rating }); 
         }
 
-        [HttpGet("product/{productId}/analytics")]
+        [HttpGet("product/{tempProductId}/analytics")]
         public async Task<ActionResult<AnalyticsInformationDto>> GetAnalytics(
             [FromQuery] GetAnalyticsDto model, Guid tempProductId)
         {

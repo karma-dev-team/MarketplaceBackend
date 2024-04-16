@@ -11,6 +11,11 @@ namespace KarmaMarketplace.Infrastructure.Data.Queries
                 .Include(x => x.Transaction)
                 .Include(x => x.Product)
                     .ThenInclude(x => x.CreatedBy)
+                .Include(x => x.Product)
+                    .ThenInclude(x => x.Images)
+                .Include(x => x.Product)
+                    .ThenInclude(x => x.Game)
+                        .ThenInclude(x => x.Logo)
                 .Include(x => x.Chat)
                     .ThenInclude(x => x.Messages)
                 .Include(x => x.Wallet); 

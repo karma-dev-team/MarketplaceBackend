@@ -11,9 +11,10 @@ namespace KarmaMarketplace.Infrastructure.Data.Queries
                 .Include(x => x.Category)
                 .Include(x => x.BuyerUser)
                 .Include(x => x.CreatedBy)
+                    .ThenInclude(x => x.Image)
                 .Include(x => x.Game)
                     .ThenInclude(x => x.Logo)
-                .Include(x => x.ProductViews)
+                //.Include(x => x.ProductViews)
                 .Include(x => x.Images);
         }
     }

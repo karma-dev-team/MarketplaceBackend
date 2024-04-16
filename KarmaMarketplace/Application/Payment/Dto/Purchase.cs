@@ -33,6 +33,8 @@ namespace KarmaMarketplace.Application.Payment.Dto
     public class GetPurchasesListDto : InputPagination
     {
         public PurchaseStatus? Status { get; set; }
+        public TransactionDirection? Direction { get; set; }
+        public TransactionOperations? Operation { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public Guid? UserId { get; set; }
