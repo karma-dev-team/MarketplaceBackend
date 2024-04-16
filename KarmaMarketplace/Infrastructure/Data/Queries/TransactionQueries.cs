@@ -10,7 +10,9 @@ namespace KarmaMarketplace.Infrastructure.Data.Queries
         public static IQueryable<TransactionEntity> IncludeStandard(this IQueryable<TransactionEntity> query)
         {
             return query
-                .Include(x => x.CreatedByUser); 
+                .Include(x => x.CreatedByUser)
+                .Include(x => x.Provider)
+                .Include(x => x.Props); 
         }
 
         public static IQueryable<TransactionEntity> FilterByParams(this IQueryable<TransactionEntity> query, 
