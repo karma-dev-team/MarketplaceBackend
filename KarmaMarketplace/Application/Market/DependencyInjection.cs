@@ -18,6 +18,7 @@ namespace KarmaMarketplace.Application.Market
             services.AddScoped<GetProduct>(); 
             services.AddScoped<GetProductsList>();
             services.AddScoped<DeleteProduct>();
+            services.AddScoped<GetAnalyticsInformation>(); 
             
             // Games 
             services.AddScoped<CreateGame>(); 

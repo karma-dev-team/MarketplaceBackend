@@ -40,8 +40,8 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
             product.RegisterView(byUser); 
 
             _context.Products.Update(product);
-            await _context.SaveChangesAsync(); 
-
+            await _context.SaveChangesAsync();
+            product.ProductViews = []; // ???? 
             return product; 
         }
     }

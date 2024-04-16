@@ -1,4 +1,5 @@
-﻿using KarmaMarketplace.Application.Market.Interfaces;
+﻿using KarmaMarketplace.Application.Market.Dto;
+using KarmaMarketplace.Application.Market.Interfaces;
 using KarmaMarketplace.Presentation.Web.Schemas;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,11 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
     public class AnalyticsController : ControllerBase
     {
         private IReviewService _reviewService;
+        private IProductService _productService;
 
-        public AnalyticsController(IReviewService reviewService) { 
+        public AnalyticsController(IReviewService reviewService, IProductService productService) { 
             _reviewService = reviewService;
+            _productService = productService;
         }
 
         [HttpGet("user/{userId}/analytics")]
@@ -20,7 +23,7 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
         {
             var reviews = await _reviewService
                 .GetReviewsList()
-                .Execute(new Application.Market.Dto.GetReviewsListDto() { UserId = userId });
+                .Execute(new GetReviewsListDto() { UserId = userId });
             decimal rating;
             if (reviews.Count == 0)
             {
@@ -31,6 +34,13 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
                 rating = reviews.Select(reviews => reviews.Rating).Sum();
             } 
             return Ok(new UserAnalyticsSchema() { AvarageRating = rating }); 
+        }
+
+        [HttpGet("product/{productId}/analytics")]
+        public async Task<ActionResult<AnalyticsInformationDto>> GetAnalytics(
+            [FromQuery] GetAnalyticsDto model, Guid tempProductId)
+        {
+            return Ok(await _productService.GetAnalyticsInformation().Execute(model)); 
         }
     }
 }

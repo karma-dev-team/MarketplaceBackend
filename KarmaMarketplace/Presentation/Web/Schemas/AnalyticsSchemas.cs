@@ -2,7 +2,7 @@
 
 namespace KarmaMarketplace.Presentation.Web.Schemas
 {
-    public class UserAnalyticsSchema
+    public class UserAnalyticsSchema 
     {
         [Required]
         public decimal AvarageRating { get; set; }

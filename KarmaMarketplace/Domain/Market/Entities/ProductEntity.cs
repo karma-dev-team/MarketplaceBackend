@@ -9,6 +9,7 @@ using KarmaMarketplace.Domain.Files.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using KarmaMarketplace.Domain.Payment.ValueObjects;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace KarmaMarketplace.Domain.Market.Entities
 {
@@ -45,7 +46,13 @@ namespace KarmaMarketplace.Domain.Market.Entities
         [Required]
         public ICollection<FileEntity> Images { get; set; } = [];
         [Required]
+        [SwaggerSchema(ReadOnly = true)]
         public ICollection<ProductViewEntity> ProductViews { get; set; } = [];
+        [Required]
+        public int ProductViewed { get
+            {
+                return ProductViews.Count; 
+            }}
 
         [NotMapped]
         public Money CurrentPrice { get
