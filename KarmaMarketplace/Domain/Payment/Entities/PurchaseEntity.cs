@@ -26,9 +26,10 @@ namespace KarmaMarketplace.Domain.Payment.Entities
         public ProductEntity Product { get; set; } = null!;
 
         [Required]
-        public bool Completed { get; set; } = false; 
-
-        public ChatEntity? Chat { get; set; } = null!;
+        public bool Completed { get; set; } = false;
+        [ForeignKey("Chat")]
+        public Guid? ChatId { get; set; }
+        public virtual ChatEntity? Chat { get; set; } = null!;
 
         [Required]
         public PurchaseStatus Status { get; set; }
@@ -58,9 +59,9 @@ namespace KarmaMarketplace.Domain.Payment.Entities
             return purchase; 
         }
 
-        public void SetBoundChat(ChatEntity chat)
+        public void SetBoundChat(Guid chatId)
         {
-            Chat = chat;
+            ChatId = chatId;
         }
 
         public void Problem(string description)

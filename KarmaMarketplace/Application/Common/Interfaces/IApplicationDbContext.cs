@@ -30,6 +30,7 @@ namespace KarmaMarketplace.Application.Common.Interfaces
         DbSet<FileEntity> Files { get; set;} 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-        EntityEntry<TEntity> Update<TEntity>(TEntity entity) where TEntity : class; 
+        EntityEntry<TEntity> Update<TEntity>(TEntity entity) where TEntity : class;
+        EntityEntry Entry(object entity); 
     }
 }

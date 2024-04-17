@@ -51,7 +51,9 @@ namespace KarmaMarketplace.Application.Payment.UseCases
                 .FirstOrDefaultAsync(x => x.UserId == product.CreatedBy.Id);
             Guard.Against.Null(userWallet, message: "User wallet does not exists!!");
             Guard.Against.Null(productOwnerWallet, message: "User wallet does not exists!!");
-
+            if (userWallet.UserId == productOwnerWallet.UserId) {
+                throw new Exception("Buyer and Product owner is not allowed to be same user"); 
+            }
 
             var transaction = TransactionEntity.Create(
                 value: product.CurrentPrice, 

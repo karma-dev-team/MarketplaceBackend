@@ -27,6 +27,7 @@ namespace KarmaMarketplace.Application.Payment.UseCases
                 .FirstOrDefaultAsync(x => x.Id == dto.TransactionId);
 
             Guard.Against.Null(transaction, message: "Transaction does not exists");
+
             var ok = Enum.TryParse(transaction.Provider.Name, out PaymentProviders provider);
             if (!ok)
                 throw new ValidationException($"Transaction: {transaction.Id} does not have provider name"); 
@@ -35,16 +36,8 @@ namespace KarmaMarketplace.Application.Payment.UseCases
             {
                 throw new PendingGatewayResult(transaction.Id); 
             }
-            // to avoid implitcly dependency from TransactionQueries.IncludeDefault()
-            var user = await _context.Users
-                .IncludeStandard()
-                .FirstOrDefaultAsync(x => x.Id == transaction.CreatedByUser.Id);
 
-            Guard.Against.Null(user, message: "What??");
-
-            var userWallet = await _context.Wallets
-                .IncludeStandard()
-                .FirstAsync(x => x.User.Id == user.Id);
+            var userWallet = await _context.Wallets.FirstOrDefaultAsync(x => x.User.Id == transaction.CreatedByUser.Id);
 
             Guard.Against.Null(userWallet, message: "User wallet");
 
@@ -52,13 +45,21 @@ namespace KarmaMarketplace.Application.Payment.UseCases
                 .IncludeStandard()
                 .FirstOrDefaultAsync(x => x.Transaction.Id == transaction.Id);
 
-            Guard.Against.Null(purchase, message: "Purchase is not bound to transaction"); 
+            Guard.Against.Null(purchase, message: "Purchase is not bound to transaction");
+
+            var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == purchase.Product.Id);
+
+            Guard.Against.Null(product, message: "Product does not exists");
 
             var productOwnerWallet = await _context.Wallets
-                .IncludeStandard()
-                .FirstOrDefaultAsync(x => x.User.Id == purchase.Product.CreatedBy.Id);
+                .FirstOrDefaultAsync(x => x.User.Id == product.CreatedById);
 
             Guard.Against.Null(productOwnerWallet, message: "Product owner wallet does not exists");
+
+            if (productOwnerWallet.UserId == userWallet.UserId)
+            {
+                throw new Exception("Product owner and buyer are same user");
+            }
 
             userWallet.ConfirmTransaction(transaction, productOwnerWallet);
 

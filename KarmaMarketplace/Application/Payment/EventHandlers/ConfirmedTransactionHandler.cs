@@ -25,7 +25,6 @@ namespace KarmaMarketplace.Application.Payment.EventHandlers
 
         public async Task HandleEvent(ConfirmedTransaction paymentEvent, IApplicationDbContext _context)
         {
-            await _context.SaveChangesAsync();
             _logger.LogInformation("Trying to create chats for transaction"); 
 
             if (paymentEvent.Transaction.Direction == TransactionDirection.Out 
@@ -42,28 +41,30 @@ namespace KarmaMarketplace.Application.Payment.EventHandlers
                     ProductId = purchase.Product.Id, 
                     TransactionId = paymentEvent.Transaction.Id,
                 });
+
                 _logger.LogInformation($"Chat: {chat.Id} has been created, by: {paymentEvent.Transaction.CreatedById}");
 
                 await _messaging.SendMessage().Execute(new SendMessageDto()
                 {
                     ChatId = chat.Id,
                     PurchaseId = purchase.Id,
-                    FromUserId = purchase.Product.CreatedBy.Id,
+                    FromUserId = purchase.Product.CreatedById,
                 }); 
 
                 var autoAnswer = await _context.AutoAnswers.FirstOrDefaultAsync(x => x.ProductId == purchase.Product.Id);                      
 
-                if (autoAnswer == null)
+                if (autoAnswer != null)
                 {
-                    return; 
+                    await _messaging.SendMessage().Execute(new SendMessageDto()
+                    {
+                        Text = autoAnswer.Answer,
+                        FromUserId = purchase.Product.CreatedById,
+                        ChatId = chat.Id,
+                    });
                 }
 
-                await _messaging.SendMessage().Execute(new SendMessageDto()
-                {
-                    Text = autoAnswer.Answer,
-                    FromUserId = purchase.Product.CreatedBy.Id, 
-                    ChatId = chat.Id,
-                });
+                purchase.SetBoundChat(chat.Id);
+                _context.Purchases.Update(purchase);
             }
         }
     }
