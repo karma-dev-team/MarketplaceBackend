@@ -13,16 +13,20 @@ namespace KarmaMarketplace.Application.Payment.EventHandlers
 {
     public class ConfirmedTransactionHandler : IEventSubscriber<ConfirmedTransaction>
     {
-        private readonly IMessagingService _messaging; 
+        private readonly IMessagingService _messaging;
+        private readonly ILogger _logger; 
 
         public ConfirmedTransactionHandler(
-            IMessagingService messaging) {
+            IMessagingService messaging, 
+            ILogger<ConfirmedTransactionHandler> logger) {
             _messaging = messaging;
+            _logger = logger; 
         }
 
         public async Task HandleEvent(ConfirmedTransaction paymentEvent, IApplicationDbContext _context)
         {
-            await _context.SaveChangesAsync(); 
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Trying to create chats for transaction"); 
 
             if (paymentEvent.Transaction.Direction == TransactionDirection.Out 
                     && paymentEvent.Transaction.Operation == TransactionOperations.Buy) {
@@ -38,6 +42,14 @@ namespace KarmaMarketplace.Application.Payment.EventHandlers
                     ProductId = purchase.Product.Id, 
                     TransactionId = paymentEvent.Transaction.Id,
                 });
+                _logger.LogInformation($"Chat: {chat.Id} has been created, by: {paymentEvent.Transaction.CreatedById}");
+
+                await _messaging.SendMessage().Execute(new SendMessageDto()
+                {
+                    ChatId = chat.Id,
+                    PurchaseId = purchase.Id,
+                    FromUserId = purchase.Product.CreatedBy.Id,
+                }); 
 
                 var autoAnswer = await _context.AutoAnswers.FirstOrDefaultAsync(x => x.ProductId == purchase.Product.Id);                      
 

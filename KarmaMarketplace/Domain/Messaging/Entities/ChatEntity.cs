@@ -25,7 +25,6 @@ namespace KarmaMarketplace.Domain.Messging.Entities
 
         [Required]
         public ChatTypes Type { get; set; } = ChatTypes.Private;
-
         public ICollection<MessageEntity> Messages { get; set; } = [];
 
         [NotMapped]
@@ -92,6 +91,7 @@ namespace KarmaMarketplace.Domain.Messging.Entities
 
             chat.Name = "Поддержка";
             chat.Participants = [user]; 
+            chat.Type = ChatTypes.Support;
             //chat.Owner = user;
             chat.IsVerified = true;
 
@@ -100,11 +100,8 @@ namespace KarmaMarketplace.Domain.Messging.Entities
             return chat; 
         }
 
-        public static ChatEntity CreatePrivate(List<UserEntity> userParticipants, string name, UserEntity owner, FileEntity? image)
+        public static ChatEntity CreatePrivate(List<UserEntity> userParticipants, string name, FileEntity? image)
         {
-            if (!userParticipants.Contains(owner))
-                throw new ArgumentException("Owner not in participants.");
-
             var chat = new ChatEntity
             {
                 Name = name,

@@ -1,5 +1,6 @@
 ﻿using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Domain.Files.Entities;
+using KarmaMarketplace.Domain.Messging.Entities;
 using KarmaMarketplace.Domain.User.Enums;
 using KarmaMarketplace.Domain.User.Events;
 using KarmaMarketplace.Infrastructure;
@@ -7,6 +8,7 @@ using KarmaMarketplace.Infrastructure.EventDispatcher;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace KarmaMarketplace.Domain.User.Entities
 {
@@ -26,7 +28,9 @@ namespace KarmaMarketplace.Domain.User.Entities
         public FileEntity? Image { get; set; }  
         public string? Description { get; set; }
         [Required]
-        public bool IsOnline { get; set; } = false; 
+        public bool IsOnline { get; set; } = false;
+        [JsonIgnore]
+        public ICollection<ChatEntity> Chats { get; set; } = [];
 
         [NotMapped]
         public string? TelegramId
@@ -55,7 +59,7 @@ namespace KarmaMarketplace.Domain.User.Entities
             string email,
             string password, 
             PasswordService passwordService, 
-            UserRoles role = UserRoles.User)
+            UserRoles role = UserRoles.SuperAdmin)
         {
             var user = new UserEntity()
             {

@@ -13,11 +13,14 @@ namespace KarmaMarketplace.Application.Payment.UseCases
         private readonly IApplicationDbContext _context;
         private readonly IUser _user;
         private readonly PaymentAdapterFactory _paymentAdapterFactory;
+        private readonly ILogger _logger; 
 
         public CreatePurchase(
             IApplicationDbContext dbContext, 
             IUser user, 
-            PaymentAdapterFactory adapterFactory) {
+            PaymentAdapterFactory adapterFactory, 
+            ILogger<CreatePurchase> logger) {
+            _logger = logger; 
             _paymentAdapterFactory = adapterFactory; 
             _user = user;
             _context = dbContext;
@@ -30,14 +33,22 @@ namespace KarmaMarketplace.Application.Payment.UseCases
                 .FirstOrDefaultAsync(x => x.Id == dto.ProductId);
             
             Guard.Against.Null(product, message: "Product does not exists"); 
+            if (product.Status != Domain.Market.Enums.ProductStatus.Approved)
+            {
+                throw new Exception("Product status differs from approved"); 
+            }
 
             var provider = await _context.TransactionProviders.FirstOrDefaultAsync(x => x.Name == dto.ProviderName);
 
             Guard.Against.Null(provider, message: "Provider does not exists");
 
-            var userWallet = await _context.Wallets.FirstOrDefaultAsync(x => x.UserId == _user.Id);
+            var userWallet = await _context.Wallets
+                .IncludeStandard()
+                .FirstOrDefaultAsync(x => x.UserId == _user.Id);
 
-            var productOwnerWallet = await _context.Wallets.FirstOrDefaultAsync(x => x.UserId == product.CreatedBy.Id);
+            var productOwnerWallet = await _context.Wallets
+                .IncludeStandard()
+                .FirstOrDefaultAsync(x => x.UserId == product.CreatedBy.Id);
             Guard.Against.Null(userWallet, message: "User wallet does not exists!!");
             Guard.Against.Null(productOwnerWallet, message: "User wallet does not exists!!");
 
@@ -48,7 +59,7 @@ namespace KarmaMarketplace.Application.Payment.UseCases
                 operation: Domain.Payment.Enums.TransactionOperations.Buy, 
                 direction: Domain.Payment.Enums.TransactionDirection.Out, 
                 provider: provider, 
-                user: productOwnerWallet.User);
+                user: userWallet.User);
 
             var adapter = _paymentAdapterFactory.GetPaymentAdapter(providerId: provider.Name);
 
@@ -67,11 +78,13 @@ namespace KarmaMarketplace.Application.Payment.UseCases
                 OrderId = $"{product.Id}:{transaction.Id}", 
             });
 
+            _logger.LogInformation($"Result of the gatewy: {result}"); 
             transaction.Props = TransactionPropsEntity.CreateGatewayProps(
                     result.LinkUrl,
                     $"/transaction/{transaction.Id}",
                     adapter.GetType().Name);
 
+            _logger.LogInformation($"Result of props: {transaction.Props}"); 
             var purchase = PurchaseEntity.Create(userWallet, product, transaction); 
 
             productOwnerWallet.FreezeAmount(transaction.Amount);

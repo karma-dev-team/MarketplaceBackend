@@ -58,9 +58,9 @@ namespace KarmaMarketplace.Application.Payment.UseCases
                 .IncludeStandard()
                 .FirstOrDefaultAsync(x => x.User.Id == purchase.Product.CreatedBy.Id);
 
-            Guard.Against.Null(productOwnerWallet, message: "Product owner wallet does not exists"); 
+            Guard.Against.Null(productOwnerWallet, message: "Product owner wallet does not exists");
 
-            productOwnerWallet.ConfirmTransaction(transaction, userWallet);
+            userWallet.ConfirmTransaction(transaction, productOwnerWallet);
 
             _context.Wallets.Update(productOwnerWallet);
             _context.Wallets.Update(userWallet); 

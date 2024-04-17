@@ -15,9 +15,9 @@ namespace KarmaMarketplace.Infrastructure.Data.Configuration
             builder
                 .Property(e => e.Type)
                 .HasConversion<string>();
-            //builder
-            //    .HasMany(e => e.Participants)
-            //    .WithMany(e => e.Chats);
+            builder
+                .HasMany(e => e.Participants)
+                .WithMany(e => e.Chats);
         }
     }
 }

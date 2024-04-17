@@ -43,6 +43,7 @@ namespace KarmaMarketplace.Domain.Payment.Entities
         {
             var transaction = new TransactionEntity
             {
+                Id = Guid.NewGuid(), 
                 CreatedByUser = user,
                 Fee = fee,
                 Amount = value,

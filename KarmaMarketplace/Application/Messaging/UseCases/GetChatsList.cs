@@ -37,8 +37,7 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
             if (dto.UserId != null)
             {
                 query = query.Where(
-                    x => x.Participants
-                    .FirstOrDefault(x => dto.UserId == x.Id) != null);
+                    x => x.Participants.Any(participant => participant.Id == dto.UserId));
             }
 
             var result = await query.ToListAsync();

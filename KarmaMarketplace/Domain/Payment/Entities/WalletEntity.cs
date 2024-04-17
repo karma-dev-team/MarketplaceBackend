@@ -20,7 +20,7 @@ namespace KarmaMarketplace.Domain.Payment.Entities
         [Required]
         public Money Frozen { get; set; } = new(0, Enums.CurrencyEnum.RussianRuble);
         [Required]
-        public Money AvailableBalance { get; set; } = new(0, Enums.CurrencyEnum.RussianRuble); 
+        public Money AvailableBalance { get; set; } = new(1000, Enums.CurrencyEnum.RussianRuble); 
         [Required]
         public Money PendingIncome { get; set; } = new(0, Enums.CurrencyEnum.RussianRuble);
         [Required]
@@ -73,7 +73,7 @@ namespace KarmaMarketplace.Domain.Payment.Entities
                 AvailableBalance += transaction.Amount;
         }
 
-        public void ConfirmTransaction(TransactionEntity transaction, WalletEntity? fromWallet = null)
+        public void ConfirmTransaction(TransactionEntity transaction, WalletEntity fromWallet)
         {
             VerifyTransaction(transaction, raiseErr: true);
 
@@ -95,7 +95,7 @@ namespace KarmaMarketplace.Domain.Payment.Entities
 
             transaction.Status = TransactionStatusEnum.Confirmed;
         }
-
+            
         public bool VerifyTransaction(TransactionEntity transaction, bool raiseErr = false)
         {
             bool fromUserWallet = transaction.CreatedByUser.Id == UserId;
