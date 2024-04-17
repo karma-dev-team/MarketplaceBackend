@@ -6,6 +6,7 @@ using KarmaMarketplace.Domain.User.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace KarmaMarketplace.Domain.Messging.Entities
 {
@@ -25,6 +26,7 @@ namespace KarmaMarketplace.Domain.Messging.Entities
 
         [Required]
         public ChatTypes Type { get; set; } = ChatTypes.Private;
+        [JsonIgnore]
         public ICollection<MessageEntity> Messages { get; set; } = [];
 
         [NotMapped]
