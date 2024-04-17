@@ -49,7 +49,7 @@ namespace KarmaMarketplace.Domain.Payment.Entities
             if (Blocked)
                 throw new WalletIsBlocked(Id);
 
-            if (AvailableBalance > money)
+            if (AvailableBalance < money)
                 throw new NotEnoughMoneyException(Id);
 
             AvailableBalance -= money;
