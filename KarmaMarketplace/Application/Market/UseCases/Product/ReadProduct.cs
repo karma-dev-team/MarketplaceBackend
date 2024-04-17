@@ -5,6 +5,7 @@ using KarmaMarketplace.Application.User.Dto;
 using KarmaMarketplace.Domain.Market.Entities;
 using KarmaMarketplace.Domain.Market.Enums;
 using KarmaMarketplace.Infrastructure;
+using KarmaMarketplace.Infrastructure.Data.Extensions;
 using KarmaMarketplace.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,17 +26,17 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
         {
             var product = await _context.Products
                 .IncludeStandard()
+                .Include(x => x.ProductViews)
                 .Where(x => x.Id == dto.ProductId)
                 .FirstOrDefaultAsync();
 
             var byUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == _user.Id);
 
-            Guard.Against.Null(byUser, message: "Unauthorized"); 
+            if (byUser == null)
+                return product; 
 
             if (product == null)
-            {
                 return null;
-            }
 
             product.RegisterView(byUser); 
 
@@ -49,11 +50,14 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
     public class GetProductsList : BaseUseCase<GetProductsListDto, ICollection<ProductEntity>>
     {
         private readonly IApplicationDbContext _context;
-        private readonly IAccessPolicy _accessPolicy; 
+        private readonly IAccessPolicy _accessPolicy;
+        private readonly IUser _user; 
 
         public GetProductsList(
             IApplicationDbContext dbContext, 
-            IAccessPolicy accessPolicy) {
+            IAccessPolicy accessPolicy, 
+            IUser user) {
+            _user = user; 
             _context = dbContext;
             _accessPolicy = accessPolicy; 
         }
@@ -69,17 +73,18 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
                 query = query.Where(x => x.Name == dto.Name);
             }
 
-            if (!string.IsNullOrEmpty(dto.Status))
+            if (dto.Status != null)
             {
-                if (Enum.TryParse(dto.Status, out ProductStatus status))
+                var status = (ProductStatus)dto.Status; 
+                if (await _accessPolicy.CanAccess(Domain.User.Enums.UserRoles.Moderator))
                 {
-                    //List<ProductStatus> canSee = [ProductStatus.Approved, ProductStatus.Sold, ProductStatus.Approved]; 
-                    //if (canSee.Contains(status) && await _accessPolicy.CanAccess(Domain.User.Enums.UserRoles.Moderator))
-                    //{
                     query = query.Where(x => x.Status == status);
-                    //}
                 }
-            }
+                else
+                {
+                    query = query.Where(x => x.Status == ProductStatus.Approved);
+                }
+            } 
 
             if (dto.CategoryId != null)
             {
@@ -95,6 +100,8 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
             {
                 query = query.Where(x => x.CreatedBy.Id == dto.UserId); 
             }
+
+            query = query.Paginate(dto.Start, dto.Ends); 
 
             var result = await query.ToListAsync();
         

@@ -2,6 +2,7 @@
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Application.Messaging.Dto;
 using KarmaMarketplace.Domain.Messging.Entities;
+using KarmaMarketplace.Infrastructure.Data.Extensions;
 using KarmaMarketplace.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,7 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
             var messages = await _context.Messages
                 .IncludeStandard()
                 .Where(x => x.ChatID == dto.ChatId)
+                .Paginate(dto.Start, dto.Ends)
                 .OrderByDescending(x => x.CreatedAt)
                 .ToListAsync();
 

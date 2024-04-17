@@ -2,9 +2,13 @@
 {
     public static class PagniationExtension
     {
-        public static IQueryable<T> Paginate<T>(this IQueryable<T> query, int start, int end)
+        public static IQueryable<T> Paginate<T>(
+            this IQueryable<T> query, int start, int end) 
+                where T : BaseAuditableEntity
         {
-            query = query.Skip(start);
+            query = query
+                .OrderBy(x => x.CreatedAt)
+                .Skip(start);
             if (end == 0)
             {
                 return query; 

@@ -22,6 +22,7 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
         public async Task<ProductEntity> Execute(DeleteProductDto dto)
         {
             var product = await _context.Products
+                .Include(x => x.ProductViews)
                 .IncludeStandard()
                 .FirstOrDefaultAsync(x => x.Id == dto.ProductId);
 

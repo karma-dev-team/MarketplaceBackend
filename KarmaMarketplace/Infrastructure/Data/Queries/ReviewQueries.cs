@@ -10,9 +10,9 @@ namespace KarmaMarketplace.Infrastructure.Data.Queries
         {
             return query
                 .Include(x => x.Purchase)
-                    .ThenInclude(x => x.Chat)
                 .Include(x => x.Product)
-                .Include(x => x.CreatedBy); 
+                .Include(x => x.CreatedBy)
+                    .ThenInclude(x => x.Image); 
         }
     }
 }

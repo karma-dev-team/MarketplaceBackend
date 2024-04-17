@@ -2,6 +2,7 @@
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Application.Market.Dto;
 using KarmaMarketplace.Domain.Market.Entities;
+using KarmaMarketplace.Infrastructure.Data.Extensions;
 using KarmaMarketplace.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,12 +24,14 @@ namespace KarmaMarketplace.Application.Market.UseCases.Review
 
             if (dto.ChatID != null)
             {
-                query = query.Where(x => x.Purchase.Chat.Id == dto.ChatID); 
+                query = query.Where(x => x.Purchase.ChatId == dto.ChatID); 
             } 
             if (dto.UserId != null)
             {
                 query = query.Where(x => x.CreatedBy.Id == dto.UserId);
             }
+
+            query = query.Paginate(dto.Start, dto.Ends); 
 
             var result = await query.ToListAsync(); 
 

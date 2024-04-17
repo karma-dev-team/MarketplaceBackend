@@ -2,6 +2,7 @@
 using KarmaMarketplace.Application.Files.Dto;
 using KarmaMarketplace.Application.Files.UseCases;
 using KarmaMarketplace.Application.User.Dto;
+using KarmaMarketplace.Domain.Market.Enums;
 using KarmaMarketplace.Domain.Payment.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 
@@ -53,7 +54,7 @@ namespace KarmaMarketplace.Application.Market.Dto
         public string? Name { get; set; }
         public Guid? CategoryId { get; set; }   
         public Guid? GameId { get; set; }
-        public string? Status { get; set; } 
+        public ProductStatus? Status { get; set; } 
         public Guid? UserId { get; set; }
     }
 

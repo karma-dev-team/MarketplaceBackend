@@ -27,6 +27,8 @@ namespace KarmaMarketplace.Domain.Messging.Entities
 
         public FileEntity? Image { get; set; }         
         public ReviewEntity? Review { get; set; }
+        [ForeignKey(nameof(ReviewEntity))]
+        public Guid? ReviewId { get; set; } 
 
         public PurchaseEntity? Purchase { get; set; }
 
@@ -74,7 +76,7 @@ namespace KarmaMarketplace.Domain.Messging.Entities
                 Purchase = purchase,
                 ChatID = chatId,
                 FromUser = fromUser,
-                Review = review, 
+                //Review = review, 
                 Type = MessageTypes.Review, 
                 Text = "REVIEW"
             };

@@ -59,11 +59,11 @@ namespace KarmaMarketplace.Application.Payment.UseCases
                 product: product);
 
             Guard.Against.Null(
-                purchase.Chat, message: $"Purchase chat is not bound to purchase: purchaseId: {purchase.Id}"); 
+                purchase.ChatId, message: $"Purchase chat is not bound to purchase: purchaseId: {purchase.Id}"); 
             // to avoid implitlcly dependant from PurchaseQueries.IncludeStandard
             var chat = await _context.Chats
                 .IncludeStandard() 
-                .FirstOrDefaultAsync(x => x.Id == purchase.Chat.Id);
+                .FirstOrDefaultAsync(x => x.Id == purchase.ChatId);
 
             Guard.Against.Null(chat, message: "Something is very bad");
 

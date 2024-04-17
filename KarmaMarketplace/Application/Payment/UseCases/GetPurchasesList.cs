@@ -2,6 +2,7 @@
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Application.Payment.Dto;
 using KarmaMarketplace.Domain.Payment.Entities;
+using KarmaMarketplace.Infrastructure.Data.Extensions;
 using KarmaMarketplace.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,8 +52,12 @@ namespace KarmaMarketplace.Application.Payment.UseCases
                 query = query
                     .Where(x => x.Status == dto.Status);
             }
-            query = query.Skip(dto.Start); 
-            query = query.Take(dto.Ends);
+            if (dto.TransactionSatus != null)
+            {
+                query = query
+                    .Where(x => x.Transaction.Status == dto.TransactionSatus); 
+            }
+            query = query.Paginate(dto.Start, dto.Ends); 
 
             return await query.ToListAsync();
         }

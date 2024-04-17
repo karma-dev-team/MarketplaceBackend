@@ -27,9 +27,8 @@ namespace KarmaMarketplace.Domain.Payment.Entities
 
         [Required]
         public bool Completed { get; set; } = false;
-        [ForeignKey("Chat")]
+        [ForeignKey(nameof(ChatEntity))]
         public Guid? ChatId { get; set; }
-        public virtual ChatEntity? Chat { get; set; } = null!;
 
         [Required]
         public PurchaseStatus Status { get; set; }

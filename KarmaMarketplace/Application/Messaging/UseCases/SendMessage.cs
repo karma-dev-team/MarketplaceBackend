@@ -11,11 +11,14 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
     public class SendMessage : BaseUseCase<SendMessageDto, MessageEntity>
     {
         private IApplicationDbContext _context;
-        private IFileService _fileService; 
+        private IFileService _fileService;
+        private ILogger _logger; 
 
         public SendMessage(
             IApplicationDbContext context, 
-            IFileService fileService ) {
+            IFileService fileService, 
+            ILogger<SendMessage> logger) {
+            _logger = logger;
             _context = context; 
             _fileService = fileService; 
         }
@@ -32,21 +35,20 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
 
             Guard.Against.Null(fromUser, message: "User does not exists");
 
-            MessageEntity message; 
+            MessageEntity message;
 
             if (dto.Image != null)
             {
-                var newImage = await _fileService.UploadFile().Execute(dto.Image); 
-
-                message = MessageEntity.CreateWithImage(dto.ChatId, fromUser, newImage); 
-            } else if (dto.PurchaseId != null) {
+                var newImage = await _fileService.UploadFile().Execute(dto.Image);
+                message = MessageEntity.CreateWithImage(dto.ChatId, fromUser, newImage);
+                _logger.LogInformation($"{newImage} image, message: {message}");
+            }
+            else if (dto.PurchaseId != null) {
                 var purchase = await _context.Purchases.FirstOrDefaultAsync(x => x.Id == dto.PurchaseId);
 
                 Guard.Against.Null(purchase, message: "Purchase does not exists");
-
-                message = MessageEntity.CreateWithPurchase(dto.ChatId, fromUser, purchase);      
-            } else if (!string.IsNullOrEmpty(dto.Text))
-            {
+                message = MessageEntity.CreateWithPurchase(dto.ChatId, fromUser, purchase);
+            } else if (!string.IsNullOrEmpty(dto.Text)) { 
                 message = MessageEntity.CreateText(dto.ChatId, fromUser, dto.Text);
             } else
             {
@@ -55,15 +57,17 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
 
             if (chat.Type == Domain.Messaging.Enums.ChatTypes.Private)
             {
-                if (fromUser.Role == Domain.User.Enums.UserRoles.Moderator)
-                {
-                    chat.Participants.Add(fromUser);
-                }
+                // TODO: Rework! 
+                //if (fromUser.Role == Domain.User.Enums.UserRoles.Moderator)
+                //{
+                //    chat.Participants.Add(fromUser);
+                //}
 
                 var someUser = chat.Participants.FirstOrDefault(x => x.Id == dto.FromUserId);
                 Guard.Against.Null(someUser, message: "You are not in participants"); 
             }
 
+            Guard.Against.Null(message, message: "Message was not able to be created"); 
             chat.Messages.Add(message);
 
             _context.Messages.Add(message); 

@@ -26,7 +26,6 @@ namespace KarmaMarketplace.Domain.Messging.Entities
 
         [Required]
         public ChatTypes Type { get; set; } = ChatTypes.Private;
-        [JsonIgnore]
         public ICollection<MessageEntity> Messages { get; set; } = [];
 
         [NotMapped]
