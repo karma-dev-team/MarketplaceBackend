@@ -48,7 +48,7 @@ namespace KarmaMarketplace.Application.Payment.EventHandlers
                 {
                     ChatId = chat.Id,
                     PurchaseId = purchase.Id,
-                    FromUserId = paymentEvent.Transaction.CreatedByUser.Id,
+                    FromUserId = purchase.Product.CreatedBy.Id,
                 }); 
 
                 var autoAnswer = await _context.AutoAnswers.FirstOrDefaultAsync(x => x.ProductId == purchase.Product.Id);                      
@@ -58,7 +58,7 @@ namespace KarmaMarketplace.Application.Payment.EventHandlers
                     await _messaging.SendMessage().Execute(new SendMessageDto()
                     {
                         Text = autoAnswer.Answer,
-                        FromUserId = paymentEvent.Transaction.CreatedByUser.Id,
+                        FromUserId = purchase.Product.CreatedBy.Id,
                         ChatId = chat.Id,
                     });
                 }

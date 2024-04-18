@@ -45,11 +45,11 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
 
             var existingChat = await _context.Chats
                 .Include(x => x.Participants)
-                .FirstOrDefaultAsync(x => x.Participants.Any(x => x.Id == toUser.Id || x.Id == fromUser.Id));
-            _logger.LogInformation($"Does it exists, {existingChat}"); 
+                .FirstOrDefaultAsync(x => x.Participants.Any(x => x.Id == fromUser.Id));
 
             if (existingChat != null)
             {
+                _logger.LogInformation($"Does it exists, {existingChat.Id}");
                 return existingChat; 
             }
             var chat = ChatEntity.CreatePrivate(
