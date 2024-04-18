@@ -43,6 +43,7 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
                 _logger.LogInformation($"Message purchase: {purchase}");
                 message = MessageEntity.CreateWithPurchase(dto.ChatId, fromUser, purchase);
             } else if (!string.IsNullOrEmpty(dto.Text)) {
+
                 _logger.LogInformation($"Message text: {dto.Text}");
                 message = MessageEntity.CreateText(dto.ChatId, fromUser, dto.Text);
             } else

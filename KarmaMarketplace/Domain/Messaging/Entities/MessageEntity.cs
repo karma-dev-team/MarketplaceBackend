@@ -34,6 +34,10 @@ namespace KarmaMarketplace.Domain.Messging.Entities
 
         public static MessageEntity CreateText(Guid chatId, UserEntity fromUser, string text)
         {
+            if (text.Length > 4028)
+            {
+                throw new Exception("Message is too long");
+            }
             var newMessage = new MessageEntity();
 
             newMessage.Text = text;

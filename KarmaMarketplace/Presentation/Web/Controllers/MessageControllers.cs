@@ -1,4 +1,5 @@
 ﻿using KarmaMarketplace.Application.Common.Interfaces;
+using KarmaMarketplace.Application.Common.Models;
 using KarmaMarketplace.Application.Messaging.Dto;
 using KarmaMarketplace.Application.Messaging.Interfaces;
 using KarmaMarketplace.Domain.Messging.Entities;
@@ -22,11 +23,11 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
         }
 
         [HttpGet("chat/{chatId}/messages")]
-        public async Task<ActionResult<ICollection<MessageEntity>>> GetChatMessages(Guid chatId)
+        public async Task<ActionResult<ICollection<MessageEntity>>> GetChatMessages(Guid chatId, [FromQuery] InputPagination pagination)
         {
             return Ok(await _messagingService
                 .GetChatMessages()
-                .Execute(new GetChatMessagesDto { ChatId = chatId }));
+                .Execute(new GetChatMessagesDto { ChatId = chatId, Start = pagination.Start, Ends = pagination.Ends }));
         }
 
         [HttpPost("chat/{chatId}/send")]
