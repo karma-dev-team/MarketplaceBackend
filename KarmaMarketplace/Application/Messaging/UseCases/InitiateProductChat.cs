@@ -43,7 +43,10 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
 
             _logger.LogInformation($"FromUser: {fromUser.Id}, toUser: {toUser.Id}");
 
-            var existingChat = fromUser.Chats.FirstOrDefault(x => x.Participants.Any(x => x.Id == toUser.Id)); 
+            var existingChat = await _context.Chats
+                .Include(x => x.Participants)
+                .FirstOrDefaultAsync(x => x.Participants.Any(x => x.Id == toUser.Id || x.Id == fromUser.Id));
+            _logger.LogInformation($"Does it exists, {existingChat}"); 
 
             if (existingChat != null)
             {

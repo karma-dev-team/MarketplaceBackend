@@ -11,6 +11,7 @@ namespace KarmaMarketplace.Infrastructure.Data.Queries
             return query
                 .Include(x => x.Purchase)
                     .ThenInclude(y => y.Product)
+                        .ThenInclude(x => x.Images)
                 .Include(x => x.FromUser)
                 .Include(x => x.Image)
                 .Include(x => x.Review);

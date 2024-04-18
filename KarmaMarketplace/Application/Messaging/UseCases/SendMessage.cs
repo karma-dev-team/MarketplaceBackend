@@ -8,20 +8,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KarmaMarketplace.Application.Messaging.UseCases
 {
-    public class SendMessage : BaseUseCase<SendMessageDto, MessageEntity>
+    public class SendMessage(
+        IApplicationDbContext context,
+        IFileService fileService,
+        ILogger<SendMessage> logger) : BaseUseCase<SendMessageDto, MessageEntity>
     {
-        private IApplicationDbContext _context;
-        private IFileService _fileService;
-        private ILogger _logger; 
-
-        public SendMessage(
-            IApplicationDbContext context, 
-            IFileService fileService, 
-            ILogger<SendMessage> logger) {
-            _logger = logger;
-            _context = context; 
-            _fileService = fileService; 
-        }
+        private readonly IApplicationDbContext _context = context;
+        private readonly IFileService _fileService = fileService;
+        private readonly ILogger<SendMessage> _logger = logger;
 
         public async Task<MessageEntity> Execute(SendMessageDto dto)
         {
@@ -42,13 +36,14 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
                 var newImage = await _fileService.UploadFile().Execute(dto.Image);
                 message = MessageEntity.CreateWithImage(dto.ChatId, fromUser, newImage);
                 _logger.LogInformation($"{newImage} image, message: {message}");
-            }
-            else if (dto.PurchaseId != null) {
+            } else if (dto.PurchaseId != null) {
                 var purchase = await _context.Purchases.FirstOrDefaultAsync(x => x.Id == dto.PurchaseId);
 
                 Guard.Against.Null(purchase, message: "Purchase does not exists");
+                _logger.LogInformation($"Message purchase: {purchase}");
                 message = MessageEntity.CreateWithPurchase(dto.ChatId, fromUser, purchase);
-            } else if (!string.IsNullOrEmpty(dto.Text)) { 
+            } else if (!string.IsNullOrEmpty(dto.Text)) {
+                _logger.LogInformation($"Message text: {dto.Text}");
                 message = MessageEntity.CreateText(dto.ChatId, fromUser, dto.Text);
             } else
             {

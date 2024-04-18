@@ -21,8 +21,8 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
             var messages = await _context.Messages
                 .IncludeStandard()
                 .Where(x => x.ChatID == dto.ChatId)
-                .Paginate(dto.Start, dto.Ends)
                 .OrderByDescending(x => x.CreatedAt)
+                //.Paginate(dto.Start, dto.Ends)
                 .ToListAsync();
 
             return messages; 

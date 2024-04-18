@@ -13,7 +13,7 @@
     {
         public Guid WalletId { get; set; }
 
-        public NotEnoughMoneyException(Guid walletId) : base("Wallet is blocked")
+        public NotEnoughMoneyException(Guid walletId) : base($"Not enough money, walletId: {walletId}")
         {
             WalletId = walletId;
         }
