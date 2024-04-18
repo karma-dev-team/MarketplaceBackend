@@ -53,7 +53,7 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
                 return existingChat; 
             }
             var chat = ChatEntity.CreatePrivate(
-                name: product.Name,
+                name: product.CreatedBy.UserName,
                 userParticipants: [fromUser, toUser],
                 image: toUser.Image
             );

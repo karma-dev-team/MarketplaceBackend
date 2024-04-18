@@ -60,7 +60,7 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
                 //}
 
                 var someUser = chat.Participants.FirstOrDefault(x => x.Id == dto.FromUserId);
-                Guard.Against.Null(someUser, message: "You are not in participants"); 
+                Guard.Against.Null(someUser, message: $"You are not in participants, userId: {dto.FromUserId}, participants: {chat.Participants.Count}"); 
             }
 
             Guard.Against.Null(message, message: "Message was not able to be created"); 

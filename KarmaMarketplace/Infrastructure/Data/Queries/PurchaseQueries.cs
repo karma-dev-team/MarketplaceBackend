@@ -18,6 +18,8 @@ namespace KarmaMarketplace.Infrastructure.Data.Queries
                         .ThenInclude(x => x.Logo)
                 .Include(x => x.Product)
                     .ThenInclude(x => x.Category)
+                .Include(x => x.Product)
+                    .ThenInclude(x => x.CreatedBy)
                 .Include(x => x.Wallet); 
         }
     }
