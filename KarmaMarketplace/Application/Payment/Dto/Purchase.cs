@@ -39,5 +39,6 @@ namespace KarmaMarketplace.Application.Payment.Dto
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public Guid? UserId { get; set; }
+        public Guid? SoldByUserId { get; set; }
     }
 }

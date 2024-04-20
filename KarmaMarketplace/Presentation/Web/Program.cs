@@ -11,6 +11,7 @@ using System.Text.Json;
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Presentation.Web.Services;
 using KarmaMarketplace.Presentation.Web.Schemas.Filters;
+using KarmaMarketplace.Presentation.Web.ExceptionHandlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -93,6 +94,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUser, CurrentUser>();
 
 builder.Services.AddApplicationServices();
+builder.Services.AddExceptionHandler<GuardClauseExceptionHandler>();
 
 builder.Services.AddCoreAdmin();
 
@@ -109,11 +111,11 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
+    //app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.yaml", "NameApp API");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "NameApp API");
         options.DefaultModelsExpandDepth(-1);
     });
     await app.InitialiseDatabaseAsync(); 

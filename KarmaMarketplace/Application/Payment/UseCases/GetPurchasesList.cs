@@ -32,6 +32,10 @@ namespace KarmaMarketplace.Application.Payment.UseCases
             {
                 query = query.Where(x => x.Transaction.CreatedByUser.Id == dto.UserId); 
             }
+            if (dto.SoldByUserId != null)
+            {
+                query = query.Where(x => x.Product.CreatedById == dto.SoldByUserId); 
+            }
             if (dto.StartTime != null && dto.EndTime != null)
             {
                 query = query
