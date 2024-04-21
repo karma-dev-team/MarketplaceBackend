@@ -9,6 +9,8 @@ namespace KarmaMarketplace.Domain.Payment.Enums
         [Display(Name = "RUB")]
         RussianRuble,
         [Display(Name = "USD")]
-        Dollar
+        Dollar,
+        [Display(Name = "EUR")]
+        Euro
     }
 }

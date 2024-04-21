@@ -43,14 +43,14 @@ namespace KarmaMarketplace.Domain.Payment.Entities
 
         public static PurchaseEntity Create(WalletEntity wallet, ProductEntity product, TransactionEntity transaction)
         {
-            PurchaseEntity purchase = new PurchaseEntity
+            var purchase = new PurchaseEntity
             {
-                Wallet = wallet, 
+                Wallet = wallet,
                 Product = product,
                 Amount = transaction.Amount,
                 Currency = transaction.Amount.Currency,
                 Transaction = transaction,
-                Status = PurchaseStatus.Processing, 
+                Status = PurchaseStatus.Processing
             };
 
             purchase.AddDomainEvent(new PurchaseCreated(purchase)); 

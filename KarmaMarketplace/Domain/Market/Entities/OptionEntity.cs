@@ -62,13 +62,14 @@ namespace KarmaMarketplace.Domain.Market.Entities
             string field, 
             int sequence)
         {
-            var range = new OptionEntity();
+            var option = new OptionEntity();
 
-            range.Label = label;
-            range.Field = field;
-            range.Sequence = sequence; 
+            option.Label = label;
+            option.Type = OptionTypes.Switch; 
+            option.Field = field;
+            option.Sequence = sequence; 
             
-            return range;
+            return option;
         }
 
         public static OptionEntity CreateSelector(string label, string value, string group, string field, int sequence)

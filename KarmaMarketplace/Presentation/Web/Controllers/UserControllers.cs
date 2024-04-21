@@ -25,7 +25,7 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
 
         [HttpPatch("{userId}")]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<ActionResult<UserScheme>> UpdateUser(Guid id, [FromBody] UpdateUserDto model)
+        public async Task<ActionResult<UserScheme>> UpdateUser(Guid userId, [FromBody] UpdateUserDto model)
         {
             var result = await UserService
                 .Update()
