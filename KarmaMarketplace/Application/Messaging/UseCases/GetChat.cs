@@ -26,6 +26,7 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
         {
             var chat = await _context.Chats
                 .IncludeStandard()
+                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == dto.ChatId);
 
             Guard.Against.Null(chat, message: "Chat does not exists");

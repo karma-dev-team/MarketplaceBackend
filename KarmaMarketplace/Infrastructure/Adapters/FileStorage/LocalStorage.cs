@@ -41,5 +41,10 @@
             var files = Directory.EnumerateFiles(fullPath);
             return Task.FromResult(files);
         }
+
+        public Task Configure()
+        {
+            return Task.CompletedTask; 
+        }
     }
 }

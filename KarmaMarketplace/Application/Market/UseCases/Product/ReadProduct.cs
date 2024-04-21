@@ -1,9 +1,11 @@
 ﻿using KarmaMarketplace.Application.Common.Interactors;
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Application.Market.Dto;
+using KarmaMarketplace.Application.Market.Services;
 using KarmaMarketplace.Application.User.Dto;
 using KarmaMarketplace.Domain.Market.Entities;
 using KarmaMarketplace.Domain.Market.Enums;
+using KarmaMarketplace.Domain.Market.Services;
 using KarmaMarketplace.Infrastructure;
 using KarmaMarketplace.Infrastructure.Data.Extensions;
 using KarmaMarketplace.Infrastructure.Data.Queries;
@@ -14,10 +16,12 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
     public class GetProduct : BaseUseCase<GetProductDto, ProductEntity?>
     {
         private readonly IApplicationDbContext _context;
-        private readonly IUser _user; 
+        private readonly IUser _user;
+        private readonly ProductDomainService _productService; 
 
-        public GetProduct(IApplicationDbContext dbContext, IUser user)
+        public GetProduct(IApplicationDbContext dbContext, IUser user, ProductDomainService productService)
         {
+            _productService = productService; 
             _context = dbContext;
             _user = user;
         }
@@ -26,7 +30,6 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
         {
             var product = await _context.Products
                 .IncludeStandard()
-                .Include(x => x.ProductViews)
                 .Where(x => x.Id == dto.ProductId)
                 .FirstOrDefaultAsync();
 
@@ -38,11 +41,13 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
             if (product == null)
                 return null;
 
-            product.RegisterView(byUser); 
+            var view = product.CreateView(byUser);
 
+            product.ProductViewed = _productService.CountViews(product);
+
+            _context.ProductViews.Add(view); 
             _context.Products.Update(product);
             await _context.SaveChangesAsync();
-            product.ProductViews = []; // ???? 
             return product; 
         }
     }
@@ -51,13 +56,10 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
     {
         private readonly IApplicationDbContext _context;
         private readonly IAccessPolicy _accessPolicy;
-        private readonly IUser _user; 
 
         public GetProductsList(
             IApplicationDbContext dbContext, 
-            IAccessPolicy accessPolicy, 
-            IUser user) {
-            _user = user; 
+            IAccessPolicy accessPolicy) {
             _context = dbContext;
             _accessPolicy = accessPolicy; 
         }
@@ -65,6 +67,7 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
         public async Task<ICollection<ProductEntity>> Execute(GetProductsListDto dto)
         {
             var query = _context.Products
+                .AsNoTracking()
                 .IncludeStandard()
                 .AsQueryable();
 
@@ -112,10 +115,12 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
     public class GetAnalyticsInformation : BaseUseCase<GetAnalyticsDto, AnalyticsInformationDto>
     {
         private readonly IApplicationDbContext _context;
-        private readonly IUser _user; 
+        private readonly IUser _user;
+        private readonly ProductDomainService _productService; 
 
-        public GetAnalyticsInformation(IApplicationDbContext dbContext, IUser user) {
+        public GetAnalyticsInformation(IApplicationDbContext dbContext, IUser user, ProductDomainService productService) {
             _context = dbContext;
+            _productService = productService;   
             _user = user; 
         } 
 
@@ -126,6 +131,7 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
             {
                 var product = await _context.Products
                     .IncludeStandard()
+                    .AsNoTracking()
                     .Where(x => x.Id == dto.ProductId)
                     .FirstOrDefaultAsync();
 
@@ -136,6 +142,7 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
             else
             {
                 var foundProducts = await _context.Products
+                    .AsNoTracking()
                     .IncludeStandard()
                     .Where(x => x.CreatedBy.Id == _user.Id)
                     .Where(x => x.CreatedAt >= dto.StartDate && x.CreatedAt <= dto.EndDate)
@@ -147,12 +154,14 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
             var viewsInWeek = 0;
             foreach ( var product in products)
             {
-                totalViews += product.CountViews(
+                totalViews += _productService.CountViews(
                         startDate: DateTime.UtcNow.AddYears(-20),
-                        endDate: DateTime.UtcNow);
-                viewsInWeek += product.CountViews(
+                        endDate: DateTime.UtcNow, 
+                        product: product);
+                viewsInWeek += _productService.CountViews(
                         startDate: DateTime.UtcNow.AddDays(-7),
-                        endDate: DateTime.UtcNow); 
+                        endDate: DateTime.UtcNow, 
+                        product: product); 
             }
 
             return new AnalyticsInformationDto(

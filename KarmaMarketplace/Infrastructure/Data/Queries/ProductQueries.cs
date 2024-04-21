@@ -1,4 +1,5 @@
-﻿using KarmaMarketplace.Domain.Market.Entities;
+﻿using KarmaMarketplace.Application.Common.Interfaces;
+using KarmaMarketplace.Domain.Market.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace KarmaMarketplace.Infrastructure.Data.Queries
@@ -14,7 +15,6 @@ namespace KarmaMarketplace.Infrastructure.Data.Queries
                     .ThenInclude(x => x.Image)
                 .Include(x => x.Game)
                     .ThenInclude(x => x.Logo)
-                //.Include(x => x.ProductViews)
                 .Include(x => x.Images);
         }
     }

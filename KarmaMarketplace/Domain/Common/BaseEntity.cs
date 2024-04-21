@@ -1,6 +1,7 @@
 ﻿using KarmaMarketplace.Infrastructure.EventDispatcher;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace KarmaMarketplace.Domain.Common
 {
@@ -9,6 +10,7 @@ namespace KarmaMarketplace.Domain.Common
         [Key, Required]
         public Guid Id { get; set; }
 
+        [JsonIgnore]
         private readonly List<BaseEvent> _domainEvents = new();
 
         [NotMapped]

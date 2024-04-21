@@ -8,6 +8,7 @@ using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Infrastructure.Adapters.FileStorage;
 using KarmaMarketplace.Infrastructure.Adapters.Mailing;
 using KarmaMarketplace.Infrastructure.EventDispatcher;
+using Minio;
 
 namespace KarmaMarketplace.Infrastructure
 {
@@ -32,7 +33,7 @@ namespace KarmaMarketplace.Infrastructure
             Guard.Against.Null(connectionString, message: "Connection string 'DefaultConnection' not found.");
 
             services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>(); 
-            services.AddScoped<ISaveChangesInterceptor, EventDispatcherInterceptor>(); 
+            //services.AddScoped<ISaveChangesInterceptor, EventDispatcherInterceptor>(); 
 
             services.AddDbContext<ApplicationDbContext>((sp, options) =>
             {
@@ -56,15 +57,41 @@ namespace KarmaMarketplace.Infrastructure
                 }
             );
 
-            services.AddMailing(configuration); 
+            var minioConfig = configuration.GetRequiredSection("Minio");
 
-            //services.AddScoped<IFileStorageAdapter, S3StorageAdapter>(); 
+
+            services.AddMailing(configuration);
+
+            //services.AddScoped<IFileStorageAdapter, S3StorageAdapter>();
             if (type == StorageTypes.Local)
             {
                 Guard.Against.Null(filesDirectory, message: "No files directory"); 
 
                 services.AddScoped<IFileStorageAdapter, LocalFileStorageAdapter>(x => new LocalFileStorageAdapter(filesDirectory));
-            } 
+            } else if (type == StorageTypes.Minio)
+            {
+                // Создаем экземпляр MinioStorage и регистрируем его в качестве сервиса
+                services.AddScoped<IFileStorageAdapter, MinioStorage>(provider =>
+                {
+                    var endpoint = minioConfig["Endpoint"];
+                    var accessKey = minioConfig["AccessKey"];
+                    var secretKey = minioConfig["SecretKey"];
+                    var bucketName = minioConfig["BucketName"];
+
+                    var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+
+                    // Create a logger
+                    var logger = loggerFactory.CreateLogger<MinioStorage>();
+
+                    logger.LogInformation("Creating minio storage"); 
+
+                    return new MinioStorage(
+                        endpoint: endpoint,
+                        accessKey: accessKey,
+                        secretKey: secretKey,
+                        bucketName: bucketName);
+                });
+            }
             services.AddAuthorizationBuilder(); 
 
             return services;

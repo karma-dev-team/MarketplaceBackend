@@ -28,6 +28,7 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
 
             var query = _context.Chats
                 .IncludeStandard()
+                .AsNoTracking()
                 .AsQueryable(); 
 
             if (dto.IsProblemChat)

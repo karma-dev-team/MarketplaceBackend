@@ -17,17 +17,17 @@ namespace KarmaMarketplace.Application.Market.Interactors.Game
 
         public async Task<GameEntity> Execute(GetGameDto dto)
         {
+            var query = _context.Games
+                    .AsNoTracking()
+                    .IncludeStandard()
+                    .AsQueryable(); 
             GameEntity? game;
             if (dto.GameId != null)
             {
-                game = await _context.Games
-                    .IncludeStandard()
-                    .FirstOrDefaultAsync(x => x.Id == dto.GameId);
+                game = await query.FirstOrDefaultAsync(x => x.Id == dto.GameId);
             } else
             {
-                game = await _context.Games
-                    .IncludeStandard()
-                    .FirstOrDefaultAsync(x => x.Name == dto.Name);
+                game = await query.FirstOrDefaultAsync(x => x.Name == dto.Name);
             }
             Guard.Against.Null(game, message: $"game does not exists, id: {dto.GameId}"); 
 
@@ -47,6 +47,7 @@ namespace KarmaMarketplace.Application.Market.Interactors.Game
         public async Task<ICollection<GameEntity>> Execute(GetGamesListDto dto)
         {
             var query = _context.Games
+                .AsNoTracking()
                 .IncludeStandard()
                 .AsQueryable(); 
 

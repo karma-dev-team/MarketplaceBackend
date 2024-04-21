@@ -21,7 +21,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
 
         private static string generateSlug(Guid id, string name)
         {
-            return id.ToString().Skip(0).Take(8).ToString() + name;  
+            return id.ToString().Skip(0).Take(8) + name;  
         }
 
         public static CategoryEntity Create(

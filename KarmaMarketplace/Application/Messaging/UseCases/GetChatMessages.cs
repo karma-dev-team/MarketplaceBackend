@@ -23,6 +23,7 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
                 .Where(x => x.ChatID == dto.ChatId)
                 .OrderByDescending(x => x.CreatedAt)
                 .Skip(dto.Start)
+                .AsNoTracking()
                 .Take(dto.Ends)
                 .ToListAsync();
 

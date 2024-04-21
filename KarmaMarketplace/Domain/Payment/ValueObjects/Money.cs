@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 namespace KarmaMarketplace.Domain.Payment.ValueObjects
 {
     [Owned]
-    public class Money
+    public class Money : ValueObject
     {
         [Required]
         public decimal Amount { get; set; }
@@ -16,6 +16,12 @@ namespace KarmaMarketplace.Domain.Payment.ValueObjects
         {
             Amount = amount;
             Currency = currency;
+        }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Amount; 
+            yield return Currency;
         }
 
         public static void VerifyCurrency(Money lhs, Money rhs)

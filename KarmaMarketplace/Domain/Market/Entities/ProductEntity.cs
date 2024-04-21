@@ -45,14 +45,9 @@ namespace KarmaMarketplace.Domain.Market.Entities
         public string Attributes { get; set; } = null!;
         [Required]
         public ICollection<FileEntity> Images { get; set; } = [];
-        [Required]
-        [SwaggerSchema(ReadOnly = true)]
-        public ICollection<ProductViewEntity> ProductViews { get; set; } = [];
-        [Required]
-        public int ProductViewed { get
-            {
-                return ProductViews.Count; 
-            }}
+        [NotMapped, Required]
+        public int ProductViewed { get; set; }
+
 
         [NotMapped, Required]
         public Money CurrentPrice { get
@@ -87,6 +82,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
                 Game = game,
                 Attributes = "{}",
                 Status = status,
+                ProductViewed = 0,
                 Images = images, 
                 Slug = Guid.NewGuid().ToString(),
             };
@@ -102,23 +98,13 @@ namespace KarmaMarketplace.Domain.Market.Entities
             return newProduct;
         }
 
-        public void RegisterView(
+        public ProductViewEntity CreateView(
             UserEntity byUser)
         {
-            ProductViews.Add(new ProductViewEntity(userId: byUser.Id, productId: Id, info: "{}"));
+            var view = new ProductViewEntity(userId: byUser.Id, productId: Id, info: "{}"); 
 
-            AddDomainEvent(new ProductViewed(this)); 
-        }
-
-        public int CountViews(
-            DateTime startDate,
-            DateTime endDate)
-        {
-            var filteredVisits = ProductViews
-                .Where(visit => visit.CreatedAt >= startDate && visit.CreatedAt <= endDate)
-                .ToList();
-
-            return filteredVisits.Count; 
+            AddDomainEvent(new ProductViewed(this));
+            return view; 
         }
 
         public static void VerifyAttributes(

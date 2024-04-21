@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using KarmaMarketplace.Domain.Payment.Entities;
 using KarmaMarketplace.Domain.Messging.Entities;
 using KarmaMarketplace.Domain.Staff.Entities;
+using KarmaMarketplace.Infrastructure.EventDispatcher;
 
 namespace KarmaMarketplace.Infrastructure.Data
 {
@@ -34,8 +35,18 @@ namespace KarmaMarketplace.Infrastructure.Data
         public DbSet<WalletEntity> Wallets { get; set; } 
         public DbSet<FileEntity> Files { get; set; }  
         public DbSet<TicketEntity> Tickets { get; set; }
+        private readonly IEventDispatcher _dispatcher; 
 
-        public ApplicationDbContext(DbContextOptions options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions options, IEventDispatcher eventDispatcher) : base(options) {
+            _dispatcher = eventDispatcher;
+            //ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;  // ??????? TODO: need to research 
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            await DispatchDomainEventsAsync();
+            return await base.SaveChangesAsync(cancellationToken);
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -48,5 +59,32 @@ namespace KarmaMarketplace.Infrastructure.Data
             builder.ApplyConfigurationsFromAssembly(assembly: Assembly.GetExecutingAssembly()); 
         }
 
+        private async Task DispatchDomainEventsAsync()
+        {
+            var entities = ChangeTracker
+                .Entries<BaseEntity>()
+                .Where(e => e.Entity.DomainEvents.Any())
+                .Select(e => e.Entity);
+
+            var domainEvents = entities
+                .SelectMany(e => e.DomainEvents)
+                .ToList();
+
+            entities.ToList().ForEach(e => e.ClearDomainEvents());
+
+            foreach (var domainEvent in domainEvents)
+            {
+                try
+                {
+                    await _dispatcher.Dispatch(domainEvent, this);
+                }
+                catch (Exception ex)
+                {
+                    // Обработка ошибок при диспетчеризации событий
+                    // Можно добавить логирование или другие механизмы обработки ошибок
+                    throw; // Можно выбрасывать исключение или обрабатывать ошибку по желанию
+                }
+            }
+        }
     }
 }

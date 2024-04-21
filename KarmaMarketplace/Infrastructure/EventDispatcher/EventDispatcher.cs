@@ -4,19 +4,27 @@ using System.Reflection;
 
 namespace KarmaMarketplace.Infrastructure.EventDispatcher
 {
-
     public class EventDispatcher : IEventDispatcher
     {
         private readonly Dictionary<Type, List<Type>> eventListeners = new();
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger<EventDispatcher> _logger;
         private readonly IServiceProvider _serviceProvider;
+        private readonly HashSet<Type> ignoredTypes = new HashSet<Type>(); // Новое поле для игнорируемых типов
 
         public EventDispatcher(ILogger<EventDispatcher> logger, IServiceScopeFactory scopeFactory, IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
             _logger = logger;
             _scopeFactory = scopeFactory;
+        }
+
+        public void AddIgnoredTypes(IEnumerable<Type> types)
+        {
+            foreach (var type in types)
+            {
+                ignoredTypes.Add(type);
+            }
         }
 
         public void RegisterEventSubscribers(Assembly assembly, IServiceScope scope)
@@ -27,6 +35,11 @@ namespace KarmaMarketplace.Infrastructure.EventDispatcher
                 $"Started to registering event subscribers, types: {string.Join(", ", eventSubscriberTypes.Select(t => t.FullName))}");
             foreach (var eventSubscriberType in eventSubscriberTypes)
             {
+                if (ignoredTypes.Contains(eventSubscriberType)) // Проверка на игнорируемые типы
+                {
+                    _logger.LogInformation($"Skipping registration of ignored type {eventSubscriberType.FullName}");
+                    continue;
+                }
                 // verfication! 
                 scope.ServiceProvider.GetRequiredService(eventSubscriberType); 
                 var eventTypes = GetEventTypes(eventSubscriberType);

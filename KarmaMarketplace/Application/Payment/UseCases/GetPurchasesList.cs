@@ -63,7 +63,9 @@ namespace KarmaMarketplace.Application.Payment.UseCases
             }
             query = query.Paginate(dto.Start, dto.Ends); 
 
-            return await query.ToListAsync();
+            return await query
+                .AsNoTracking()
+                .ToListAsync();
         }
     }
 }

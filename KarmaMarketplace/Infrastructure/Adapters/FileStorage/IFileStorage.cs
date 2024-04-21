@@ -13,5 +13,6 @@
 
         // Перечисляет файлы в директории
         Task<IEnumerable<string>> ListFilesAsync(string path);
+        Task Configure(); 
     }
 }

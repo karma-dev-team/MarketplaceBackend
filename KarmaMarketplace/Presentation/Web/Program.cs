@@ -12,6 +12,9 @@ using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Presentation.Web.Services;
 using KarmaMarketplace.Presentation.Web.Schemas.Filters;
 using KarmaMarketplace.Presentation.Web.ExceptionHandlers;
+using KarmaMarketplace.Infrastructure.Adapters.FileStorage;
+using Minio;
+using KarmaMarketplace.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -93,6 +96,7 @@ builder.Services.AddScoped<IPasswordHasher<UserEntity>, PasswordHasher<UserEntit
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUser, CurrentUser>();
 
+builder.Services.AddDomainServices(); 
 builder.Services.AddApplicationServices();
 builder.Services.AddExceptionHandler<GuardClauseExceptionHandler>();
 

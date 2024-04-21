@@ -28,6 +28,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Minio" Version="6.0.2" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
     <PackageReference Include="Sentry.AspNetCore" Version="4.2.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
@@ -36,11 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\Stuff\Dto\" />
-    <Folder Include="Application\Stuff\EventHandlers\" />
-    <Folder Include="Application\Stuff\Exceptions\" />
-    <Folder Include="Application\Stuff\Interfaces\" />
-    <Folder Include="Application\Stuff\UseCases\" />
     <Folder Include="Data\files\" />
     <Folder Include="Migrations\" />
   </ItemGroup>

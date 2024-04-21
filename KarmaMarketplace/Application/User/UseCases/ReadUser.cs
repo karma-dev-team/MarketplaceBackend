@@ -49,7 +49,9 @@ namespace KarmaMarketplace.Application.User.Interactors
         public async Task<UserEntity> Execute(GetUserDto dto)
         {
             var query = _context.Users
-                .IncludeStandard().AsQueryable();
+                .IncludeStandard()
+                .AsNoTracking()
+                .AsQueryable();
 
             if (dto.UserId != null)
             {

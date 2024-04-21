@@ -19,6 +19,7 @@ namespace KarmaMarketplace.Application.Market.UseCases.Review
         public async Task<ICollection<ReviewEntity>> Execute(GetReviewsListDto dto)
         {
             var query = _context.Reviews
+                .AsNoTracking()
                 .IncludeStandard()
                 .AsQueryable(); 
 

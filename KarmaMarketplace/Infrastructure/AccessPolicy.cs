@@ -37,7 +37,9 @@ namespace KarmaMarketplace.Infrastructure
                 return await CanAccess(role, currentUser.Id);
             } 
 
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+            var user = await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == userId);
             if (user == null)
             {
                 return false;

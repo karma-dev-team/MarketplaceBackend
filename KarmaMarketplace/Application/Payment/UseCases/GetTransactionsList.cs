@@ -32,6 +32,7 @@ namespace KarmaMarketplace.Application.Payment.UseCases
 
             var result = await _context.Transactions
                 .IncludeStandard()
+                .AsNoTracking()
                 .FilterByParams(
                     fromDate: dto.FromDate, 
                     toDate: dto.ToDate, 

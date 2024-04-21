@@ -20,6 +20,7 @@ namespace KarmaMarketplace.Application.Payment.UseCases
         public async Task<WalletEntity> Execute(GetWalletDto dto)
         {
             var wallet = await _context.Wallets
+                .AsNoTracking()
                 .IncludeStandard()
                 .FirstOrDefaultAsync(x => x.Id == dto.WalletId || x.UserId == dto.UserId);
 

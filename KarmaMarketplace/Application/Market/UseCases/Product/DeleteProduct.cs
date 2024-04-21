@@ -22,7 +22,6 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
         public async Task<ProductEntity> Execute(DeleteProductDto dto)
         {
             var product = await _context.Products
-                .Include(x => x.ProductViews)
                 .IncludeStandard()
                 .FirstOrDefaultAsync(x => x.Id == dto.ProductId);
 
@@ -30,7 +29,11 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
             Guard.Against.Null(_user.Id); 
 
             await _accessPolicy.FailIfNotSelfOrNoAccess(
-                (Guid)_user.Id, Domain.User.Enums.UserRoles.Admin, product.CreatedBy.Id); 
+                (Guid)_user.Id, Domain.User.Enums.UserRoles.Admin, product.CreatedBy.Id);
+
+            await _context.ProductViews
+                .Where(x => x.ProductId == product.Id)
+                .ExecuteDeleteAsync();
 
             _context.Products.Remove(product);
             await _context.SaveChangesAsync(); 

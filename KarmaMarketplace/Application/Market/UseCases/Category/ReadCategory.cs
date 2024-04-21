@@ -41,6 +41,7 @@ namespace KarmaMarketplace.Application.Market.Interactors.Category
         {
             var query = _context.Categories
                 .IncludeStandard()
+                .AsNoTracking()
                 .AsQueryable(); 
             
             if (!string.IsNullOrEmpty(dto.Name))
