@@ -11,9 +11,8 @@
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.1.1" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.1.1" />
+    <PackageReference Include="Nunit" Version="4.1.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,9 +21,13 @@
 
   <ItemGroup>
     <Folder Include="Application.UnitTests\" />
-    <Folder Include="Domain.UnitTests\" />
     <Folder Include="Application.FunctionalTests\" />
+    <Folder Include="Domain.UnitTests\Entities\" />
     <Folder Include="Web.AcceptanceTest\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\KarmaMarketplace\KarmaMarketplace.csproj" />
   </ItemGroup>
 
 </Project>
