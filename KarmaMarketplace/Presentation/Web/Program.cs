@@ -15,6 +15,8 @@ using KarmaMarketplace.Presentation.Web.ExceptionHandlers;
 using KarmaMarketplace.Infrastructure.Adapters.FileStorage;
 using Minio;
 using KarmaMarketplace.Domain;
+using Hangfire;
+using Hangfire.PostgreSql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -100,6 +102,15 @@ builder.Services.AddDomainServices();
 builder.Services.AddApplicationServices();
 builder.Services.AddExceptionHandler<GuardClauseExceptionHandler>();
 
+builder.Services.AddHangfire(config => 
+    config
+        .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UsePostgreSqlStorage(c => 
+            c.UseNpgsqlConnection(builder.Configuration["TasksStorage"]))); 
+
+builder.Services.AddHangfireServer();
 builder.Services.AddCoreAdmin();
 
 builder.Services.AddCors(option => option.AddPolicy("TaskManger", builder =>
@@ -131,6 +142,7 @@ app.MapDefaultControllerRoute();
 app.UseHealthChecks("/health");
 app.UseHttpsRedirection();
 
+app.UseHangfireDashboard();
 app.UseAuthorization();
 app.UseAuthentication();
 app.UseWebSockets(new WebSocketOptions() { 

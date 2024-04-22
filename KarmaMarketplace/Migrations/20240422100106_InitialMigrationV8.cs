@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KarmaMarketplace.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigrationsv4 : Migration
+    public partial class InitialMigrationV8 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -53,13 +53,13 @@ namespace KarmaMarketplace.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tickets",
+                name: "ProductViews",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Text = table.Column<string>(type: "text", nullable: false),
-                    Subject = table.Column<string>(type: "text", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Info = table.Column<string>(type: "jsonb", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -67,7 +67,7 @@ namespace KarmaMarketplace.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tickets", x => x.Id);
+                    table.PrimaryKey("PK_ProductViews", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -88,46 +88,6 @@ namespace KarmaMarketplace.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TransactionPropsEntity", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TransactionProviders",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Fee = table.Column<decimal>(type: "numeric", nullable: false),
-                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TransactionProviders", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PaymentSystems",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
-                    TransactionProviderEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PaymentSystems", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PaymentSystems_TransactionProviders_TransactionProviderEnti~",
-                        column: x => x.TransactionProviderEntityId,
-                        principalTable: "TransactionProviders",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -179,6 +139,18 @@ namespace KarmaMarketplace.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ChatEntityUserEntity",
+                columns: table => new
+                {
+                    ChatsId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ParticipantsId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatEntityUserEntity", x => new { x.ChatsId, x.ParticipantsId });
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ChatReads",
                 columns: table => new
                 {
@@ -203,7 +175,6 @@ namespace KarmaMarketplace.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     ImageId = table.Column<Guid>(type: "uuid", nullable: true),
                     Deleted = table.Column<bool>(type: "boolean", nullable: false),
                     IsVerified = table.Column<bool>(type: "boolean", nullable: false),
@@ -219,6 +190,24 @@ namespace KarmaMarketplace.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Files",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FileName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    FilePath = table.Column<string>(type: "text", nullable: false),
+                    MimeType = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    Size = table.Column<long>(type: "bigint", nullable: false),
+                    ProductEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    TicketCommentEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    TicketEntityId = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Files", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Games",
                 columns: table => new
                 {
@@ -228,7 +217,7 @@ namespace KarmaMarketplace.Migrations
                     Description = table.Column<string>(type: "text", nullable: false),
                     Type = table.Column<int>(type: "integer", nullable: false),
                     Tags = table.Column<string>(type: "jsonb", nullable: false),
-                    LogoID = table.Column<Guid>(type: "uuid", nullable: true),
+                    LogoID = table.Column<Guid>(type: "uuid", nullable: false),
                     BannerID = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -238,28 +227,41 @@ namespace KarmaMarketplace.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Games", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Games_Files_BannerID",
+                        column: x => x.BannerID,
+                        principalTable: "Files",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Games_Files_LogoID",
+                        column: x => x.LogoID,
+                        principalTable: "Files",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Images",
+                name: "TransactionProviders",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    FileName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    FilePath = table.Column<string>(type: "text", nullable: false),
-                    MimeType = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    Size = table.Column<long>(type: "bigint", nullable: false),
-                    ProductEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    TicketEntityId = table.Column<Guid>(type: "uuid", nullable: true)
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Fee = table.Column<decimal>(type: "numeric", nullable: false),
+                    LogoId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Images", x => x.Id);
+                    table.PrimaryKey("PK_TransactionProviders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Images_Tickets_TicketEntityId",
-                        column: x => x.TicketEntityId,
-                        principalTable: "Tickets",
-                        principalColumn: "Id");
+                        name: "FK_TransactionProviders_Files_LogoId",
+                        column: x => x.LogoId,
+                        principalTable: "Files",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -272,8 +274,9 @@ namespace KarmaMarketplace.Migrations
                     Email = table.Column<string>(type: "text", nullable: false),
                     Role = table.Column<string>(type: "text", nullable: false),
                     ImageId = table.Column<Guid>(type: "uuid", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    IsOnline = table.Column<bool>(type: "boolean", nullable: false),
                     Blocked = table.Column<bool>(type: "boolean", nullable: false),
-                    ChatEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -283,14 +286,32 @@ namespace KarmaMarketplace.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Chats_ChatEntityId",
-                        column: x => x.ChatEntityId,
-                        principalTable: "Chats",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Users_Images_ImageId",
+                        name: "FK_Users_Files_ImageId",
                         column: x => x.ImageId,
-                        principalTable: "Images",
+                        principalTable: "Files",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PaymentSystems",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    TransactionProviderEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PaymentSystems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PaymentSystems_TransactionProviders_TransactionProviderEnti~",
+                        column: x => x.TransactionProviderEntityId,
+                        principalTable: "TransactionProviders",
                         principalColumn: "Id");
                 });
 
@@ -307,10 +328,11 @@ namespace KarmaMarketplace.Migrations
                     BasePrice_Amount = table.Column<decimal>(type: "numeric", nullable: false),
                     BasePrice_Currency = table.Column<int>(type: "integer", nullable: false),
                     Description = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: false),
+                    GameId = table.Column<Guid>(type: "uuid", nullable: false),
                     Status = table.Column<string>(type: "text", nullable: false),
                     BuyerUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     Attributes = table.Column<string>(type: "jsonb", nullable: false),
-                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -325,12 +347,50 @@ namespace KarmaMarketplace.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Products_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Products_Users_BuyerUserId",
                         column: x => x.BuyerUserId,
                         principalTable: "Users",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Products_Users_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tickets",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Text = table.Column<string>(type: "text", nullable: false),
+                    Subject = table.Column<string>(type: "text", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    AssignedUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClosedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tickets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tickets_Users_AssignedUserId",
+                        column: x => x.AssignedUserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Tickets_Users_CreatedById",
                         column: x => x.CreatedById,
                         principalTable: "Users",
                         principalColumn: "Id");
@@ -348,7 +408,6 @@ namespace KarmaMarketplace.Migrations
                     Status = table.Column<string>(type: "text", nullable: false),
                     CreatedByUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     CompletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    StatusDescription = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     Fee_Amount = table.Column<decimal>(type: "numeric", nullable: false),
                     Fee_Currency = table.Column<int>(type: "integer", nullable: false),
                     ProviderId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -378,6 +437,29 @@ namespace KarmaMarketplace.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserWarnings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Reason = table.Column<string>(type: "text", nullable: false),
+                    ByUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserWarnings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserWarnings_Users_UserEntityId",
+                        column: x => x.UserEntityId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -411,14 +493,16 @@ namespace KarmaMarketplace.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductViews",
+                name: "TicketComments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Info = table.Column<string>(type: "jsonb", nullable: true),
-                    ProductEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ByUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Text = table.Column<string>(type: "text", nullable: false),
+                    ParentCommentId = table.Column<Guid>(type: "uuid", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    TicketId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TicketEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -426,12 +510,18 @@ namespace KarmaMarketplace.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductViews", x => x.Id);
+                    table.PrimaryKey("PK_TicketComments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductViews_Products_ProductEntityId",
-                        column: x => x.ProductEntityId,
-                        principalTable: "Products",
+                        name: "FK_TicketComments_Tickets_TicketEntityId",
+                        column: x => x.TicketEntityId,
+                        principalTable: "Tickets",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TicketComments_Users_ByUserId",
+                        column: x => x.ByUserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -445,7 +535,7 @@ namespace KarmaMarketplace.Migrations
                     WalletId = table.Column<Guid>(type: "uuid", nullable: false),
                     ProductId = table.Column<Guid>(type: "uuid", nullable: false),
                     Completed = table.Column<bool>(type: "boolean", nullable: false),
-                    ChatId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ChatId = table.Column<Guid>(type: "uuid", nullable: true),
                     Status = table.Column<string>(type: "text", nullable: false),
                     ReviewId = table.Column<Guid>(type: "uuid", nullable: true),
                     TransactionId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -458,12 +548,6 @@ namespace KarmaMarketplace.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Purchases", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Purchases_Chats_ChatId",
-                        column: x => x.ChatId,
-                        principalTable: "Chats",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Purchases_Products_ProductId",
                         column: x => x.ProductId,
@@ -493,7 +577,7 @@ namespace KarmaMarketplace.Migrations
                     Rating = table.Column<int>(type: "integer", nullable: false),
                     Text = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     ProductId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -517,7 +601,8 @@ namespace KarmaMarketplace.Migrations
                         name: "FK_Reviews_Users_CreatedById",
                         column: x => x.CreatedById,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -547,9 +632,9 @@ namespace KarmaMarketplace.Migrations
                         principalTable: "Chats",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Messages_Images_ImageId",
+                        name: "FK_Messages_Files_ImageId",
                         column: x => x.ImageId,
-                        principalTable: "Images",
+                        principalTable: "Files",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Messages_Purchases_PurchaseId",
@@ -575,6 +660,11 @@ namespace KarmaMarketplace.Migrations
                 column: "GameEntityId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ChatEntityUserEntity_ParticipantsId",
+                table: "ChatEntityUserEntity",
+                column: "ParticipantsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ChatReads_ChatEntityId",
                 table: "ChatReads",
                 column: "ChatEntityId");
@@ -585,9 +675,19 @@ namespace KarmaMarketplace.Migrations
                 column: "ImageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Chats_OwnerId",
-                table: "Chats",
-                column: "OwnerId");
+                name: "IX_Files_ProductEntityId",
+                table: "Files",
+                column: "ProductEntityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Files_TicketCommentEntityId",
+                table: "Files",
+                column: "TicketCommentEntityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Files_TicketEntityId",
+                table: "Files",
+                column: "TicketEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Games_BannerID",
@@ -598,16 +698,6 @@ namespace KarmaMarketplace.Migrations
                 name: "IX_Games_LogoID",
                 table: "Games",
                 column: "LogoID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Images_ProductEntityId",
-                table: "Images",
-                column: "ProductEntityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Images_TicketEntityId",
-                table: "Images",
-                column: "TicketEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_ChatEntityId",
@@ -660,14 +750,9 @@ namespace KarmaMarketplace.Migrations
                 column: "CreatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductViews_ProductEntityId",
-                table: "ProductViews",
-                column: "ProductEntityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Purchases_ChatId",
-                table: "Purchases",
-                column: "ChatId");
+                name: "IX_Products_GameId",
+                table: "Products",
+                column: "GameId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Purchases_ProductId",
@@ -700,6 +785,31 @@ namespace KarmaMarketplace.Migrations
                 column: "PurchaseId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TicketComments_ByUserId",
+                table: "TicketComments",
+                column: "ByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TicketComments_TicketEntityId",
+                table: "TicketComments",
+                column: "TicketEntityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tickets_AssignedUserId",
+                table: "Tickets",
+                column: "AssignedUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tickets_CreatedById",
+                table: "Tickets",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TransactionProviders_LogoId",
+                table: "TransactionProviders",
+                column: "LogoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Transactions_CreatedByUserId",
                 table: "Transactions",
                 column: "CreatedByUserId");
@@ -715,14 +825,14 @@ namespace KarmaMarketplace.Migrations
                 column: "ProviderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_ChatEntityId",
-                table: "Users",
-                column: "ChatEntityId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Users_ImageId",
                 table: "Users",
                 column: "ImageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserWarnings_UserEntityId",
+                table: "UserWarnings",
+                column: "UserEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Wallets_UserId",
@@ -737,6 +847,22 @@ namespace KarmaMarketplace.Migrations
                 principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
+                name: "FK_ChatEntityUserEntity_Chats_ChatsId",
+                table: "ChatEntityUserEntity",
+                column: "ChatsId",
+                principalTable: "Chats",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_ChatEntityUserEntity_Users_ParticipantsId",
+                table: "ChatEntityUserEntity",
+                column: "ParticipantsId",
+                principalTable: "Users",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_ChatReads_Chats_ChatEntityId",
                 table: "ChatReads",
                 column: "ChatEntityId",
@@ -744,39 +870,31 @@ namespace KarmaMarketplace.Migrations
                 principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Chats_Images_ImageId",
+                name: "FK_Chats_Files_ImageId",
                 table: "Chats",
                 column: "ImageId",
-                principalTable: "Images",
+                principalTable: "Files",
                 principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Chats_Users_OwnerId",
-                table: "Chats",
-                column: "OwnerId",
-                principalTable: "Users",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Games_Images_BannerID",
-                table: "Games",
-                column: "BannerID",
-                principalTable: "Images",
-                principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Games_Images_LogoID",
-                table: "Games",
-                column: "LogoID",
-                principalTable: "Images",
-                principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Images_Products_ProductEntityId",
-                table: "Images",
+                name: "FK_Files_Products_ProductEntityId",
+                table: "Files",
                 column: "ProductEntityId",
                 principalTable: "Products",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Files_TicketComments_TicketCommentEntityId",
+                table: "Files",
+                column: "TicketCommentEntityId",
+                principalTable: "TicketComments",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Files_Tickets_TicketEntityId",
+                table: "Files",
+                column: "TicketEntityId",
+                principalTable: "Tickets",
                 principalColumn: "Id");
         }
 
@@ -788,15 +906,34 @@ namespace KarmaMarketplace.Migrations
                 table: "Categories");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Users_Chats_ChatEntityId",
-                table: "Users");
+                name: "FK_Products_Games_GameId",
+                table: "Products");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Users_Images_ImageId",
-                table: "Users");
+                name: "FK_Products_Users_BuyerUserId",
+                table: "Products");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Products_Users_CreatedById",
+                table: "Products");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_TicketComments_Users_ByUserId",
+                table: "TicketComments");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Tickets_Users_AssignedUserId",
+                table: "Tickets");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Tickets_Users_CreatedById",
+                table: "Tickets");
 
             migrationBuilder.DropTable(
                 name: "AutoAnswers");
+
+            migrationBuilder.DropTable(
+                name: "ChatEntityUserEntity");
 
             migrationBuilder.DropTable(
                 name: "ChatReads");
@@ -815,6 +952,12 @@ namespace KarmaMarketplace.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductViews");
+
+            migrationBuilder.DropTable(
+                name: "UserWarnings");
+
+            migrationBuilder.DropTable(
+                name: "Chats");
 
             migrationBuilder.DropTable(
                 name: "Reviews");
@@ -838,22 +981,22 @@ namespace KarmaMarketplace.Migrations
                 name: "Games");
 
             migrationBuilder.DropTable(
-                name: "Chats");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Images");
+                name: "Files");
 
             migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Tickets");
+                name: "TicketComments");
 
             migrationBuilder.DropTable(
                 name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Tickets");
         }
     }
 }

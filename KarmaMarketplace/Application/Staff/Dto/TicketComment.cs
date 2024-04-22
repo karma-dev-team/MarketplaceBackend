@@ -1,6 +1,6 @@
 ﻿namespace KarmaMarketplace.Application.Staff.Dto
 {
-    public class TicketComment
+    public class TicketCommentDto
     {
     }
 }

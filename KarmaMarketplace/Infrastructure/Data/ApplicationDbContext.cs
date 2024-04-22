@@ -1,12 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Domain.User.Entities;
-using KarmaMarketplace.Infrastructure.Data.Configuration;
 using System.Reflection;
 using KarmaMarketplace.Domain.Market.Entities;
 using KarmaMarketplace.Domain.Files.Entities;
-using System.Reflection.Emit;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using KarmaMarketplace.Domain.Payment.Entities;
 using KarmaMarketplace.Domain.Messging.Entities;
 using KarmaMarketplace.Domain.Staff.Entities;
@@ -35,6 +32,9 @@ namespace KarmaMarketplace.Infrastructure.Data
         public DbSet<WalletEntity> Wallets { get; set; } 
         public DbSet<FileEntity> Files { get; set; }  
         public DbSet<TicketEntity> Tickets { get; set; }
+        public DbSet<TicketCommentEntity> TicketComments { get; set; }
+        public DbSet<WarningEntity> UserWarnings { get; set; }
+
         private readonly IEventDispatcher _dispatcher; 
 
         public ApplicationDbContext(DbContextOptions options, IEventDispatcher eventDispatcher) : base(options) {

@@ -63,12 +63,17 @@ namespace KarmaMarketplace.Migrations
                     b.Property<long>("Size")
                         .HasColumnType("bigint");
 
+                    b.Property<Guid?>("TicketCommentEntityId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid?>("TicketEntityId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProductEntityId");
+
+                    b.HasIndex("TicketCommentEntityId");
 
                     b.HasIndex("TicketEntityId");
 
@@ -356,9 +361,6 @@ namespace KarmaMarketplace.Migrations
                     b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ProductEntityId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid");
 
@@ -366,8 +368,6 @@ namespace KarmaMarketplace.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductEntityId");
 
                     b.ToTable("ProductViews");
                 });
@@ -639,8 +639,6 @@ namespace KarmaMarketplace.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChatId");
-
                     b.HasIndex("ProductId");
 
                     b.HasIndex("TransactionId");
@@ -813,10 +811,62 @@ namespace KarmaMarketplace.Migrations
                     b.ToTable("Wallets");
                 });
 
+            modelBuilder.Entity("KarmaMarketplace.Domain.Staff.Entities.TicketCommentEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ParentCommentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("TicketEntityId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TicketId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ByUserId");
+
+                    b.HasIndex("TicketEntityId");
+
+                    b.ToTable("TicketComments");
+                });
+
             modelBuilder.Entity("KarmaMarketplace.Domain.Staff.Entities.TicketEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AssignedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ClosedById")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -843,6 +893,10 @@ namespace KarmaMarketplace.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AssignedUserId");
+
+                    b.HasIndex("CreatedById");
 
                     b.ToTable("Tickets");
                 });
@@ -944,6 +998,41 @@ namespace KarmaMarketplace.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("KarmaMarketplace.Domain.User.Entities.WarningEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("UserEntityId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserEntityId");
+
+                    b.ToTable("UserWarnings");
+                });
+
             modelBuilder.Entity("ChatEntityUserEntity", b =>
                 {
                     b.HasOne("KarmaMarketplace.Domain.Messging.Entities.ChatEntity", null)
@@ -965,8 +1054,12 @@ namespace KarmaMarketplace.Migrations
                         .WithMany("Images")
                         .HasForeignKey("ProductEntityId");
 
+                    b.HasOne("KarmaMarketplace.Domain.Staff.Entities.TicketCommentEntity", null)
+                        .WithMany("Files")
+                        .HasForeignKey("TicketCommentEntityId");
+
                     b.HasOne("KarmaMarketplace.Domain.Staff.Entities.TicketEntity", null)
-                        .WithMany("Images")
+                        .WithMany("Files")
                         .HasForeignKey("TicketEntityId");
                 });
 
@@ -1077,13 +1170,6 @@ namespace KarmaMarketplace.Migrations
                     b.Navigation("Game");
                 });
 
-            modelBuilder.Entity("KarmaMarketplace.Domain.Market.Entities.ProductViewEntity", b =>
-                {
-                    b.HasOne("KarmaMarketplace.Domain.Market.Entities.ProductEntity", null)
-                        .WithMany("ProductViews")
-                        .HasForeignKey("ProductEntityId");
-                });
-
             modelBuilder.Entity("KarmaMarketplace.Domain.Market.Entities.ReviewEntity", b =>
                 {
                     b.HasOne("KarmaMarketplace.Domain.User.Entities.UserEntity", "CreatedBy")
@@ -1169,10 +1255,6 @@ namespace KarmaMarketplace.Migrations
 
             modelBuilder.Entity("KarmaMarketplace.Domain.Payment.Entities.PurchaseEntity", b =>
                 {
-                    b.HasOne("KarmaMarketplace.Domain.Messging.Entities.ChatEntity", "Chat")
-                        .WithMany()
-                        .HasForeignKey("ChatId");
-
                     b.HasOne("KarmaMarketplace.Domain.Market.Entities.ProductEntity", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
@@ -1212,8 +1294,6 @@ namespace KarmaMarketplace.Migrations
 
                     b.Navigation("Amount")
                         .IsRequired();
-
-                    b.Navigation("Chat");
 
                     b.Navigation("Product");
 
@@ -1379,6 +1459,38 @@ namespace KarmaMarketplace.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("KarmaMarketplace.Domain.Staff.Entities.TicketCommentEntity", b =>
+                {
+                    b.HasOne("KarmaMarketplace.Domain.User.Entities.UserEntity", "ByUser")
+                        .WithMany()
+                        .HasForeignKey("ByUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("KarmaMarketplace.Domain.Staff.Entities.TicketEntity", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("TicketEntityId");
+
+                    b.Navigation("ByUser");
+                });
+
+            modelBuilder.Entity("KarmaMarketplace.Domain.Staff.Entities.TicketEntity", b =>
+                {
+                    b.HasOne("KarmaMarketplace.Domain.User.Entities.UserEntity", "AssignedUser")
+                        .WithMany()
+                        .HasForeignKey("AssignedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("KarmaMarketplace.Domain.User.Entities.UserEntity", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById");
+
+                    b.Navigation("AssignedUser");
+
+                    b.Navigation("CreatedBy");
+                });
+
             modelBuilder.Entity("KarmaMarketplace.Domain.User.Entities.UserEntity", b =>
                 {
                     b.HasOne("KarmaMarketplace.Domain.Files.Entities.FileEntity", "Image")
@@ -1386,6 +1498,13 @@ namespace KarmaMarketplace.Migrations
                         .HasForeignKey("ImageId");
 
                     b.Navigation("Image");
+                });
+
+            modelBuilder.Entity("KarmaMarketplace.Domain.User.Entities.WarningEntity", b =>
+                {
+                    b.HasOne("KarmaMarketplace.Domain.User.Entities.UserEntity", null)
+                        .WithMany("Warnings")
+                        .HasForeignKey("UserEntityId");
                 });
 
             modelBuilder.Entity("KarmaMarketplace.Domain.Market.Entities.CategoryEntity", b =>
@@ -1401,8 +1520,6 @@ namespace KarmaMarketplace.Migrations
             modelBuilder.Entity("KarmaMarketplace.Domain.Market.Entities.ProductEntity", b =>
                 {
                     b.Navigation("Images");
-
-                    b.Navigation("ProductViews");
                 });
 
             modelBuilder.Entity("KarmaMarketplace.Domain.Messging.Entities.ChatEntity", b =>
@@ -1417,9 +1534,21 @@ namespace KarmaMarketplace.Migrations
                     b.Navigation("Systems");
                 });
 
+            modelBuilder.Entity("KarmaMarketplace.Domain.Staff.Entities.TicketCommentEntity", b =>
+                {
+                    b.Navigation("Files");
+                });
+
             modelBuilder.Entity("KarmaMarketplace.Domain.Staff.Entities.TicketEntity", b =>
                 {
-                    b.Navigation("Images");
+                    b.Navigation("Comments");
+
+                    b.Navigation("Files");
+                });
+
+            modelBuilder.Entity("KarmaMarketplace.Domain.User.Entities.UserEntity", b =>
+                {
+                    b.Navigation("Warnings");
                 });
 #pragma warning restore 612, 618
         }
