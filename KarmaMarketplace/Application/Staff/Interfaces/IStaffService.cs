@@ -1,6 +1,14 @@
-﻿namespace KarmaMarketplace.Application.Staff.Interfaces
+﻿using KarmaMarketplace.Application.Staff.UseCases;
+
+namespace KarmaMarketplace.Application.Staff.Interfaces
 {
-    public class IStaffService
+    public interface IStaffService
     {
+        CreateComment CreateComment();
+        CreateTicket CreateTicket(); 
+        DeleteComment DeleteComment();
+        DeleteTicket DeleteTicket();
+        UpdateTicket UpdateTicket();
+        WarnUser WarnUser(); 
     }
 }

@@ -52,7 +52,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
         [NotMapped, Required]
         public Money CurrentPrice { get
             {
-                if (ReferenceEquals(DiscountPrice, null))
+                if (DiscountPrice is null)
                 {
                     return BasePrice; 
                 } else

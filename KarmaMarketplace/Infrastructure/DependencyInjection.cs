@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Identity;
 using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Infrastructure.Adapters.FileStorage;
 using KarmaMarketplace.Infrastructure.Adapters.Mailing;
-using KarmaMarketplace.Infrastructure.EventDispatcher;
-using Minio;
 
 namespace KarmaMarketplace.Infrastructure
 {
@@ -57,9 +55,6 @@ namespace KarmaMarketplace.Infrastructure
                 }
             );
 
-            var minioConfig = configuration.GetRequiredSection("Minio");
-
-
             services.AddMailing(configuration);
 
             //services.AddScoped<IFileStorageAdapter, S3StorageAdapter>();
@@ -70,13 +65,22 @@ namespace KarmaMarketplace.Infrastructure
                 services.AddScoped<IFileStorageAdapter, LocalFileStorageAdapter>(x => new LocalFileStorageAdapter(filesDirectory));
             } else if (type == StorageTypes.Minio)
             {
-                // Создаем экземпляр MinioStorage и регистрируем его в качестве сервиса
+                var minioConfig = configuration.GetRequiredSection("Minio");
+             
                 services.AddScoped<IFileStorageAdapter, MinioStorage>(provider =>
                 {
                     var endpoint = minioConfig["Endpoint"];
                     var accessKey = minioConfig["AccessKey"];
                     var secretKey = minioConfig["SecretKey"];
                     var bucketName = minioConfig["BucketName"];
+
+                    if (string.IsNullOrEmpty(endpoint) 
+                        || string.IsNullOrEmpty(accessKey) 
+                        || string.IsNullOrEmpty(secretKey) 
+                        || string.IsNullOrEmpty(bucketName))
+                    {
+                        throw new ArgumentException("Minio configuration one of the parameters is empty"); 
+                    }
 
                     var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
 

@@ -1,4 +1,5 @@
 ﻿using KarmaMarketplace.Application.Common.Interfaces;
+using KarmaMarketplace.Application.Payment.UseCases;
 using KarmaMarketplace.Domain.Files.Entities;
 using KarmaMarketplace.Domain.Messging.Entities;
 using KarmaMarketplace.Domain.User.Enums;
@@ -31,6 +32,8 @@ namespace KarmaMarketplace.Domain.User.Entities
         public bool IsOnline { get; set; } = false;
         [JsonIgnore]
         public ICollection<ChatEntity> Chats { get; set; } = [];
+        [JsonIgnore]
+        public ICollection<WarningEntity> Warnings { get; set; } = []; 
 
         [NotMapped]
         public string? TelegramId
@@ -109,6 +112,27 @@ namespace KarmaMarketplace.Domain.User.Entities
                     fieldName: "Role"
                 )
              );
+        }
+
+        public void Warn(string reason, UserEntity byUser)
+        {
+            if (Blocked)
+            {
+                return; 
+            }
+            if (byUser.Role >= UserRoles.Admin)
+            {
+                throw new AccessDenied("You cannot block this user"); 
+            }
+            var warn = new WarningEntity() { Reason = reason, ByUserId = byUser.Id }; 
+            
+            Warnings.Add(warn);
+            if (Warnings.Count > 3)
+            {
+                Block();
+                return; 
+            }
+            AddDomainEvent(new UserWarned(this, reason)); 
         }
     }
 }

@@ -28,9 +28,7 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
         {
             await _accessPolicy.FailIfNoAccess(Domain.User.Enums.UserRoles.User);
 
-            var byUser = await _context.Users
-                .IncludeStandard()
-                .FirstOrDefaultAsync(x => x.Id == _user.Id);
+            var byUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == _user.Id);
 
             Guard.Against.Null(byUser, message: "correct user is not provided");
 
@@ -40,9 +38,7 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
 
             Guard.Against.Null(category, message: "category does not exists");
 
-            var game = await _context.Games
-                .IncludeStandard()
-                .FirstOrDefaultAsync(x => x.Id == dto.GameId);
+            var game = await _context.Games.FirstOrDefaultAsync(x => x.Id == dto.GameId);
 
             Guard.Against.Null(game, message: "game does not exists");
 

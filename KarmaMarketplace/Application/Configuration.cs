@@ -9,6 +9,8 @@ namespace KarmaMarketplace.Application
         {
             var eventDispatcher = (EventDispatcher)app.ApplicationServices.GetRequiredService<IEventDispatcher>();
 
+            eventDispatcher.AddIgnoredTypes([typeof(LoggingHandler<>)]); 
+
             // Resolve and add event listeners within the scope of a request
             using (var scope = app.ApplicationServices.CreateScope())
             {

@@ -23,6 +23,7 @@ namespace KarmaMarketplace.Infrastructure.EventDispatcher
         {
             foreach (var type in types)
             {
+                _logger.LogInformation($"Added {type.FullName} into ignore list");
                 ignoredTypes.Add(type);
             }
         }

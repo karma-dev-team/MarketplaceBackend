@@ -26,7 +26,7 @@ namespace KarmaMarketplace.Application.User.Dto
     public class NotificationCreatedDto
     {
         [Required]
-        public ICollection<Guid> UserIds { get; set; }
+        public ICollection<Guid> UserIds { get; set; } = []; 
         [Required]
         public int SentToUsers { get; set; } = 0; 
     }

@@ -11,8 +11,6 @@ namespace KarmaMarketplace.Domain.User.Enums
         Other,
         [Display(Name = "user")]
         User, 
-        [Display(Name = "seller")]
-        Seller,
         [Display(Name = "moderator")]
         Moderator,
         [Display(Name = "admin")]

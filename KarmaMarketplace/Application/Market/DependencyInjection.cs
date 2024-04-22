@@ -1,4 +1,5 @@
-﻿using KarmaMarketplace.Application.Market.Interactors.Category;
+﻿using KarmaMarketplace.Application.Market.EventHandlers;
+using KarmaMarketplace.Application.Market.Interactors.Category;
 using KarmaMarketplace.Application.Market.Interactors.Game;
 using KarmaMarketplace.Application.Market.Interfaces;
 using KarmaMarketplace.Application.Market.Services;
@@ -38,7 +39,10 @@ namespace KarmaMarketplace.Application.Market
 
             // Reviews
             services.AddScoped<CreateReview>();
-            services.AddScoped<GetReviewsList>(); 
+            services.AddScoped<GetReviewsList>();
+
+            // Events
+            services.AddScoped<ProductCreatedHandler>(); 
 
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();

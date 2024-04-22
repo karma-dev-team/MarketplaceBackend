@@ -31,10 +31,10 @@ namespace KarmaMarketplace.Application.User.UseCases
                     throw new AccessDenied("Impossible to ping that many users");
                 }
 
-                users = await _context.Users.Where(x => x.Role == dto.Role).ToListAsync();
+                users = await _context.Users.AsNoTracking().Where(x => x.Role == dto.Role).ToListAsync();
             } else if (dto.UserId != null)
             {
-                users = await _context.Users.Where(x => x.Id == dto.UserId).ToListAsync(); 
+                users = await _context.Users.AsNoTracking().Where(x => x.Id == dto.UserId).ToListAsync(); 
             }
 
             var countUsers = users.Count;
