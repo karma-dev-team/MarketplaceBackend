@@ -37,7 +37,7 @@ namespace KarmaMarketplace.Infrastructure.Data
 
         private readonly IEventDispatcher _dispatcher; 
 
-        public ApplicationDbContext(DbContextOptions options, IEventDispatcher eventDispatcher) : base(options) {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IEventDispatcher eventDispatcher) : base(options) {
             _dispatcher = eventDispatcher;
             //ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;  // ??????? TODO: need to research 
         }

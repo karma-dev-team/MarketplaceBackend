@@ -24,7 +24,6 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
         public async Task<ChatEntity> Execute(InitiateProductChatDto dto)
         {
             var fromUser = await _context.Users
-                .Include(x => x.Chats)
                 .FirstOrDefaultAsync(x => x.Id == dto.FromUserId);
             Guard.Against.Null(fromUser, "User not found.");
 
@@ -34,7 +33,6 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
             Guard.Against.Null(product, "Product not found.");
 
             var toUser = await _context.Users
-                .Include(x => x.Chats)
                 .FirstOrDefaultAsync(x => x.Id == product.CreatedBy.Id);
             Guard.Against.Null(toUser, "User not found.");
 
@@ -57,8 +55,6 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
                 userParticipants: [fromUser, toUser],
                 image: toUser.Image
             );
-            fromUser.Chats.Add(chat);
-            toUser.Chats.Add(chat);
 
             _logger.LogInformation($"Added private chat, with participants: {chat.Participants}");
             _context.Users.UpdateRange([fromUser, toUser]);

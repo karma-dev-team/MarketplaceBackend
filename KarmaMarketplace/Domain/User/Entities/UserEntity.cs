@@ -31,7 +31,7 @@ namespace KarmaMarketplace.Domain.User.Entities
         [Required]
         public bool IsOnline { get; set; } = false;
         [JsonIgnore]
-        public ICollection<ChatEntity> Chats { get; set; } = [];
+        public ICollection<ChatParticipant> Chats { get; set; } = [];
         [JsonIgnore]
         public ICollection<WarningEntity> Warnings { get; set; } = []; 
 

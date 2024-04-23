@@ -1,4 +1,5 @@
 ﻿using KarmaMarketplace.Application.Common.Interfaces;
+using KarmaMarketplace.Infrastructure.EventSourcing;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -12,7 +13,8 @@ namespace KarmaMarketplace.Infrastructure.EventDispatcher
         private readonly IServiceProvider _serviceProvider;
         private readonly HashSet<Type> ignoredTypes = new HashSet<Type>(); // Новое поле для игнорируемых типов
 
-        public EventDispatcher(ILogger<EventDispatcher> logger, IServiceScopeFactory scopeFactory, IServiceProvider serviceProvider)
+        public EventDispatcher(
+            ILogger<EventDispatcher> logger, IServiceScopeFactory scopeFactory, IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
             _logger = logger;
@@ -120,6 +122,11 @@ namespace KarmaMarketplace.Infrastructure.EventDispatcher
                         dynamic dynamicSubscriber = Convert.ChangeType(eventSubscriber, eventSubscriberType);
 
                         await dynamicSubscriber.HandleEvent((dynamic)@event, dbContext);
+
+                        // only after succesful completion, event could be added to eventStore. 
+                        var eventStore = scope.ServiceProvider.GetRequiredService<IEventStore>(); 
+                        
+                        await eventStore.StoreEvent(@event);
                     }
                 }
             }

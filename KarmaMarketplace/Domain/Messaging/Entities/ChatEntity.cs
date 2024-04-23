@@ -15,7 +15,7 @@ namespace KarmaMarketplace.Domain.Messging.Entities
         [Required]
         public string Name { get; set; } = null!;
 
-        public ICollection<UserEntity> Participants { get; set; } = [];
+        public ICollection<ChatParticipant> Participants { get; set; } = [];
         public FileEntity? Image { get; set; } = null!;
         [Required]
         public bool Deleted { get; set; } = false; 

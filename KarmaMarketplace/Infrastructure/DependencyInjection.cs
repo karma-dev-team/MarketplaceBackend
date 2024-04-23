@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Infrastructure.Adapters.FileStorage;
 using KarmaMarketplace.Infrastructure.Adapters.Mailing;
+using KarmaMarketplace.Infrastructure.EventSourcing;
 
 namespace KarmaMarketplace.Infrastructure
 {
@@ -31,7 +32,6 @@ namespace KarmaMarketplace.Infrastructure
             Guard.Against.Null(connectionString, message: "Connection string 'DefaultConnection' not found.");
 
             services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>(); 
-            //services.AddScoped<ISaveChangesInterceptor, EventDispatcherInterceptor>(); 
 
             services.AddDbContext<ApplicationDbContext>((sp, options) =>
             {
@@ -42,8 +42,18 @@ namespace KarmaMarketplace.Infrastructure
                     o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
                 );
             });
+            services.AddDbContext<EventStoreContext>((sp, options) =>
+            {
+                options.EnableDetailedErrors(true);
+                options.UseNpgsql(
+                    connectionString,
+                    o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
+                );
+            });
 
             services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+            services.AddScoped<IEventStoreContext>(provider => provider.GetRequiredService<EventStoreContext>());
+            services.AddScoped<IEventStore, EventStore>(); 
             services.AddScoped<ApplicationDbContextInitialiser>();
 
             services.AddSingleton(TimeProvider.System);
