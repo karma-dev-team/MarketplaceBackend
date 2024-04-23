@@ -4,6 +4,9 @@ namespace KarmaMarketplace.Application.Files.Interfaces
 {
     public interface IFileService
     {
-        UploadFile UploadFile(); 
+        UploadFile UploadFile();
+        UploadFiles UploadFiles(); 
+        DeleteFile DeleteFile();
+        DeleteFiles DeleteFiles(); 
     }
 }

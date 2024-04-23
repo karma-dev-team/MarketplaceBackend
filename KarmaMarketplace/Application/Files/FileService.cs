@@ -18,5 +18,15 @@ namespace KarmaMarketplace.Application.Files
         {
             return ServiceProvider.GetRequiredService<UploadFile>();
         }
+
+        public DeleteFile DeleteFile()
+        {
+            return ServiceProvider.GetRequiredService<DeleteFile>();
+        }
+
+        public DeleteFiles DeleteFiles()
+        {
+            return ServiceProvider.GetRequiredService<DeleteFiles>();
+        }
     }
 }

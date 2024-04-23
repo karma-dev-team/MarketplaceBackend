@@ -5,6 +5,7 @@ using KarmaMarketplace.Domain.Market.Entities;
 using KarmaMarketplace.Domain.Files.Entities;
 using KarmaMarketplace.Domain.Messging.Entities;
 using KarmaMarketplace.Domain.Payment.Entities;
+using KarmaMarketplace.Domain.Staff.Entities;
 
 namespace KarmaMarketplace.Application.Common.Interfaces
 {
@@ -27,7 +28,10 @@ namespace KarmaMarketplace.Application.Common.Interfaces
         DbSet<ChatReadRecord> ChatReads { get; set;} 
         DbSet<TransactionEntity> Transactions { get; set;} 
         DbSet<WalletEntity> Wallets { get; set;} 
-        DbSet<FileEntity> Files { get; set;} 
+        DbSet<FileEntity> Files { get; set;}
+        DbSet<TicketEntity> Tickets { get; set; }
+        DbSet<TicketCommentEntity> TicketComments { get; set; }
+        DbSet<WarningEntity> UserWarnings { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         EntityEntry<TEntity> Update<TEntity>(TEntity entity) where TEntity : class;

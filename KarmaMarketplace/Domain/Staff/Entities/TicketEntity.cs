@@ -14,13 +14,10 @@ namespace KarmaMarketplace.Domain.Staff.Entities
         public string Text { get; set; } = string.Empty;
         [Required]
         public string Subject { get; set; } = string.Empty;
-        [Required]
         public ICollection<FileEntity> Files { get; set; } = [];
         [Required]
         public TicketStatus Status { get; private set; } = TicketStatus.Open;
-        [Required]
-        public UserEntity AssignedUser { get; private set; } = null!;
-        [Required]
+        public UserEntity? AssignedUser { get; private set; } = null!;
         public ICollection<TicketCommentEntity> Comments { get; private set; } = [];
         [ForeignKey(nameof(UserEntity))]
         public Guid? ClosedById { get; private set; }
@@ -53,7 +50,7 @@ namespace KarmaMarketplace.Domain.Staff.Entities
         public void Accept(UserEntity byUser)
         {
             RaiseIfClosed();
-            if (byUser.Id == AssignedUser.Id)
+            if (byUser.Id == AssignedUser?.Id)
             {
                 // do nothing 
                 return; 
@@ -78,7 +75,7 @@ namespace KarmaMarketplace.Domain.Staff.Entities
             AddDomainEvent(new TicketStatusUpdated(this, status)); 
         }
  
-        public void AddComment(UserEntity byUser, string text, ICollection<FileEntity> files, Guid? commentAnswerId = null)
+        public TicketCommentEntity AddComment(UserEntity byUser, string text, ICollection<FileEntity> files, Guid? commentAnswerId = null)
         {
             RaiseIfClosed();
 
@@ -93,7 +90,8 @@ namespace KarmaMarketplace.Domain.Staff.Entities
             }
             Comments.Add(comment);
 
-            AddDomainEvent(new TicketCommentAdded(comment, this)); 
+            AddDomainEvent(new TicketCommentAdded(comment, this));
+            return comment; 
         }
 
         public void RemoveComment(Guid commentId)

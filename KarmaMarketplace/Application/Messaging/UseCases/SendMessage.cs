@@ -73,7 +73,14 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
             _context.Chats.Update(chat);
             await _context.SaveChangesAsync();
 
-            await _messagesCache.AddMessage(message.FromUser.Id, message); 
+            await _messagesCache.AddMessage(message.FromUser.Id, message);
+
+            if (chat.Type != Domain.Messaging.Enums.ChatTypes.Support) { 
+                var otherUser = chat.Participants.FirstOrDefault(x => x.Id != message.FromUser.Id);
+
+                Guard.Against.Null(otherUser, message: "Oops");
+                await _messagesCache.AddMessage(otherUser.Id, message);
+            }
 
             return message;
         } 

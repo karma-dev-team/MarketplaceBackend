@@ -11,13 +11,10 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
     public class GetChatsList : BaseUseCase<GetChatsListDto, ICollection<ChatEntity>>
     {
         private IApplicationDbContext _context;
-        private IUser _user;
 
         public GetChatsList(
-            IApplicationDbContext context,
-            IUser user) {
+            IApplicationDbContext context) {
             _context = context;
-            _user = user; 
         }
 
         public async Task<ICollection<ChatEntity>> Execute(GetChatsListDto dto)
