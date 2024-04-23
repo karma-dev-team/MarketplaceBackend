@@ -10,7 +10,6 @@ namespace KarmaMarketplace.Application.Files
             services.AddScoped<UploadFile>();
             services.AddScoped<UploadFiles>(); 
             services.AddScoped<DeleteFile>();
-            services.AddScoped<DeleteFiles>();
 
             services.AddScoped<IFileService, FileService>(); 
 

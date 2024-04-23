@@ -9,7 +9,7 @@ namespace KarmaMarketplace.Domain.Staff.Entities
     {
         // does not have events 
         [Required]
-        public UserEntity ByUser { get; set; } = null!;
+        public UserEntity CreatedBy { get; set; } = null!;
         [Required]
         public string Text { get; set; } = null!;
         public Guid? ParentCommentId { get; set; }
@@ -23,7 +23,7 @@ namespace KarmaMarketplace.Domain.Staff.Entities
         public static TicketCommentEntity Create(UserEntity byUser, string text, ICollection<FileEntity> files)
         {
             var newComment = new TicketCommentEntity() { 
-                ByUser = byUser,
+                CreatedBy = byUser,
                 Text = text, 
                 Files = files
             };
@@ -35,7 +35,7 @@ namespace KarmaMarketplace.Domain.Staff.Entities
         {
             var newComment = new TicketCommentEntity()
             {
-                ByUser = byUser,
+                CreatedBy = byUser,
                 Files = files,
                 Text = text,
                 ParentCommentId = parentCommentId, 

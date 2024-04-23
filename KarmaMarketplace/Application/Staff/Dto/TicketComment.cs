@@ -12,4 +12,10 @@ namespace KarmaMarketplace.Application.Staff.Dto
         public Guid? ParentCommentId { get; set; }
         public ICollection<CreateFileDto> Files { get; set; } = []; 
     }
+
+    public class GetCommentsDto
+    {
+        public Guid? UserId { get; set; }
+        public Guid? TicketId { get; set; }
+    }
 }

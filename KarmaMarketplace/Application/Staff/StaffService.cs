@@ -32,5 +32,18 @@ namespace KarmaMarketplace.Application.Staff
         {
             return _serviceProvider.GetRequiredService<UpdateTicket>();
         }
+
+        public GetTicket GetTicket()
+        {
+            return _serviceProvider.GetRequiredService<GetTicket>();
+        }
+        public GetTicketsList GetTicketsList()
+        {
+            return _serviceProvider.GetRequiredService<GetTicketsList>();
+        }
+        public GetCommentsList GetCommentsList()
+        {
+            return _serviceProvider.GetRequiredService<GetCommentsList>();
+        }
     }
 }

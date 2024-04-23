@@ -2,6 +2,7 @@
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Application.Files.Interfaces;
 using KarmaMarketplace.Application.Staff.Dto;
+using KarmaMarketplace.Domain.Files.Entities;
 using KarmaMarketplace.Domain.Staff.Entities;
 
 namespace KarmaMarketplace.Application.Staff.UseCases
@@ -25,7 +26,7 @@ namespace KarmaMarketplace.Application.Staff.UseCases
 
             var newFiles = await _fileService.UploadFiles().Execute(dto.Files);
 
-            var ticket = TicketEntity.Create(dto.Text, dto.Subject, byUser, newFiles);
+            var ticket = TicketEntity.Create(dto.Text, dto.Subject, byUser, (List<FileEntity>)newFiles);
 
             await _context.Tickets.AddAsync(ticket);
             await _context.SaveChangesAsync();

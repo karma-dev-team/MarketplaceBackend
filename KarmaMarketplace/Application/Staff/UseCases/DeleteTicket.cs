@@ -2,6 +2,7 @@
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Domain.Staff.Entities;
 using KarmaMarketplace.Domain.User.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace KarmaMarketplace.Application.Staff.UseCases
 {
@@ -23,7 +24,9 @@ namespace KarmaMarketplace.Application.Staff.UseCases
             // Perform access check for admin role
             await _accessPolicy.FailIfNoAccess(UserRoles.Admin);
 
-            var ticket = await _context.Tickets.FindAsync(ticketId);
+            var ticket = await _context.Tickets
+                .Include(x => x.Comments)
+                .FirstOrDefaultAsync(x => x.Id == ticketId);
 
             Guard.Against.Null(ticket, $"Ticket with ID {ticketId} does not exist.");
 

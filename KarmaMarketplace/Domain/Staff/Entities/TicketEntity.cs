@@ -14,7 +14,7 @@ namespace KarmaMarketplace.Domain.Staff.Entities
         public string Text { get; set; } = string.Empty;
         [Required]
         public string Subject { get; set; } = string.Empty;
-        public ICollection<FileEntity> Files { get; set; } = [];
+        public List<FileEntity> Files { get; set; } = [];
         [Required]
         public TicketStatus Status { get; private set; } = TicketStatus.Open;
         public UserEntity? AssignedUser { get; private set; } = null!;
@@ -32,7 +32,7 @@ namespace KarmaMarketplace.Domain.Staff.Entities
         }
 
         public static TicketEntity Create(
-            string text, string subject, UserEntity createdBy, ICollection<FileEntity> files)
+            string text, string subject, UserEntity createdBy, List<FileEntity> files)
         {
             var ticket = new TicketEntity()
             {

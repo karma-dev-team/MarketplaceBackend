@@ -7,6 +7,5 @@ namespace KarmaMarketplace.Application.Files.Interfaces
         UploadFile UploadFile();
         UploadFiles UploadFiles(); 
         DeleteFile DeleteFile();
-        DeleteFiles DeleteFiles(); 
     }
 }
