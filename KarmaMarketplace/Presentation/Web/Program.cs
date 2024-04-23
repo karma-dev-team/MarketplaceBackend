@@ -17,6 +17,7 @@ using Minio;
 using KarmaMarketplace.Domain;
 using Hangfire;
 using Hangfire.PostgreSql;
+using KarmaMarketplace.Infrastructure.EventSourcing;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -133,7 +134,8 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "NameApp API");
         options.DefaultModelsExpandDepth(-1);
     });
-    await app.InitialiseDatabaseAsync(); 
+    await app.InitialiseDatabaseAsync();
+    await app.InitialiseEventStoreDatabaseAsync(); 
 }
 app.UseEventDispatcher(); 
 app.UseStaticFiles();

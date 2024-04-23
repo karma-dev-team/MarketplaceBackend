@@ -32,9 +32,5 @@ namespace KarmaMarketplace.Application.Staff
         {
             return _serviceProvider.GetRequiredService<UpdateTicket>();
         }
-        public WarnUser WarnUser()
-        {
-            return _serviceProvider.GetRequiredService<WarnUser>();
-        }
     }
 }

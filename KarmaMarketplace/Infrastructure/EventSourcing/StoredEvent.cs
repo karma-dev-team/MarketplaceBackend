@@ -7,7 +7,6 @@ namespace KarmaMarketplace.Infrastructure.EventSourcing
     {
         [Key]
         public Guid EventId { get; set; }
-        [Required]
         public Guid? ByUserId { get; set; }
         [Required]
         public DateTime Timestamp { get; set; } = DateTime.UtcNow; 

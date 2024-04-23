@@ -11,7 +11,6 @@ namespace KarmaMarketplace.Application.Staff
             services.AddScoped<UpdateTicket>();
             services.AddScoped<DeleteTicket>();
             services.AddScoped<DeleteComment>();
-            services.AddScoped<WarnUser>();
             services.AddScoped<CreateComment>(); 
 
             services.AddScoped<IStaffService, StaffService>();

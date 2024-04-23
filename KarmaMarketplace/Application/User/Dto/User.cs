@@ -26,6 +26,11 @@ namespace KarmaMarketplace.Application.User.Dto
         public string? Name { get; set; }
     }
 
+    public class WarnUserDto {
+        public string Reason { get; set; } = null!; 
+        public Guid UserId { get; set; }
+    }
+
     public class LoginDto
     {
         [Required]

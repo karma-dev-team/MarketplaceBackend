@@ -8,6 +8,7 @@ using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Infrastructure.Adapters.FileStorage;
 using KarmaMarketplace.Infrastructure.Adapters.Mailing;
 using KarmaMarketplace.Infrastructure.EventSourcing;
+using KarmaMarketplace.Infrastructure.Caching;
 
 namespace KarmaMarketplace.Infrastructure
 {
@@ -55,9 +56,11 @@ namespace KarmaMarketplace.Infrastructure
             services.AddScoped<IEventStoreContext>(provider => provider.GetRequiredService<EventStoreContext>());
             services.AddScoped<IEventStore, EventStore>(); 
             services.AddScoped<ApplicationDbContextInitialiser>();
+            services.AddScoped<EventStoreContextInitialiser>();
 
             services.AddSingleton(TimeProvider.System);
             //services.AddScoped<IEventSubscriber<BaseEvent>, LoggingHandler<BaseEvent>>(); 
+            services.AddScoped<IMessagesCache, InMemoryMessageCache>();
 
             services.AddScoped<PasswordService, PasswordService>(
                 x => {

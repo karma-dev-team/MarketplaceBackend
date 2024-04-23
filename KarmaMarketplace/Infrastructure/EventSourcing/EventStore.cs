@@ -1,6 +1,8 @@
 ﻿using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Infrastructure.EventDispatcher;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace KarmaMarketplace.Infrastructure.EventSourcing
 {
@@ -17,12 +19,21 @@ namespace KarmaMarketplace.Infrastructure.EventSourcing
 
         public async Task StoreEvent<TEvent>(TEvent @event) where TEvent : BaseEvent
         {
+            var jsonOptions = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                }
+            }; 
+
             var storedEvent = new StoredEvent
             {
                 EventId = Guid.NewGuid(),
                 ByUserId = _user.Id, 
                 EventType = typeof(TEvent).Name,
-                Data = Newtonsoft.Json.JsonConvert.SerializeObject(@event)
+                Data = JsonConvert.SerializeObject(@event, jsonOptions)
             };
 
             await _context.Events.AddAsync(storedEvent);

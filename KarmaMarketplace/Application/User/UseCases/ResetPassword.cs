@@ -15,7 +15,6 @@ namespace KarmaMarketplace.Application.User.UseCases
         private PasswordService _passwordService; 
 
         public ResetPassword(
-            IEmailService emailService,
             IApplicationDbContext dbContext,
             IMemoryCache cacheService, 
             PasswordService passwordService) {

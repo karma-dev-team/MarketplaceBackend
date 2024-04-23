@@ -2,7 +2,6 @@
 using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Application.User.Dto;
 using KarmaMarketplace.Domain.User.Entities;
-using KarmaMarketplace.Infrastructure.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace KarmaMarketplace.Application.User.UseCases

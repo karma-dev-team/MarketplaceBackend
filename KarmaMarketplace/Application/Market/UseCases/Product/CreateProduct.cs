@@ -28,9 +28,7 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
         {
             await _accessPolicy.FailIfNoAccess(Domain.User.Enums.UserRoles.User);
 
-            var byUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == _user.Id);
-
-            Guard.Against.Null(byUser, message: "correct user is not provided");
+            var byUser = await _accessPolicy.GetCurrentUser(); 
 
             var category = await _context.Categories
                 .IncludeStandard()

@@ -9,6 +9,5 @@ namespace KarmaMarketplace.Application.Staff.Interfaces
         DeleteComment DeleteComment();
         DeleteTicket DeleteTicket();
         UpdateTicket UpdateTicket();
-        WarnUser WarnUser(); 
     }
 }

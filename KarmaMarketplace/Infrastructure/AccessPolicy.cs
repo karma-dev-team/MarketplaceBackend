@@ -1,5 +1,6 @@
 ﻿using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Application.User.Exceptions;
+using KarmaMarketplace.Domain.User.Entities;
 using KarmaMarketplace.Domain.User.Enums;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,15 +8,17 @@ namespace KarmaMarketplace.Infrastructure
 {
     public class AccessPolicy : IAccessPolicy
     {
-        private IApplicationDbContext _context;
-        private IUser currentUser;
-        private ILogger _logger;    
+        private readonly IApplicationDbContext _context;
+        private readonly IUser _currentUser;
+        private readonly ILogger _logger;
+        private UserEntity? _cachedCurrentUser; 
 
         public AccessPolicy(
             IApplicationDbContext context, IUser user, ILogger<AccessPolicy> logger) { 
             _context = context;
-            currentUser = user;
+            _currentUser = user;
             _logger = logger;
+            _cachedCurrentUser = null; 
         }
 
         public static void UnauthorizedIfNull(Guid? userId)
@@ -28,18 +31,21 @@ namespace KarmaMarketplace.Infrastructure
 
         public async Task<bool> CanAccess(UserRoles role, Guid? userId = null)
         {
+            if (_cachedCurrentUser != null) {  
+                if (_cachedCurrentUser.Id == userId || _cachedCurrentUser.Id == _currentUser.Id) {
+                    return _cachedCurrentUser.Role >= role;
+                }
+            }
             if (userId == null)
             {
-                if (currentUser.Id == null)
+                if (_currentUser.Id == null)
                 {
                     return false; 
                 }
-                return await CanAccess(role, currentUser.Id);
+                return await CanAccess(role, _currentUser.Id);
             } 
 
-            var user = await _context.Users
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == userId);
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
             if (user == null)
             {
                 return false;
@@ -49,6 +55,7 @@ namespace KarmaMarketplace.Infrastructure
                 return false; 
             }
 
+            _cachedCurrentUser = user; 
             return user.Role >= role; 
         }
 
@@ -58,7 +65,7 @@ namespace KarmaMarketplace.Infrastructure
 
             if (!canAccess)
             {
-                throw new AccessDenied($"Role: {role}, userId: {userId}, currentUserId: {currentUser.Id}"); 
+                throw new AccessDenied($"Role: {role}, userId: {userId}, currentUserId: {_currentUser.Id}"); 
             }
         }
 
@@ -73,10 +80,25 @@ namespace KarmaMarketplace.Infrastructure
 
         public async Task FailIfNotSelfOrNoAccess(Guid byUserId, UserRoles role, Guid? userId = null)
         {
-            if (!(await CanAccessOrSelf(role: role, byUserId: byUserId, userId: currentUser.Id)))
+            if (!(await CanAccessOrSelf(role: role, byUserId: byUserId, userId: _currentUser.Id)))
             {
-                throw new AccessDenied($"Role: {role}, userId: {userId}, currentUserId: {currentUser.Id}, byUserId: {byUserId}");
+                throw new AccessDenied($"Role: {role}, userId: {userId}, currentUserId: {_currentUser.Id}, byUserId: {byUserId}");
             }
+        }
+
+        async public Task<UserEntity> GetCurrentUser()
+        {
+            if (_cachedCurrentUser?.Id != _currentUser.Id)
+            {
+                _cachedCurrentUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == _currentUser.Id);
+            }
+
+            if (_cachedCurrentUser == null)
+            {
+                throw new AccessDenied("User is not authroized");
+            }
+
+            return _cachedCurrentUser; 
         }
     }
 }

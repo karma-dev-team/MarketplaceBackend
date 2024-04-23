@@ -3,6 +3,7 @@ using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Application.Files.Interfaces;
 using KarmaMarketplace.Application.Messaging.Dto;
 using KarmaMarketplace.Domain.Messging.Entities;
+using KarmaMarketplace.Infrastructure.Caching;
 using KarmaMarketplace.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,8 +12,10 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
     public class SendMessage(
         IApplicationDbContext context,
         IFileService fileService,
-        ILogger<SendMessage> logger) : BaseUseCase<SendMessageDto, MessageEntity>
+        ILogger<SendMessage> logger, 
+        IMessagesCache messagesCache) : BaseUseCase<SendMessageDto, MessageEntity>
     {
+        private readonly IMessagesCache _messagesCache = messagesCache;
         private readonly IApplicationDbContext _context = context;
         private readonly IFileService _fileService = fileService;
         private readonly ILogger<SendMessage> _logger = logger;
@@ -69,6 +72,8 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
             _context.Messages.Add(message); 
             _context.Chats.Update(chat);
             await _context.SaveChangesAsync();
+
+            await _messagesCache.AddMessage(message.FromUser.Id, message); 
 
             return message;
         } 

@@ -31,7 +31,7 @@ namespace KarmaMarketplace.Domain.User.Entities
         [Required]
         public bool IsOnline { get; set; } = false;
         [JsonIgnore]
-        public ICollection<ChatParticipant> Chats { get; set; } = [];
+        public ICollection<ChatEntity> Chats { get; set; } = [];
         [JsonIgnore]
         public ICollection<WarningEntity> Warnings { get; set; } = []; 
 
@@ -119,10 +119,6 @@ namespace KarmaMarketplace.Domain.User.Entities
             if (Blocked)
             {
                 return; 
-            }
-            if (byUser.Role >= UserRoles.Admin)
-            {
-                throw new AccessDenied("You cannot block this user"); 
             }
             var warn = new WarningEntity() { Reason = reason, ByUserId = byUser.Id }; 
             

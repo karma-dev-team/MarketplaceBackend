@@ -41,8 +41,7 @@ namespace KarmaMarketplace.Application.Market.UseCases.Product
                 Domain.User.Enums.UserRoles.Moderator, 
                 product.CreatedBy.Id);
 
-            var user = await _context.Users.FirstOrDefaultAsync(
-                x => x.Id == _user.Id);
+            var user = await _accessPolicy.GetCurrentUser(); 
 
             Guard.Against.Null(user, message: "No user"); 
 
