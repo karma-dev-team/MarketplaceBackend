@@ -31,4 +31,8 @@ namespace KarmaMarketplace.Presentation.Web.Schemas
         [Required]
         public string Email { get; set; } = null!;
     }
+
+    public class WarnUserScheme {
+        public string Reason { get; set; } = null!;
+    }
 }

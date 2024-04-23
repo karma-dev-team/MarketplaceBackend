@@ -1,5 +1,7 @@
 ﻿using KarmaMarketplace.Application.Staff.Interfaces;
+using KarmaMarketplace.Application.User.Dto;
 using KarmaMarketplace.Application.User.Interfaces;
+using KarmaMarketplace.Presentation.Web.Schemas;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,15 +24,17 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<ActionResult<bool>> BlockUser(Guid userId)
         {
-            await _userService.Update().Execute(new Application.User.Dto.UpdateUserDto { UserId = userId, Blocked = true });
+            await _userService.Update()
+                .Execute(new UpdateUserDto { UserId = userId, Blocked = true });
             return Ok(true);
         }
 
         [HttpPost("/user/{userId}/warn")]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<ActionResult<bool>> WarnUser(Guid userId)
+        public async Task<ActionResult<bool>> WarnUser(Guid userId, [FromBody] WarnUserScheme model)
         {
-            await _userService.WarnUser().Execute(userId); 
+            await _userService.WarnUser()
+                .Execute(new WarnUserDto() { UserId = userId, Reason = model.Reason }); 
             return Ok(true);
         }
     }

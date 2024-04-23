@@ -54,5 +54,10 @@ namespace KarmaMarketplace.Application.User
         {
             return ServiceProvider.GetRequiredService<CreateNotification>();
         }
+
+        public WarnUser WarnUser()
+        {
+            return ServiceProvider.GetRequiredService<WarnUser>();
+        }
     }
 }

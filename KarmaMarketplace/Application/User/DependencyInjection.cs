@@ -25,6 +25,7 @@ namespace KarmaMarketplace.Application.User
             services.AddScoped<SendResetCode>(); 
             services.AddScoped<ResetPassword>();
             services.AddScoped<GetUsersList>();
+            services.AddScoped<WarnUser>();
 
             services.AddScoped<UserCreatedHandler>(); 
 
