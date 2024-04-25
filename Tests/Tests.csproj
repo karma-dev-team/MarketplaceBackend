@@ -41,4 +41,10 @@
     <Using Include="System.Threading.Tasks" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Application.IntegrationTests\User\" />
+    <Folder Include="Application.IntegrationTests\Payment\" />
+    <Folder Include="Application.IntegrationTests\Market\" />
+  </ItemGroup>
+
 </Project>
