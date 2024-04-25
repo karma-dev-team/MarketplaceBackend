@@ -12,8 +12,6 @@ using KarmaMarketplace.Application.Common.Interfaces;
 using KarmaMarketplace.Presentation.Web.Services;
 using KarmaMarketplace.Presentation.Web.Schemas.Filters;
 using KarmaMarketplace.Presentation.Web.ExceptionHandlers;
-using KarmaMarketplace.Infrastructure.Adapters.FileStorage;
-using Minio;
 using KarmaMarketplace.Domain;
 using Hangfire;
 using Hangfire.PostgreSql;
@@ -154,3 +152,5 @@ app.UseCors("TaskManger");
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }

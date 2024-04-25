@@ -47,7 +47,7 @@ namespace KarmaMarketplace.Presentation.Web.Controllers
         }
 
         [HttpPatch("{productId}")]
-        public async Task<ActionResult<ProductEntity>> UpdateProduct([FromBody] UpdateProductDto model)
+        public async Task<ActionResult<ProductEntity>> UpdateProduct([FromBody] UpdateProductDto model, Guid productId)
         {
             return Ok(await _productService
                 .UpdateProduct()

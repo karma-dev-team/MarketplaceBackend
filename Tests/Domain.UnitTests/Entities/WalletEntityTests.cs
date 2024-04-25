@@ -115,9 +115,10 @@ namespace Tests.Domain.UnitTests.Entities
             wallet.AddBalance(new Money(500, CurrencyEnum.RussianRuble));
             var initialBalance = wallet.AvailableBalance.Amount;
             var transaction = new TransactionEntity { Amount = new Money(200, CurrencyEnum.RussianRuble), Direction = TransactionDirection.Out, CreatedByUser = createdBy };
+            var otherWallet = new WalletEntity() { AvailableBalance = new Money(400, CurrencyEnum.RussianRuble) };
 
             // Act
-            wallet.ConfirmTransaction(transaction, null);
+            wallet.ConfirmTransaction(transaction, otherWallet);
 
             // Assert
             Assert.That(wallet.AvailableBalance.Amount, Is.EqualTo(initialBalance - transaction.Amount.Amount));

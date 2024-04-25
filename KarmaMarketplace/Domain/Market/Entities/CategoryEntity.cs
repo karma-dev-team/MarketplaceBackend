@@ -19,7 +19,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
         [Required, MaxLength(256)]
         public string Slug { get; set; } = null!;
 
-        private static string generateSlug(Guid id, string name)
+        private static string GenerateSlug(Guid id, string name)
         {
             return id.ToString().Skip(0).Take(8) + name;  
         }
@@ -32,7 +32,7 @@ namespace KarmaMarketplace.Domain.Market.Entities
         {
             var id = Guid.NewGuid();
 
-            var categorySlug = slug ?? generateSlug(id, name);
+            var categorySlug = slug ?? GenerateSlug(id, name);
 
             var newCategory = new CategoryEntity() { 
                 Id = id,

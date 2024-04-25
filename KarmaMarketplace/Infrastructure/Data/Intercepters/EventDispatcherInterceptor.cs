@@ -55,7 +55,7 @@ namespace KarmaMarketplace.Infrastructure.Data.Intercepters
                     var dispatcher = _serviceProvider.GetRequiredService<IEventDispatcher>();
                     await dispatcher.Dispatch(domainEvent, (ApplicationDbContext)context);
                 }
-                catch (Exception ex)
+                catch 
                 {
                     throw; 
                 }

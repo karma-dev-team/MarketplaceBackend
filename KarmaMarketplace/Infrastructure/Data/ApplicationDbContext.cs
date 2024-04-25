@@ -78,7 +78,7 @@ namespace KarmaMarketplace.Infrastructure.Data
                 {
                     await _dispatcher.Dispatch(domainEvent, this);
                 }
-                catch (Exception ex)
+                catch 
                 {
                     // Обработка ошибок при диспетчеризации событий
                     // Можно добавить логирование или другие механизмы обработки ошибок
