@@ -70,7 +70,6 @@ namespace KarmaMarketplace.Application.Messaging.UseCases
             chat.Messages.Add(message);
 
             _context.Messages.Add(message); 
-            _context.Chats.Update(chat);
             await _context.SaveChangesAsync();
 
             await _messagesCache.AddMessage(message.FromUser.Id, message);

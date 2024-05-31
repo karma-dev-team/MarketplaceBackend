@@ -24,6 +24,7 @@ namespace KarmaMarketplace.Application.Market.EventHandlers
             await _createNotification.Execute(
                 new User.Dto.CreateNotificationDto() { 
                     UserId = eventValue.Product.CreatedBy.Id,
+                    Title = "Вы создали продукт", 
                     Text = "Вы создали продукт", 
                     Data = { { "Имя продукта", eventValue.Product.Id.ToString() } }
                 }

@@ -90,9 +90,9 @@ namespace KarmaMarketplace.Infrastructure.Data
             {
                 var providerImages = new Dictionary<string, string>();
 
-                providerImages[nameof(PaymentProviders.BankCardRu)] = "https://playerok4.com/images/Icons/CardRF.svg";
-                providerImages[nameof(PaymentProviders.Balance)] = "https://playerok4.com/images/Icons/WalletMoney.png";
-                providerImages[nameof(PaymentProviders.Test)] = "https://playerok4.com/images/Icons/WalletMoney.png"; 
+                providerImages[nameof(PaymentProviders.BankCardRu)] = "https://playerok.com/images/Icons/CardRF.svg";
+                providerImages[nameof(PaymentProviders.Balance)] = "https://playerok.com/images/Icons/Wallet.png";
+                providerImages[nameof(PaymentProviders.Test)] = "https://playerok.com/images/Icons/Wallet.png"; 
 
                 var providers = new List<TransactionProviderEntity>
                 {

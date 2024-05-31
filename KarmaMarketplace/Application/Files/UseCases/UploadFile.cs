@@ -25,7 +25,6 @@ namespace KarmaMarketplace.Application.Files.UseCases
             if (dto.FileId != null)
             {
                 var image = await _context.Files
-                    .AsNoTracking()
                     .FirstOrDefaultAsync(x => x.Id == dto.FileId);
                 Guard.Against.Null(image, message: $"Image does not exists with id: {dto.FileId}");
 
